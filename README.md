@@ -26,6 +26,9 @@
 1.  테이블 명 : board_like
 2.  칼럼 :  snake 표기법  `ex) create_date   ( jpa 에서 자동 변환 <->)`
 
+#### 4. SPRING
+1. Spring Batch
+2. Spring Redis
 
 #### 5. GIT  ⚡  
 
