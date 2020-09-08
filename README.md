@@ -33,4 +33,4 @@
 #### 5. GIT  ⚡  
 
  	1. 브랜치 분리
-      	1.  `Master – develop – front(back)/[기능명]`
+      	1.  `Master – develop – front(back)/[기능명]` 
