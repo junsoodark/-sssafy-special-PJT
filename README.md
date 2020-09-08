@@ -35,3 +35,4 @@
 
  	1. 브랜치 분리
       	1.  `Master – develop – front(back)/[기능명]` 
+      	2. [지라 명령어] [이슈번호] | add /modify / fix / complete [기능] 
