@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename type &apos;ssafy.musicD.controller.accountController&apos; to &apos;AccountController&apos;&#x0A;- Original project: &apos;musicD&apos;&#x0A;- Original element: &apos;ssafy.musicD.controller.accountController&apos;&#x0A;- Renamed element: &apos;ssafy.musicD.controller.AccountController&apos;&#x0A;- Update references to refactored element&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;accountController&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;ssafy.musicD.controller{accountController.java[accountController" matchStrategy="1" name="AccountController" qualified="false" references="true" similarDeclarations="false" stamp="1599631925540" textual="false" version="1.0"/>
+</session>

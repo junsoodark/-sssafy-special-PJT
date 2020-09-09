@@ -1,0 +1,5 @@
+package ssafy.musicD.service;
+
+public interface AccountService {
+
+}
