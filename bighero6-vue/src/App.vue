@@ -7,8 +7,6 @@
     <core-view />
 
     <core-footer />
-
-    <core-cta />
   </v-app>
 </template>
 
@@ -17,7 +15,7 @@
     name: 'App',
 
     components: {
-      CoreCta: () => import('@/components/core/Cta'),
+      //CoreCta: () => import('@/components/core/Cta'),
       CoreDrawer: () => import('@/components/core/Drawer'),
       CoreFooter: () => import('@/components/core/Footer'),
       CoreAppBar: () => import('@/components/core/AppBar'),
