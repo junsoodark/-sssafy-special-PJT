@@ -30,6 +30,10 @@
 1.  테이블 명 : board_like
 2.  칼럼 :  snake 표기법  `ex) create_date   ( jpa 에서 자동 변환 <->)`
 
+> **Collection**: User, Diary, Song, Playlist, Weather,  Emoticon, Emotion
+>
+> https://www.erdcloud.com/d/FGwLeCCqZR882rQWx
+
 #### 4. SPRING
 1. Spring Batch
 2. Spring Redis
@@ -37,5 +41,9 @@
 #### 5. GIT  ⚡  
 
  	1. 브랜치 분리
-      	1.  `Master – develop – front(back)/[기능명]` 
-      	2. [지라 명령어] [이슈번호] | add /modify / fix / complete [기능] 
+            	1.  `Master – develop – front(back)/[기능명]` 
+            	2. [지라 명령어] [이슈번호] | add /modify / fix / complete [기능] 
+            	
+#### 6. RESTAPI 
+
+> https://docs.google.com/spreadsheets/d/1GXDvTWkfpEFODi7P8N3UnyTOshqlrGuWe5YP8AsIAcE/edit#gid=0
