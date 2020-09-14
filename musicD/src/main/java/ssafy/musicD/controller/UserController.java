@@ -10,21 +10,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
-import ssafy.musicD.dto.Account;
-import ssafy.musicD.service.AccountServiceImpl;
+import ssafy.musicD.dto.User;
+import ssafy.musicD.service.UserServiceImpl;
 
 @RestController
 @RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
-public class AccountController {
+public class UserController {
 	@Autowired
-	private AccountServiceImpl accountService;
+	private UserServiceImpl userService;
 	
 	@ApiOperation(value="계정 목록", response=String.class)
-	@GetMapping("/account/{username}")
-	public List<Account> getAccountInfo(@PathVariable String username) {
-		List<Account> list = accountService.getAccountInfo(username);
+	@GetMapping("/user/{name}")
+	public List<User> getAccountInfo(@PathVariable String name) {
+		List<User> list = userService.getUserInfo(name);
 		
+		System.out.println(list.size());
 		
 		return list;
 	}

@@ -1,0 +1,9 @@
+spring:
+   data:
+      mongodb:
+         host: j3a107.p.ssafy.io
+         port: 27017
+         authentication-database: admin
+         database: ﻿musicD
+         username: root
+         password: bh66hb
