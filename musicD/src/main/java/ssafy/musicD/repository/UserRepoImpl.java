@@ -17,9 +17,10 @@ public class UserRepoImpl implements UserRepo {
 	
 	public List<User> getUserInfo(String name) {
 		Query query = new Query(new Criteria().andOperator(Criteria.where("name").is(name)));
+
 		User user = new User();
 		user.setName("donghwi");
-		
+
 		mongoTemplate.insert(user, "user");
 		
 		/* 업데이트 관련
@@ -35,5 +36,13 @@ public class UserRepoImpl implements UserRepo {
 		*/
 		
 		return mongoTemplate.find(query, User.class, "user");
+	}
+
+	public void deleteUser(String userId) {
+		Criteria criteria = new Criteria("_id");
+		criteria.is(userId);
+		Query query = new Query(criteria);
+
+		mongoTemplate.remove(query, "user");
 	}
 }

@@ -6,4 +6,5 @@ import ssafy.musicD.dto.User;
 
 public interface UserRepo {
 	public List<User> getUserInfo(String name);
+	public void deleteUser(String userId);
 }
