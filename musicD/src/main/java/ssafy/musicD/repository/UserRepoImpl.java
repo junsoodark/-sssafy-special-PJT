@@ -18,7 +18,7 @@ public class UserRepoImpl implements UserRepo {
 	public List<User> getUserInfo(String name) {
 		System.out.println("*********************");
 
-		Query query = new Query(new Criteria().andOperator(Criteria.where("name").is("whee")));
+		Query query = new Query(new Criteria().andOperator(Criteria.where("name").is(name)));
 		User user = new User();
 		user.setName("donghwi");
 		
