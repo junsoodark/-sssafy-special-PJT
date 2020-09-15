@@ -25,8 +25,6 @@ public class UserController {
 	public List<User> getAccountInfo(@PathVariable String name) {
 		List<User> list = userService.getUserInfo(name);
 		
-		System.out.println(list.size());
-		
 		return list;
 	}
 }
