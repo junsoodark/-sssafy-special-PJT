@@ -10,6 +10,6 @@ public class MusicDApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MusicDApplication.class, args);
 	}
-	
+
 
 }
