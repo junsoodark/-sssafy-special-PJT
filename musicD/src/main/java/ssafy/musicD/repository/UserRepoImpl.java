@@ -15,13 +15,18 @@ public class UserRepoImpl implements UserRepo {
 	@Autowired
 	private MongoTemplate mongoTemplate;
 	
-	public List<User> getUserInfo(String name) {
-		Query query = new Query(new Criteria().andOperator(Criteria.where("name").is(name)));
+	public User getUserInfo(String userId) {
+		Criteria criteria = new Criteria("_id");
+		criteria.is(userId);
+		Query query = new Query(criteria);
 
-		User user = new User();
-		user.setName("donghwi");
+		return mongoTemplate.findOne(query, User.class , "user");
 
-		mongoTemplate.insert(user, "user");
+
+//		User user = new User();
+//		user.setName("donghwi");
+//
+//		mongoTemplate.insert(user, "user");
 		
 		/* 업데이트 관련
 		Criteria criteria = new Criteria("name");
@@ -35,7 +40,6 @@ public class UserRepoImpl implements UserRepo {
 		
 		*/
 		
-		return mongoTemplate.find(query, User.class, "user");
 	}
 
 	public void deleteUser(String userId) {

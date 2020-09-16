@@ -14,8 +14,8 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	UserRepoImpl userRepo;
 	
-	public List<User> getUserInfo(String name) {
-		return userRepo.getUserInfo(name);
+	public User getUserInfo(String userId) {
+		return userRepo.getUserInfo(userId);
 
 	}
 

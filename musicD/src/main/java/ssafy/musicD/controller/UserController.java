@@ -20,12 +20,12 @@ public class UserController {
 	@Autowired
 	private UserServiceImpl userService;
 	
-	@ApiOperation(value="계정 목록", response=String.class)
-	@GetMapping("/user/{name}")
-	public List<User> getAccountInfo(@PathVariable String name) {
-		List<User> list = userService.getUserInfo(name);
+	@ApiOperation(value="회원 정보 조회", response=String.class)
+	@GetMapping("/user/{userId}")
+	public User getAccountInfo(@PathVariable String userId) {
+		User user = userService.getUserInfo(userId);
 
-		return list;
+		return user;
 	}
 
 	@ApiOperation(value="계정 탈퇴", response=String.class)
