@@ -16,7 +16,10 @@ public class UserServiceImpl implements UserService {
 	
 	public User getUserInfo(String userId) {
 		return userRepo.getUserInfo(userId);
+	}
 
+	public void updateUserInfo(User user) {
+		userRepo.updateUserInfo(user);
 	}
 
 	public void deleteUser(String userId) {

@@ -28,6 +28,20 @@ public class UserController {
 		return user;
 	}
 
+	@ApiOperation(value="회원 정보 수정", response=String.class)
+	@PutMapping("/user")
+	public ResponseEntity<Map<String, Object>> updateUser(@RequestBody User user) {
+		ResponseEntity<Map<String, Object>> entity = null;
+		try {
+			userService.updateUserInfo(user);
+			entity = handleSuccess(user.get_id() + "번 회원 정보 수정");;
+		} catch (Exception e) {
+			entity = handleException(e);
+		}
+
+		return entity;
+	}
+
 	@ApiOperation(value="계정 탈퇴", response=String.class)
 	@DeleteMapping("/user/{userId}")
 	public ResponseEntity<Map<String, Object>> delete(@PathVariable String userId) {

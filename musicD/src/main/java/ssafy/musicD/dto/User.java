@@ -15,7 +15,9 @@ public class User {
 	@Id
 	private String _id;
 	private String email;
+	private String password;
 	private String name;
+	private String nickname;
 	private String profileURL;
 	private int[] playlist;
 	private int[] diary;

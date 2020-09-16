@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import ssafy.musicD.dto.User;
@@ -40,6 +41,19 @@ public class UserRepoImpl implements UserRepo {
 		
 		*/
 		
+	}
+
+	public void updateUserInfo(User user) {
+		Criteria criteria = new Criteria("_id");
+		criteria.is(user.get_id());
+		Query query = new Query(criteria);
+
+		Update update = new Update();
+		update.set("nickname", user.getNickname());
+		update.set("profileURL", user.getProfileURL());
+		update.set("password", user.getPassword());
+
+		mongoTemplate.updateFirst(query, update, "user");
 	}
 
 	public void deleteUser(String userId) {
