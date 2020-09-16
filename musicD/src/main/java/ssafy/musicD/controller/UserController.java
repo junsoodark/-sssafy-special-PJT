@@ -56,6 +56,20 @@ public class UserController {
 		return entity;
 	}
 
+	@ApiOperation(value="이메일 중복 체크", response=String.class)
+	@PostMapping("/user/checkemail")
+	public @ResponseBody String checkEmail(@RequestBody String email) {
+
+		return userService.checkEmail(email);
+	}
+
+	@ApiOperation(value="닉네임 중복 체크", response=String.class)
+	@PostMapping("/user/checknickname")
+	public @ResponseBody String checkNickname(@RequestBody String nickname) {
+
+		return userService.checkNickname(nickname);
+	}
+
 	/* 예외 처리 */
 	private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
 		Map<String, Object> resultMap = new HashMap<>();

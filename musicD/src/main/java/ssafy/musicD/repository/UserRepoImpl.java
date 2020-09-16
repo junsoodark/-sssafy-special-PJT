@@ -29,18 +29,7 @@ public class UserRepoImpl implements UserRepo {
 //
 //		mongoTemplate.insert(user, "user");
 		
-		/* 업데이트 관련
-		Criteria criteria = new Criteria("name");
-		criteria.is("whee");
-		
-		Query q2 = new Query(criteria);
-		Update update = new Update();
-		update.set("email", "no");
-		
-		mongoTemplate.updateFirst(q2, update, "user");
-		
-		*/
-		
+
 	}
 
 	public void updateUserInfo(User user) {
@@ -62,5 +51,29 @@ public class UserRepoImpl implements UserRepo {
 		Query query = new Query(criteria);
 
 		mongoTemplate.remove(query, "user");
+	}
+
+	public String checkEmail(String email) {
+		Criteria criteria = new Criteria("email");
+		criteria.is(email);
+		Query query = new Query(criteria);
+
+		User temp = mongoTemplate.findOne(query, User.class, "user");
+		if (temp == null) {
+			return "SUCCESS";
+		} else
+			return "FAIL";
+	}
+
+	public String checkNickname(String nickname) {
+		Criteria criteria = new Criteria("nickname");
+		criteria.is(nickname);
+		Query query = new Query(criteria);
+
+		User temp = mongoTemplate.findOne(query, User.class, "user");
+		if (temp == null) {
+			return "SUCCESS";
+		} else
+			return "FAIL";
 	}
 }

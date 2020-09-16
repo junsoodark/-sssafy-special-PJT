@@ -25,4 +25,12 @@ public class UserServiceImpl implements UserService {
 	public void deleteUser(String userId) {
 		userRepo.deleteUser(userId);
 	}
+
+	public String checkEmail(String email) {
+		return userRepo.checkEmail(email);
+	}
+
+	public String checkNickname(String nickname) {
+		return userRepo.checkNickname(nickname);
+	}
 }
