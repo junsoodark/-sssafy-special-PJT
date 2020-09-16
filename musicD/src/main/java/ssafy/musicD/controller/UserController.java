@@ -19,6 +19,20 @@ import ssafy.musicD.service.UserServiceImpl;
 public class UserController {
 	@Autowired
 	private UserServiceImpl userService;
+
+	@ApiOperation(value="회원 가입", response=String.class)
+	@PostMapping("/user/signup")
+	public ResponseEntity<Map<String, Object>> signUp(@RequestBody User user) {
+		ResponseEntity<Map<String, Object>> entity = null;
+		try {
+			userService.signUp(user);
+			entity = handleSuccess(user.getNickname() + "님 회원 가입");
+		} catch (Exception e) {
+			entity = handleException(e);
+		}
+
+		return entity;
+	}
 	
 	@ApiOperation(value="회원 정보 조회", response=String.class)
 	@GetMapping("/user/{userId}")

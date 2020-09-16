@@ -13,7 +13,11 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	UserRepoImpl userRepo;
-	
+
+	public void signUp(User user) {
+		userRepo.signUp(user);
+	}
+
 	public User getUserInfo(String userId) {
 		return userRepo.getUserInfo(userId);
 	}

@@ -15,6 +15,10 @@ import ssafy.musicD.dto.User;
 public class UserRepoImpl implements UserRepo {
 	@Autowired
 	private MongoTemplate mongoTemplate;
+
+	public void signUp(User user) {
+		mongoTemplate.insert(user, "user");
+	}
 	
 	public User getUserInfo(String userId) {
 		Criteria criteria = new Criteria("_id");
@@ -22,13 +26,6 @@ public class UserRepoImpl implements UserRepo {
 		Query query = new Query(criteria);
 
 		return mongoTemplate.findOne(query, User.class , "user");
-
-
-//		User user = new User();
-//		user.setName("donghwi");
-//
-//		mongoTemplate.insert(user, "user");
-		
 
 	}
 
