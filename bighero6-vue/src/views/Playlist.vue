@@ -1,5 +1,5 @@
 <template>
-  <v-container class="grey">
+  <v-container>
     <v-row
       v-for="n in 1"
       :key="n"
@@ -9,7 +9,7 @@
       <!-- 플레이어 -->
       <v-col>
         <v-card class="pa-2" tile>
-          <div class="container">
+          <div class="container-player">
             <div class="column add-bottom">
               <div id="mainwrap">
                 <div id="nowPlay">
@@ -46,9 +46,41 @@
                   내 플레이리스트
                 </v-col>
                 <v-col class="playlist" style="text-align:right;">
-                  <v-btn class="mx-2" fab dark small color="indigo">
-                    <v-icon dark>mdi-plus</v-icon>
-                  </v-btn>
+                  <v-dialog v-model="dialog" persistent max-width="600px">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        class="mx-2"
+                        color="indigo"
+                        fab
+                        dark
+                        small
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        <v-icon dark>mdi-plus</v-icon>
+                      </v-btn>
+                    </template>
+                    <v-card>
+                      <v-card-title>
+                        <span class="headline">새 플레이리스트</span>
+                      </v-card-title>
+                      <v-card-text>
+                        <v-container>
+                          <v-row>
+                            <v-col cols="12" sm="6" md="4">
+                              <v-text-field label="플레이리스트 명*" required></v-text-field>
+                            </v-col>
+                          </v-row>
+                        </v-container>
+                        <small>*필수 입력 값</small>
+                      </v-card-text>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
+                        <v-btn color="blue darken-1" text @click="dialog = false">Save</v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
                 </v-col>
               </v-row>
               <v-row>
@@ -57,10 +89,10 @@
                     <v-carousel 
                       v-model="myplaylistmodel"
                       :hide-delimiter-background="true"
-                      style="height: 200px;"
+                      :height="200"
                     >
                       <v-carousel-item
-                        v-for="(myplaylist, i) in myplaylists"
+                        v-for="myplaylist in myplaylists"
                         :key="myplaylist"
                       >
                         <v-sheet
@@ -73,7 +105,9 @@
                             align="center"
                             justify="center"
                           >
-                            <div class="display-3">Slide {{ i + 1 }}</div>
+                            <div>
+                              <playlistcds />
+                            </div>
                           </v-row>
                         </v-sheet>
                       </v-carousel-item>
@@ -99,10 +133,10 @@
                     <v-carousel 
                       v-model="monthlyplaylistmodel"
                       :hide-delimiter-background="true"
-                      style="height: 200px;"
+                      :height="200"
                     >
                       <v-carousel-item
-                        v-for="(monthlyplaylist, i) in monthlyplaylists"
+                        v-for="monthlyplaylist in monthlyplaylists"
                         :key="monthlyplaylist"
                       >
                         <v-sheet
@@ -115,7 +149,9 @@
                             align="center"
                             justify="center"
                           >
-                            <div class="display-3">Slide {{ i + 1 }}</div>
+                            <div>
+                              <playlistcds />
+                            </div>
                           </v-row>
                         </v-sheet>
                       </v-carousel-item>
@@ -133,8 +169,12 @@
 
 <script>
 export default {
+  components: {
+    playlistcds: () => import('@/components/PlaylistCDs'),
+  },
   data () {
     return {
+      dialog: false,
       myplaylists: [
         'yellow darken-2',
         'secondary',
@@ -176,7 +216,7 @@ export default {
 /* Global Styles
 ================================================== */
 
-.container {
+.container-player {
 -webkit-font-smoothing:antialiased;
 -webkit-text-size-adjust:100%;
 background-color:#0665a2;
