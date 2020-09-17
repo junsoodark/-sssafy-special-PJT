@@ -1,9 +1,13 @@
 package ssafy.musicD.repository;
 
-import java.util.List;
+import java.util.Optional;
 
-import ssafy.musicD.dto.User;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface UserRepo {
-	public List<User> getUserInfo(String name);
+import ssafy.musicD.models.User;
+
+public interface UserRepo extends MongoRepository<User, String> {
+	Optional<User> findByEmail(String email);
+
+	Boolean existsByEmail(String email);
 }
