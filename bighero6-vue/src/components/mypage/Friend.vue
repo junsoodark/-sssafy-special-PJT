@@ -97,6 +97,7 @@
 
             <v-list-item-action>
               <v-icon small>mdi-open-in-new</v-icon>
+              
             </v-list-item-action>
           </v-list-item>
 
