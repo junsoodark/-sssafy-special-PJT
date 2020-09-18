@@ -10,15 +10,19 @@ export default new Vuex.Store({
     items: [
       {
         text: 'Home',
-        href: '#!',
+        href: '/',
       },
       {
         text: 'About',
-        href: '#about',
+        href: 'about',
       },
       {
         text: 'Diary',
-        href: '#diary',
+        href: 'diary',
+      },
+      {
+        text: 'Playlist',
+        href: 'playlist',
       },
     ],
   },
@@ -36,7 +40,7 @@ export default new Vuex.Store({
 
         categories.push({
           text,
-          href: '#!',
+          href: '',
         })
       }
 
