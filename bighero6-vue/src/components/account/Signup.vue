@@ -1,6 +1,6 @@
 <template>
   <div id="login">
-    <v-container class="mx-auto" style="max-width:600px">
+    <v-container class="mx-auto" style="max-width:600px; margin-top:50px">
       <div class="inputForm mx-auto">
       <v-form>
         <v-row align="center" no-gutters>
@@ -39,26 +39,19 @@
         ></v-text-field>
         <v-text-field
           v-model="reenter"
-          :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+          :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
           :rules="reenterRules"
-          :type="show1 ? 'text' : 'password'"
+          :type="show2 ? 'text' : 'password'"
           name="input-10-1"
           label="Re-enter"
           hint="At least 8 characters"
           counter
-          @click:append="show1 = !show1"
+          @click:append="show2 = !show2"
         ></v-text-field>
       </v-form>
-      <v-row align="center">
-        <v-col cols="12" sm="7">
-        </v-col>
-        <v-col cols="12" sm="2" class="my-5">
-            <v-btn depressed small color = "primary">로그인</v-btn>
-        </v-col>
-        <v-col cols="12" sm="3" class="my-5">
-            <v-btn depressed small color = "primary">회원가입</v-btn>
-        </v-col>
-      </v-row>
+      <div align="right" class="my-4">
+        <v-btn depressed small color = "primary">회원가입</v-btn>
+      </div>
     </div>
     </v-container>
     
@@ -74,6 +67,7 @@ export default {
       certicode: '',
       email: '',
       show1: false,
+      show2: false,
       nickname: '',
       emailRules: [
         v => !!v || 'E-mail is required',
