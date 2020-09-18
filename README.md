@@ -1,13 +1,22 @@
-#### 서울 1반 7조(빅히어로6)
-팀장 : 박준수 / 
-팀원 : 김동휘, 김소희, 
+## 서울 1반 7조(빅히어로6)
+팀장 : 박준수 
+팀원 : 김동휘, 김소희, 권혁규 , 윤지원, 김원정
 
-### 음악 다이어리
-#
+## 💡 프로젝트 소개 
 
-## 9/07
-아이디어 회의 진행
-음악 + 일기 주제 선정 
+### 음악 메모리 🎵
+
+> **사용자의 일기에 따라 ```맞춤음악을 추천``` 해주고 일기와 음악을 함께 기록할 수 있는 서비스** 
+
+
+
+## ✏ 사용언어 /기술스택
+
+<div align=center><img src ="https://img.shields.io/badge/Platform-web-brightgreen">&nbsp;&nbsp;<img src="https://img.shields.io/badge/Framework-Spring / Django / Vue.js-yellowgreen"> </div>
+
+<div align=center><img src="https://img.shields.io/badge/Database-MongoDB / Redis-blue">&nbsp;&nbsp;<img src="https://img.shields.io/badge/Server-AWS-orange">&nbsp;&nbsp;<img src="https://img.shields.io/badge/Language-Java / python / Javascript%20-lightgray"></div>
+
+
 
 ## ⭐ 코딩 컨벤션 
 
@@ -28,8 +37,7 @@
 
 #### 3.  DB
 
-1.  테이블 명 : board_like
-2.  칼럼 :  snake 표기법  `ex) create_date   ( jpa 에서 자동 변환 <->)`
+2.  칼럼 :  snake 표기법  ```ex) create_date```  
 
 > **Collection**: User, Diary, Song, Playlist, Weather,  Emoticon, Emotion
 >
@@ -39,12 +47,18 @@
 1. Spring Batch
 2. Spring Redis
 
-#### 5. GIT  ⚡  
+#### 5. GIT    
 
  	1. 브랜치 분리
             	1.  `Master – develop – front(back)/[기능명]` 
-            	2. [지라 명령어] [이슈번호] | add /modify / fix / complete [기능] 
-            	
-#### 6. RESTAPI 
+                  	2. [지라 명령어] [이슈번호] | add /modify / fix / complete [기능] 
+      
 
-> https://docs.google.com/spreadsheets/d/1GXDvTWkfpEFODi7P8N3UnyTOshqlrGuWe5YP8AsIAcE/edit#gid=0
+
+
+## 📃 API 문서 
+
+> RestAPi : https://docs.google.com/spreadsheets/d/1GXDvTWkfpEFODi7P8N3UnyTOshqlrGuWe5YP8AsIAcE/edit#gid=0
+>
+> 와이어프레임 : https://preview.uxpin.com/cce515b6b4808b2a9e236e8545f714d080e024d1
+
