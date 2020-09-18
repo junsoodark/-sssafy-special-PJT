@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import MyPage from '../views/MyPage.vue'
 import Login from '../views/Login.vue'
 import Playlist from '../views/Playlist.vue'
+import Signup from '../views/SignupPage.vue'
 
 
 
