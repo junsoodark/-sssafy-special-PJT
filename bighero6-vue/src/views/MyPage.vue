@@ -25,7 +25,7 @@
             <Profile/>
         </div>
         <div v-else>
-            
+            <Friend/>
         </div>
         </v-card>
       </v-tab-item>
@@ -37,7 +37,7 @@
   export default {
  components: {
     Profile: () => import('@/components/mypage/Profile'),
-   /*  Friend: () => import('@/components/mypage/Friend'), */
+     Friend: () => import('@/components/mypage/Friend'), 
       },
     data () {
       return {

@@ -7,7 +7,7 @@
           <img id="basicImg" v-else src="../../assets/instagram/adventurealtitude.jpg" />
           
 
-          <div class="profileButton">
+          <div class="profileButton"> 
           <button @click="updateImage"><img src="../../assets/add.png"/></button>&nbsp;
          <!--  <v-file-input hide-input></v-file-input> -->
           <button @click="removeImage"><img src="../../assets/delete.png"/></button>
@@ -29,7 +29,7 @@
         label="이메일"
         required
       ></v-text-field>
-    </v-form>
+    </v-form>   
          <v-btn class="mr-10" tile color="primary" dark  @click="deleteHandler">탈퇴</v-btn>
          <v-btn class="mr-10" tile color="primary" dark @click="updateHandler">수정</v-btn>
       </div>
@@ -41,7 +41,9 @@
     data () {
       return {
         nickName : "빅히어로",
-        email:"bigHero@naver.com"
+        email:"bigHero@naver.com",
+        imgSrc:"",
+        file:""
       }
     },
     methods: {
@@ -58,7 +60,8 @@
       this.imgSrc=null;
       this.$refs.imageInput.value="";
     },
-    }
+    },
+       
   }
 </script>
 
