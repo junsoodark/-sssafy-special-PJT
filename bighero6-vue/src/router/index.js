@@ -5,10 +5,6 @@ import MyPage from '../views/MyPage.vue'
 import Login from '../views/Login.vue'
 import Playlist from '../views/Playlist.vue'
 import Signup from '../views/SignupPage.vue'
-<<<<<<< HEAD
-=======
-
->>>>>>> ccb4aa10b3497f1130337d7331bc36d56b21b2c4
 
 
 Vue.use(Router)
