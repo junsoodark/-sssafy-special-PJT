@@ -21,6 +21,6 @@ public class User {
 	private String profileURL;
 	private int[] playlist;
 	private int[] diary;
-	private int[] friends;
+	private String[] friends;
 
 }
