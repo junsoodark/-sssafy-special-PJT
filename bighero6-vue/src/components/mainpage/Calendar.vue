@@ -53,7 +53,7 @@
                       class="ui-calendar-item-name"
                       v-for="(item, index) in col.data"
                       :key="index">
-                      <img :src="weather()">
+                      <img src=../../assets/weather/sun.png">
                       <img :src="item.album" ><br>
                       <span>{{item.title}}</span>
                       
