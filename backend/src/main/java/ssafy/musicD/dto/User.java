@@ -22,5 +22,6 @@ public class User {
 	private int[] playlist;
 	private int[] diary;
 	private String[] friends;
+	private String[] waitfriends;
 
 }
