@@ -7,7 +7,6 @@ import Playlist from '../views/Playlist.vue'
 import Signup from '../views/SignupPage.vue'
 
 
-
 Vue.use(Router)
 
 export default new Router({

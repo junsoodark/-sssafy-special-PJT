@@ -13,10 +13,6 @@ export default new Vuex.Store({
         href: '/',
       },
       {
-        text: 'About',
-        href: 'about',
-      },
-      {
         text: 'Diary',
         href: 'diary',
       },
@@ -24,10 +20,18 @@ export default new Vuex.Store({
         text: 'Playlist',
         href: 'playlist',
       },
+      {
+        text: 'MyPage',
+        href: 'mypage',
+      },
+      {
+        text: 'login',
+        href: 'login',
+      },
     ],
   },
   getters: {
-    categories: state => {
+ /*    categories: state => {
       const categories = []
 
       for (const article of state.articles) {
@@ -38,16 +42,18 @@ export default new Vuex.Store({
 
         const text = article.category
 
-        categories.push({
+         categories.push({
           text,
           href: '',
-        })
+        }) 
       }
 
       return categories.sort().slice(0, 4)
-    },
-    links: (state, getters) => {
-      return state.items.concat(getters.categories)
+    }, */
+    //links: (state, getters) => {
+      links: (state) => {
+      //return state.items.concat(getters.categories)
+      return state.items
     },
   },
   mutations: {
