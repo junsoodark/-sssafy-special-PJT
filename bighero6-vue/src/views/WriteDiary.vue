@@ -3,18 +3,39 @@
     <div class="back page"></div>
     <div class="current page">
       <div class="header">
-        <a href="#" class="yesterday">< 2016-07-14</a>      
-        <a href="#" class="tomorrow">2016-07-16 ></a>
-        <p class="today">2016-07-15 (Friday)</p>
-        <v-container fluid>
-    <v-row justify="space-around" class="mb-2">
-      <span class="group pa-2">
-        <v-icon>home</v-icon>
-        <v-icon>event</v-icon>
-        <v-icon>info</v-icon>
-      </span>
-    </v-row></v-container>
-        <input type="text" class="title"/>
+        <v-menu
+          v-model="menu"
+          :close-on-content-click="false"
+          :nudge-right="40"
+          transition="scale-transition"
+          offset-y
+          min-width="290px"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <p class="today">
+              <v-icon style="cursor:pointer;"
+                readonly
+                v-bind="attrs"
+                v-on="on"
+              >event</v-icon>
+              {{ date }}
+            </p>
+          </template>
+          <v-date-picker v-model="date" @input="menu = false"></v-date-picker>
+        </v-menu>
+        <v-container>
+          <v-row>
+            <v-col cols="12">
+              <v-sheet elevation="3" class="pa-2">
+                <v-textarea
+                  v-model="diarytext"
+                  :auto-grow="true"
+                  :rounded="true"
+                ></v-textarea>
+              </v-sheet>
+            </v-col>
+          </v-row>
+        </v-container>
       </div>
     </div>
     <div class="next page"></div>
@@ -23,7 +44,11 @@
 
 <script>
 export default {
-
+  data: () => ({
+    date: new Date().toISOString().substr(0, 10),
+    menu: false,
+    diarytext: "",
+  }),
 }
 </script>
 
