@@ -19,7 +19,7 @@ export default function getCalendarData(d) {
       album:'https://cdnimg.melon.co.kr/cm/album/images/100/74/454/10074454_500.jpg'
     },
     {
-      date: `2020-09-22`,
+      date: `${year}-${month}-${day+1%30}`,
       title: 'DuaLipa-Dontstart now',
       weather:'rain',
       album:'https://cdnimg.melon.co.kr/cm2/album/images/103/45/880/10345880_20200326181909_500.jpg',
