@@ -35,9 +35,70 @@
     <div class="shadow"></div>
   </div>
 </div>
-<!--  <div id="playList" style="float:right">
-   하이
- </div> -->
+  <div id="player" >
+      <div class="cd-player">
+  <div class="cd-player-inner">
+    <div class="play-cover">
+
+    </div>
+    <div class="cd">
+      <div class="album-cover spin">
+        <img src="https://cdnimg.melon.co.kr/cm/album/images/100/74/454/10074454_500.jpg" alt="">
+
+      </div>
+      <div class="song-info">
+        <h2 class="song-title">비도오고 그래서</h2>
+        <h3 class="song-singer">헤이즈</h3>
+        <h4 class="song-hits"></h4>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <div class="remoter">
+  <div class="btn btn-prev">
+    <div class="icon"></div>
+  </div>
+  <div class="btn btn-next">
+    <div class="icon"></div>
+  </div>
+  <div class="btn btn-repeat">
+    <div class="icon">REPEAT</div>
+  </div>
+  <div class="btn btn-pause">
+    <div class="icon"></div>
+  </div>
+  <div class="btn btn-vol-up">
+    <div class="icon"></div>
+  </div>
+
+  <div class="btn btn-vol-down">
+    <div class="icon"></div>
+  </div>
+  <label class="vol-label">VOLUME</label>
+</div> -->
+ </div> 
+ <div id ="diaryDetail">
+ <v-card class="note">
+  <!--<b></b><i></i>-->
+  <div class="off"><div><div spellcheck="false">
+    <h1>2020-9-22</h1><br/>
+     <img src = "../../assets/weather/rain.png" style ="width:50px;height:50px;margin:5px;">
+     <img src = "../../assets/emotion/cry.png" style ="width:50px;height:50px;margin:5px;"><br>
+     <v-card>
+       <img src = "../../assets/instagram/rain.jpg" style ="width:100%;height:150px;">
+       <div class="diaryText">
+     <p>오늘은 아침부터 비가 너무 많이온다<br>
+       우울하다...<br>
+       밖에 나가고 싶다
+     </p>
+     </div>
+     </v-card>
+    </div>
+   
+    </div></div></v-card>
+    </div>
+    <!-- <img  class = "pen" src = "../../assets/pen.png"  > -->
+    
  </div>
 
   
@@ -53,24 +114,23 @@ View the project on Github : https://github.com/akzhy/Vara
 
 */
 #diary{
-  background: #fff4d3;
+  background: #fff4d3;height: 1000px;
 }
-#book{
-  height: 1000px;
-}
+
 
 
 .book {
   transform-style: preserve-3d;
-  transform: rotateX(45deg) rotateY(0deg) rotateZ(-45deg);
+ /*  transform: rotateX(45deg) rotateY(0deg) rotateZ(-45deg); */
   transition: transform 1s;
   position: absolute;
   left: 0;
   top: 0;
   right: 0;
   /* bottom: 5%;  */
-  margin: 30px  30%;  
-  width: 25em;
+  margin-top: 15px;  
+  margin-left: 30%;
+  width: 20em;
   height: 600px;
   
 }
@@ -100,8 +160,8 @@ View the project on Github : https://github.com/akzhy/Vara
 }
 .book .paper,
 .book .shadow {
-  width: 30em;
-  height: 650px;
+  width: 430px;
+  height: 640px;
   position: absolute;
   top: 0;
   left: 0;
@@ -227,31 +287,95 @@ View the project on Github : https://github.com/akzhy/Vara
 .book .paper.fourth .front {
   transform: translateZ(0.1px);
 }
-/* .book .second-page #vara-container {
+ .book .second-page #vara-container {
   width: 100%;
   height: 100%;
   padding: 1em;
-} */
-/* #link {
+} 
+ #link {
   position: absolute;
   bottom: 10px;
   right: 10px;
   color: #615858;
   letter-spacing: 2px;
   text-decoration: none;
-} */
+} 
 
 .calendar{
   position: relative;
   top :0px;
-  left:-400px; 
-  width:170%;
+  left:-380px; 
+  width:180%;
   height: 100%;
+
   transition: transform 1s;
 }
+/* ----------------------CD player --------------------- */
+#player{
+  position: absolute;
+  right: 4%;
+  top : 25px;
+}
+/* -----------50----------- NOTE  --------------------- */
+#diaryDetail{
+  position:absolute;
+  right:6%;
+  top : 145px;
+  height: 500px;
+  z-index:0;
+}
+.note {
+  font-size: 16px;
+  line-height: 22px; /* Adjusts font size line height. */
+  background: #f8f1c6;
+  background: linear-gradient(#f8f1c6 0%, #f8f1c6 96%, #cfceab 100%);
+  background-size: 2px 22px; /* This property adds the grey line height */
+  border-radius: 2px;
+  border: 1px solid #C4C296;
+  color: #878260;
+  width: 500px;
+  margin: 20px auto;
 
+}
+.diaryText{
+  text-align: center;
+  padding:10% 10%;
+}
+.note > div > div > div > span {
+  color: #9C9778;
+  font-weight: bold;
+} /* Title H1 style */
+
+.note > div > div, 
+.note > div > div > div {
+  height: 500px;
+  border-left: 1px solid #ddbbb8;
+  box-shadow: 0 0 1px rgba(221,187,184,0.4),
+              inset 0 0 1px rgba(221,187,184,0.4);
+} /* These are the 2 lines on the right */
+
+
+.note > div > div {
+  margin-left: 40px;
+}  /* Adds margin to extend the note app to the left. */
+
+.note > div > div > div {
+  padding: 22px 20px 21px 20px;
+  margin-left: 4px;
+  outline: none;
+} /* Padding to add the space around the shape. */
+
+/* ---------------- pen ------------*/
+.pen{
+  height: 500px;
+  position: absolute;
+  right: 1px;
+  top:250px;
+}
 </style>
-
+<style lang="scss">
+@import "@/style/cdplayer.scss";
+</style>
 <script>
 
 
