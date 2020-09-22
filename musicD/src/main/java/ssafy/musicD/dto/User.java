@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Document(collection="user")
 public class User {
 	@Id
-	private String _id;
+	private String id;
 	private String email;
 	private String password;
 	private String name;
@@ -24,6 +24,7 @@ public class User {
 	private int[] playlist;
 	private int[] diary;
 	private int[] friends;
+	private String role;
 	
 	@Builder
 	public User(String email, String name, String password) {
