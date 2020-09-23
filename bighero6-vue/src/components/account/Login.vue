@@ -3,13 +3,13 @@
     <v-container class="mx-auto" style="max-width:450px; margin-top:150px">
       <div class="inputForm mx-auto">
       <v-form @submit.prevent="login(loginData)">
-        <v-text-field v-model="email"
+        <v-text-field v-model="loginData.email"
                       :rules="emailRules"
                       label="email"
                       required
         ></v-text-field>
         <v-text-field
-          v-model="password"
+          v-model="loginData.password"
           :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
           :rules="[rules.required, rules.min]"
           :type="show1 ? 'text' : 'password'"
@@ -41,8 +41,8 @@ export default {
   data() {
     return {
       loginData: {
-        email: null,
-        password: null,
+        email: '',
+        password: '',
       },
       show1: false,
       email: '',
