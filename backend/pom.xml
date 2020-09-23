@@ -70,7 +70,6 @@
 			</exclusions>
 		</dependency>
 		<!-- swagger -->
->>>>>>> refs/heads/back/Login
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>

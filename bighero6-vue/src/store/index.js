@@ -125,7 +125,7 @@ export default new Vuex.Store({
         
         alert("로그인")
 
-        router.push({ name: 'Home' })
+        router.push({ name: 'home' })
       })
       .catch(err => {
         alert(err.response.data)
@@ -177,7 +177,7 @@ export default new Vuex.Store({
       sessionStorage.clear();
 
       alert("로그아웃");
-      router.push({ name: "Home" });
+      router.push({ name: "home" });
     },
 
 

@@ -2,24 +2,22 @@
   <div id="login">
     <v-container class="mx-auto" style="max-width:450px; margin-top:150px">
       <div class="inputForm mx-auto">
-      <v-form>
-        <v-text-field v-model="email"
+      <v-form @submit.prevent="login(loginData)">
+        <v-text-field v-model="loginData.email"
                       :rules="emailRules"
                       label="email"
                       required
         ></v-text-field>
         <v-text-field
-          v-model="password"
+          v-model="loginData.password"
           :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
           :rules="[rules.required, rules.min]"
           :type="show1 ? 'text' : 'password'"
-          name="input-10-1"
           label="Password"
           hint="At least 8 characters"
           counter
           @click:append="show1 = !show1"
         ></v-text-field>
-      </v-form>
       <v-row align="center">
         <v-col cols="12" sm="7">
         </v-col>
@@ -30,6 +28,7 @@
             <v-btn depressed small color = "primary">회원가입</v-btn>
         </v-col>
       </v-row>
+      </v-form>
     </div>
     </v-container>
     
@@ -42,8 +41,8 @@ export default {
   data() {
     return {
       loginData: {
-        email: null,
-        password: null,
+        email: '',
+        password: '',
       },
       show1: false,
       email: '',
@@ -58,6 +57,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["login"]),
   },
 };
 </script>
