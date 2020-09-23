@@ -5,7 +5,7 @@ import MyPage from '../views/MyPage.vue'
 import Login from '../views/Login.vue'
 import Playlist from '../views/Playlist.vue'
 import Signup from '../views/SignupPage.vue'
-
+import WriteDiary from '../views/WriteDiary.vue'
 
 Vue.use(Router)
 
@@ -38,7 +38,11 @@ export default new Router({
       path: '/playlist',
       name: 'playlist',
       component: Playlist,
-
+    },
+    {
+      path: '/writediary',
+      name: 'writediary',
+      component: WriteDiary,
     },
   ],
 })
