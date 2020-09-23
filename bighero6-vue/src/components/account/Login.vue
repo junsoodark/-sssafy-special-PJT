@@ -24,7 +24,7 @@
         <v-col cols="12" sm="7">
         </v-col>
         <v-col cols="12" sm="2" class="my-5">
-            <v-btn depressed small color = "primary">로그인</v-btn>
+            <v-btn type="submit" depressed small color = "primary">로그인</v-btn>
         </v-col>
         <v-col cols="12" sm="3" class="my-5">
             <v-btn depressed small color = "primary">회원가입</v-btn>
@@ -37,11 +37,14 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
-      password: 'Password',
-      email: null,
+      loginData: {
+        email: null,
+        password: null,
+      },
       show1: false,
       email: '',
       emailRules: [

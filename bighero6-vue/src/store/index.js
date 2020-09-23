@@ -6,7 +6,6 @@ import VueCookies from "vue-cookies";
 
 import createPersistedState from "vuex-persistedstate";
 import moduleName from "./test_moduleName";
-import firebase from 'firebase'
 
 Vue.use(Vuex)
 
@@ -122,16 +121,6 @@ export default new Vuex.Store({
         const loginTime = loginH + ":" + loginM + ":" + loginS
         commit('UPDATE_LOGIN_TIME', loginTime)
 
-        var fbpassword = res.data.fbpassword
-        // firebase 사용자 로그인
-        firebase.auth().signInWithEmailAndPassword(loginData.email, fbpassword)
-        .catch(function(error) {
-          // Handle Errors here.
-          var errorMessage = error.message;
-          console.log('파이어베이스 로그인 에러')
-          console.log(errorMessage)
-          // ...
-        })
         
         
         alert("로그인")
@@ -161,16 +150,6 @@ export default new Vuex.Store({
         headers: { "Content-Type": "application/json; charset=utf-8" },
       })
       .then((res) => {
-        var fbPassword = res.data.fbPassword
-        // firebase 회원가입
-        firebase.auth().createUserWithEmailAndPassword(email, fbPassword)
-        .catch(function (error) {
-          // Handle Errors here.
-          var errorMessage = error.message;
-          console.log("firebase 인증 에러");
-          console.log(errorMessage);
-          // ...
-        })
         //
         const loginData = {
           'email': email,
