@@ -1,6 +1,5 @@
 <template>
   <div class="page-container">
-
     <!-- <h2 @click="changeDate">Has month and week two mode. And you can custom all style</h2> -->
     <div class="container">
       <Calendar
@@ -10,7 +9,7 @@
         :mode="mode"
         @next="onNext"
         @prev="onPrev"
-        firstDay="1"
+       
         ref="calendar"
       >
         <!-- <div slot="header-left" class="ui-calendar-header__left">
@@ -27,7 +26,6 @@
             Week
           </button>
         </div> -->
-
         <template v-slot:body="{ data }">
           <transition :name="transitionName">
             <div class="calendar-body-grid" :key="indentifier">
@@ -53,9 +51,11 @@
                       class="ui-calendar-item-name"
                       v-for="(item, index) in col.data"
                       :key="index">
-                      
-                      <img src="../../assets/weather/sun.png">
-                      <img :src="item.album" ><br>
+
+                      <img class="weatherIcon mr-2" :src= "weather(item.weather)">
+                      <img class="weatherIcon" src= "../../assets/emotion/happy.png">
+                      <br>
+                      <img class="albumIcon" :src="item.album" ><br>
                       <span>{{item.title}}</span>
                       
                       <!-- <span class="del" @click="deleteItem(item.title)">✖️</span> -->
@@ -95,8 +95,8 @@ export default {
      */
   },
   methods: {
-        weather : function(w){
-          return "../../assets/weather/sun.png"; 
+    weather(w) {
+          return require('../../assets/weather/'+w+'.png'); 
       }
       ,
     onMonthChange(val) {
@@ -135,20 +135,36 @@ export default {
     }
   }
 };
+
 </script>
 
 <style scoped>
-.calendar-day-item{
-    height:120px;
-    width:30px;
-    cursor: pointer;
+@import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap'); 
+*{
+    font-family: 'Rubik', sans-serif; 
 }
-img {
-    width: 33%;
-    height: 33%;
+/* .ui-calendar-item-date{
+     font-family: 'Rubik', sans-serif; 
+} */
+.calendar-day-item{
+    height:105px;
+    width:25px;
+    cursor: pointer;
+     
+}
+.albumIcon {
+    width: 40px;
+    height: 30px;
+}
+.weatherIcon{
+    width:18px;
+    height: 18px;
+    float:left;
 }
 .ui-calendar-item-name{
-    text-align: center;
+     text-align: center; 
+     padding:0;
+     margin:0;
 }
 span{
     font-size: 5px;
