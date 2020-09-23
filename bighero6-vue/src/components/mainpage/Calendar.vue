@@ -35,7 +35,7 @@
                 <div v-for="col in row" 
                   class="calendar-day-item"
                   
-                  :key="col.date.full">
+                  :key="col.date.full" @click ="getDiaryDetail(col.date.full)">
                   <div
                     :class="[
                       'ui-calendar-item',
@@ -44,7 +44,7 @@
                         'is-today': col.isToday
                       },
                     ]">
-                    <div class="ui-calendar-item-date">
+                    <div :slot="col.now" class="ui-calendar-item-date">
                       {{col.date.date}}
                     </div>
                     <div
@@ -53,10 +53,10 @@
                       :key="index">
 
                       <img class="weatherIcon mr-2" :src= "weather(item.weather)">
-                      <img class="weatherIcon" src= "../../assets/emotion/happy.png">
+                      <img class="weatherIcon" :src= "emotion(item.emotion)">
                       <br>
-                      <img class="albumIcon" :src="item.album" ><br>
-                      <span>{{item.title}}</span>
+                      <img class="albumIcon" :src="albumUrl(item.music.musicID)"><br>
+                      <span>{{item.music.singer}}-{{item.music.title}}</span>
                       
                       <!-- <span class="del" @click="deleteItem(item.title)">✖️</span> -->
                     </div>
@@ -83,9 +83,11 @@ export default {
   data() {
     return {
       indentifier: '',
-      dateData: data().Array,
+      //dateData : data().Array
+      dateData: [],
       transitionName: 'slide-left',
-      mode: 'month'
+      mode: 'month',
+      diary :{},
     };
   },
   computed :{
@@ -99,9 +101,14 @@ export default {
           return require('../../assets/weather/'+w+'.png'); 
       }
       ,
+       emotion(e) {
+          return require('../../assets/emotion/'+e+'.png'); 
+      }
+      ,
     onMonthChange(val) {
       console.log(val);
       this.indentifier = val.now.full;
+      this.getDiaryByMonth(this.indentifier);
     },
     onNext() {
       this.transitionName = 'slide-left';
@@ -132,7 +139,73 @@ export default {
       }, ['next']);
       const dateText = h('div', { class: ['ui-calendar-modeBtn'] }, [selectedDate]);
       return h('div', [prevButton, dateText, nextButton]);
-    }
+    },
+   getDiaryByMonth(date){
+       // 월별 유저의 다이어리 데이터 가져오는 함수 
+           date = date.slice(5,7);
+           console.log(date)
+           //axios 요청 현재월 데이터 요청 
+
+           //this.dateData = {};
+   },
+   getDiaryDetail(date){
+    console.log(date+'테스트');
+    var diary = {};
+    diary = this.dateData.filter(x=> x.date == date);
+    console.log(diary[0])
+    this.$emit('showDetail',diary[0]);
+   },
+   albumUrl(url){
+       //10197480
+       var imgurl = 'https://cdnimg.melon.co.kr/cm/album/images/'+ url.slice(0,3)+'/'+ url.slice(3,5)+'/'+url.slice(5,8)+'/'+url+'_500.jpg';
+       return imgurl;
+   }
+  },
+  mounted() {
+    console.log(this.indentifier);
+    this.getDiaryByMonth(this.indentifier);
+    this.dateData = [{
+      date: `2020-09-20`,
+      title: 'BTS-DNA',
+      weather:'sun',
+      emotion:'happy',
+      music : {
+          musicID: '10197480',
+          title: 'DNA',
+          singer: 'BTS'
+      },
+      album:'https://cdnimg.melon.co.kr/cm/album/images/101/97/480/10197480_500.jpg',
+      content:'친구랑 같이 노래방 간날',
+      contentImg:''
+    },
+    {
+      date: `2020-09-21`,
+      title: 'BTS-DNA',
+      weather:'rain',
+      emotion:'cry',
+      music : {
+          musicID: '10074454',
+          title: '비도오고그래서',
+          singer: '헤이즈'
+      },
+      album:'https://cdnimg.melon.co.kr/cm/album/images/101/97/480/10197480_500.jpg',
+      content:'오늘은 비가 너무 많이 왔다.',
+      contentImg:''
+    },{
+      date: `2020-09-22`,
+      title: 'BTS-DNA',
+      weather:'sun',
+      emotion:'in-love',
+       music : {
+          musicID: '10197480',
+          title: 'DNA',
+          singer: 'BTS'
+      },
+      album:'https://cdnimg.melon.co.kr/cm/album/images/101/97/480/10197480_500.jpg',
+      content:'오늘은 날이 너무 좋다. 노래방 가고싶다 ㅎㅎㅎ',
+      contentImg:''
+    }]
+
   }
 };
 
@@ -167,7 +240,7 @@ export default {
      margin:0;
 }
 span{
-    font-size: 5px;
+    font-size: 4px;
 }
 </style>
 

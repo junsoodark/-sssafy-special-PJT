@@ -14,7 +14,7 @@
     </div>
     <div class="second paper">
       <div class="page last front contents">
-        <calendar  v-if ="open" class="calendar"></calendar>
+        <calendar @showDetail="getDiaryDetail" v-if ="open" class="calendar"></calendar>
       </div>
       <div class="page back"></div>
     </div>
@@ -35,7 +35,7 @@
     <div class="shadow"></div>
   </div>
 </div>
-  <div id="player" >
+  <div v-if="diaryDetail" id="player" >
       <div class="cd-player">
   <div class="cd-player-inner">
     <div class="play-cover">
@@ -43,12 +43,12 @@
     </div>
     <div class="cd">
       <div class="album-cover spin">
-        <img src="https://cdnimg.melon.co.kr/cm/album/images/100/74/454/10074454_500.jpg" alt="">
+        <img :src="albumUrl(diaryDetail.music.musicID)" alt="">
 
       </div>
       <div class="song-info">
-        <h2 class="song-title">비도오고 그래서</h2>
-        <h3 class="song-singer">헤이즈</h3>
+        <h2 class="song-title">{{diaryDetail.music.title}}</h2>
+        <h3 class="song-singer">{{diaryDetail.music.singer}}</h3>
         <h4 class="song-hits"></h4>
       </div>
     </div>
@@ -78,27 +78,26 @@
 </div> -->
  </div> 
  <div id ="diaryDetail">
- <v-card class="note">
+ <v-card v-if="diaryDetail" class="note">
   <!--<b></b><i></i>-->
   <div class="off"><div><div spellcheck="false">
-    <h1>2020-9-22</h1><br/>
-     <img src = "../../assets/weather/rain.png" style ="width:50px;height:50px;margin:5px;">
-     <img src = "../../assets/emotion/cry.png" style ="width:50px;height:50px;margin:5px;"><br>
+    <h1>{{diaryDetail.date}}</h1><br/>
+     <img :src = "weather(diaryDetail.weather)" style ="width:50px;height:50px;margin:5px;">
+     <img :src = "emotion(diaryDetail.emotion)" style ="width:50px;height:50px;margin:5px;"><br>
      <v-card>
        <img src = "../../assets/instagram/rain.jpg" style ="width:100%;height:150px;">
        <div class="diaryText">
-     <p>오늘은 아침부터 비가 너무 많이온다<br>
-       우울하다...<br>
-       밖에 나가고 싶다
-     </p>
+         {{diaryDetail.content}}
      </div>
      </v-card>
     </div>
    
     </div></div></v-card>
     </div>
-    <!-- <img  class = "pen" src = "../../assets/pen.png"  > -->
-    
+
+
+
+<div data-video="JC08Fu3QfJg" data-autoplay="0" data-loop="1" id="youtube-audio1"></div>
  </div>
 
   
@@ -327,8 +326,8 @@ View the project on Github : https://github.com/akzhy/Vara
 .note {
   font-size: 16px;
   line-height: 22px; /* Adjusts font size line height. */
-  background: #f8f1c6;
-  background: linear-gradient(#f8f1c6 0%, #f8f1c6 96%, #cfceab 100%);
+  background: #fa8cd0;
+  /*background: linear-gradient(#f8f1c6 0%, #f8f1c6 96%, #cfceab 100%); */
   background-size: 2px 22px; /* This property adds the grey line height */
   border-radius: 2px;
   border: 1px solid #C4C296;
@@ -387,14 +386,42 @@ components: {
   data() {
     return {
       open : false,
+      diaryDetail:'',
     };
   },
 methods : {
+  weather(w) {
+          return require('../../assets/weather/'+w+'.png'); 
+      }
+      ,
+  emotion(e) {
+          return require('../../assets/emotion/'+e+'.png'); 
+      }
+      ,
   openBook(){
 
     setTimeout(() => { this.open =true; }, 1000)
    
-  }
+  },
+   albumUrl(url){
+       //10197480
+       var imgurl = 'https://cdnimg.melon.co.kr/cm/album/images/'+ url.slice(0,3)+'/'+ url.slice(3,5)+'/'+url.slice(5,8)+'/'+url+'_500.jpg';
+       return imgurl;
+   },
+  getDiaryDetail(data){
+    console.log(data);
+    this.diaryDetail = data ; 
+  },
+
+parse_str(str) {
+    return str.split('&').reduce(function(params, param) {
+        var paramSplit = param.split('=').map(function(value) {
+            return decodeURIComponent(value.replace('+', ' '));
+        });
+        params[paramSplit[0]] = paramSplit[1];
+        return params;
+    }, {});
+}
 },
 mounted(){
 var winWidth = $(window).width();
@@ -409,7 +436,6 @@ var posX = Math.max(80 * ratio, 30);
 $("body").css("font-size", bodyFontSize + "px");
 fontSize.small = Math.max(fontSize.small * ratio, 7);
 fontSize.medium = Math.max(fontSize.medium * ratio, 10);  */
-
 
   
   $(".front:not(.last)").click(function() {

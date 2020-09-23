@@ -42,15 +42,15 @@ export default function getCalendarData(d) {
       title: 'shopping'
     }, */
 
-  const ObjectData = {};
+/*   const ObjectData = {};
 
   ArrayData.forEach((item) => {
     ObjectData[item.date] = { ...item };
-  });
+  }); */
 
   return {
     Array: ArrayData,
-    Object: ObjectData
+    /* Object: ObjectData */
   };
 }
 
