@@ -1,112 +1,101 @@
-package ssafy.musicD.controller;
+package ssafy.musicD.repository;
 
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
-
-import org.springframework.web.bind.annotation.*;
-import org.springframework.ws.server.endpoint.annotation.XPathParam;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.stereotype.Repository;
 import ssafy.musicD.dto.User;
-import ssafy.musicD.repository.FriendRepolmpl;
-import ssafy.musicD.service.FriendServicelmpl;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-@RestController
-@RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
-public class FriendController {
+@Repository
+public class FriendRepolmpl {
     @Autowired
-    private FriendServicelmpl friendService;
+    private MongoTemplate mongoTemplate;
 
-    @ApiOperation(value = "친구 검색", response = String.class)
-    @GetMapping("/friend/{keyword}")
-    public List<User> searchFriends(@PathVariable String keyword) {
-        List<User> searchFriendList = friendService.searchFriends(keyword);
-        return searchFriendList;
+    public List<User> searchFriends(String keyword) {
+        Criteria criteria = new Criteria("_id");//criteria에 유저 아이디 넣어야함 (jwt 토큰)
+//        criteria.is(userId);   <-- jwt 토큰으로 아이디 구해오기
+//        Query query = new Query(Criteria.where("_id"));
+        Query query = new Query(Criteria.where("name").regex(keyword));
+        List<User> keywordFriend = mongoTemplate.find(query, User.class, "user");
+        System.out.println(keywordFriend);
+//        Query query2 = new Query(criteria.where("friends").is(keywordFriend));
+        User temp = mongoTemplate.findOne(query, User.class, "user");
+        List<String> listed = temp.getFriends();
+        String userId1 = temp.get_id();
+        System.out.println(temp);
+        System.out.println(userId1);
+        listed.add(userId1);
+        System.out.println(listed);
+        Update update = new Update();
+        update.set("friends",listed);
+        mongoTemplate.updateFirst(query,update,"user");
+        System.out.println(temp);
+        if ()
+//        System.out.println(listed);
+//        mongoTemplate.insert(userId1,"friends");
+
+//        Update update = new Update();
+//        listed.append
+//        System.out.println(listed.append(userId1));
+//        update.set("friends",listed+"123");
+//        mongoTemplate.updateFirst(query,update,"user");
+//        System.out.println(temp);
+//        System.out.println(temp.getFriends()[0]);
+//        System.out.println(list[3]);
+        return mongoTemplate.find(query,User.class, "user");
     }
 
-//    @ApiOperation(value = "친구 아닌 유저 검색", response = String.class)
-//    @GetMapping("/nonfriend/{keyword}")
-//    public List<User> searchNonFriends(@PathVariable String keyword) {
-//        List<User> searchNonFriendList = friendService.searchNonFriend(keyword);
-//        return searchNonFriendList;
+//
+//    public List<User> waitFriendList(String userId){
+//        Criteria criteria = new Criteria("_id");
+//        criteria.is(userId);
+//        Query query= new Query(criteria);
+//        return mongoTemplate.find(query,User.class,"user");   0   1
 //    }
 //
-//    @ApiOperation(value = "친구 목록 조회", response = String.class)
-//    @GetMapping("/friend/")
-//    public List<User> friendList() {
-//        List<User> friendList = friendService.friendList();
-//        return friendList;
+//
+//
+//    public List<User> searchNonFriend(String keyword){
+//        Criteria criteria = new Criteria("_id");//criteria에 유저 아이디 넣어야함 (jwt 토큰)
+////        criteria.is(userId);   <-- jwt 토큰으로 아이디 구해오기
+//        Query query = new Query(Criteria.where("name").regex(keyword));
+//        List<User> keywordFriend = mongoTemplate.find(query, User.class, "user");
+//        Query query2 = new Query(criteria.where("friends").not(keywordFriend));
+//        return mongoTemplate.find(query2,User.class, "user");
 //    }
 //
-//    @ApiOperation(value = "친구 요청 보내기", response = String.class)
-//    @PostMapping("/friend/request/")
-//    public ResponseEntity<Map<String,Object>> requestFriend(HttpServletRequest req, HttpServletResponse res) {
-//        Map<String, Object> resultMap = new HashMap<>();
-//        HttpStatus status = null;
-//
-//        try {
-//
-//            status = HttpStatus.OK;
-//            resultMap.put("message", "친구신청 성공하였습니다.");
-//
-//        } catch (RuntimeException | SQLException e) {
-//            status = HttpStatus.BAD_REQUEST;
-//            resultMap.put("status", status.value());
-//            resultMap.put("message", e.getMessage());
-//        }
-//
-//        return new ResponseEntity<Map<String, Object>>(resultMap, status);
-//    }
-//    @ApiOperation(value = "친구 요청 수락", response = String.class)
-//    @PostMapping("/friend/accept/")
-//    public ResponseEntity<Map<String,Object>> acceptFriend(HttpServletRequest req,HttpServletResponse res){
-//        Map<String,Object> resultMap = new HashMap<>();
-//        HttpStatus status = null;
-//        try{
-//            status = HttpStatus.OK;
-//            resultMap.put("message", "친구 요청에 수락하셨습니다.");
-//        } catch (RuntimeException | SQLException e) {
-//            status = HttpStatus.BAD_REQUEST;
-//            resultMap.put("status", status.value());
-//            resultMap.put("message", e.getMessage());
-//        }
-//        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+//    public List<User> friendList(User user){
+//        Criteria criteria = new Criteria("_id");
+//        criteria.is(user.get_id());
+//        Query query = new Query(criteria.where("friends").);
+//        return mongoTemplate.find(query,User.class,"user");
 //    }
 //
-//    @ApiOperation(value = "나에게 친구요청한 유저 목록 조회", response = String.class)
-//    @GetMapping("/friend/request/list/")
-//    public List<User> waitFriendList() {
-//        List<User> waitFriendList = friendService.waitFriendList();
-//        return waitFriendList;
-//    }
 //
-//    @ApiOperation(value="친구 삭제", response=String.class)
-//    @DeleteMapping("/friend/{userId}")
-//    public ResponseEntity<Map<String, Object>> deleteFriend(@PathVariable String userId) {
-//        Map<String, Object> resultMap = null;
-//        HttpStatus status = null;
-//        try {
-//            friendService.deleteFriend(userId);
-//            status = HttpStatus.OK;
-//            resultMap.put("message", "친구 삭제하셨습니다.");
-//        } catch (RuntimeException | SQLException e) {
-//            status = HttpStatus.BAD_REQUEST;
-//            resultMap.put("status", status.value());
-//            resultMap.put("message", e.getMessage());
-//        }
+    public void requestFriend(User user){
+        Criteria criteria = new Criteria("_id");//criteria에 유저 아이디 넣어야함 (jwt 토큰)
+        String receiveFriendId = user.get_id();
+        Query query = new Query(Criteria.where("_id").is(receiveFriendId));
+        User temp = mongoTemplate.findOne(query, User.class, "user");
+        List<String> listed = temp.getFriends();
+        listed.add(receiveFriendId);
+        Update update = new Update();
+        update.set("friends",listed);
+        mongoTemplate.updateFirst(query,update,"user");
+    }
 //
-//        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+//    public void deleteFriend(User user){
+//        Criteria criteria = new Criteria("_id");
+//        criteria.is(user.get_id());
+//        Query query =new Query(Criteria.where("nickname").is(criteria));
+//
+//
+//
 //    }
+
 
 }

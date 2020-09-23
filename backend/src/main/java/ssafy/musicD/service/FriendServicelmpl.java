@@ -22,7 +22,7 @@ public class FriendServicelmpl implements FriendService{
 //
 //    public List<User> friendList(User user) { return friendRepo.friendList(user);}
 //
-//    public void requestFriend(User user) {friendRepo.requestFriend(user);}
+    public void requestFriend(User user) {friendRepo.requestFriend(user);}
 //
 //    public void deleteFriend(User user) {friendRepo.deleteFriend(user);}
 

@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,7 +23,7 @@ public class User {
 	private String profileURL;
 	private int[] playlist;
 	private int[] diary;
-	private String[] friends;
-	private String[] waitfriends;
+	private List<String> friends;
+	private List<String> waitfriends;
 
 }

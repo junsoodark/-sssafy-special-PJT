@@ -14,7 +14,7 @@ public interface FriendService {
 //
 //    public List<User> friendList(User user);
 //
-//    public void requestFriend(User user);
+    public void requestFriend(User user);
 //
 //    public void deleteFriend(User user);
 
