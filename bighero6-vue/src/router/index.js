@@ -42,7 +42,11 @@ export default new Router({
       path: '/playlist',
       name: 'playlist',
       component: Playlist,
-
+    },
+    {
+      path: '/writediary',
+      name: 'writediary',
+      component: WriteDiary,
     },
   ],
 })
