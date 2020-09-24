@@ -11,5 +11,4 @@ public class MusicDApplication {
 		SpringApplication.run(MusicDApplication.class, args);
 	}
 
-
 }

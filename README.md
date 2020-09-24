@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ## 서울 1반 7조(빅히어로6)
 팀장 : 박준수 
 팀원 : 김동휘, 김소희, 권혁규 , 윤지원, 김원정
@@ -10,11 +11,16 @@
 
 
 
-## ✏ 사용언어 /기술스택
+## ✏ 사용언어 /기술스택 
 
 <div align=center><img src ="https://img.shields.io/badge/Platform-web-brightgreen">&nbsp;&nbsp;<img src="https://img.shields.io/badge/Framework-Spring / Django / Vue.js-yellowgreen"> </div>
 
 <div align=center><img src="https://img.shields.io/badge/Database-MongoDB / Redis-blue">&nbsp;&nbsp;<img src="https://img.shields.io/badge/Server-AWS-orange">&nbsp;&nbsp;<img src="https://img.shields.io/badge/Language-Java / python / Javascript%20-lightgray"></div>
+=======
+#### 서울 1반 7조(빅히어로6)
+팀장 : 박준수 / 
+팀원 : 김동휘, 김소희, 윤지원, 권혁규, 김원정
+>>>>>>> ccb4aa10b3497f1130337d7331bc36d56b21b2c4
 
 
 
