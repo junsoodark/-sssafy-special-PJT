@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "dayjs": "^1.8.36",
+    "firebase": "^7.21.0",
     "vara": "^1.2.0",
     "vue": "^2.6.11",
     "vue-router": "^3.1.6",

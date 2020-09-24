@@ -37,12 +37,20 @@
 </template>
 
 <script>
+import config from "../../lib/FireBaseConfig";
+import firebase from "firebase"; // 파이어베이스 import 
+//import "firebase/storage";
+
+// Initialize Firebase
+firebase.initializeApp(config.apiKey);
+
+
   export default {
     data () {
       return {
         nickName : "빅히어로",
         email:"bigHero@naver.com",
-        imgSrc:"",
+        imgSrc:"https://firebasestorage.googleapis.com/v0/b/music-diary-710d3.appspot.com/o/profile%2Fuser2.jpeg?alt=media",
         file:""
       }
     },
@@ -55,6 +63,10 @@
         return;
       this.file = e.target.files[0]; // 파일을 가져옴
       this.imgSrc = URL.createObjectURL(this.file); // 미리보기용으로 url 생성
+
+      //var profileRef = firebase.storage().ref().child("profile/user");
+       this.imgSrc = "https://firebasestorage.googleapis.com/v0/b/music-diary-710d3.appspot.com/o/profile%2Fuser1.jpg?alt=media";
+        
     },
     removeImage(){
       this.imgSrc=null;
