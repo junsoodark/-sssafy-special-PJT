@@ -1,5 +1,6 @@
 <template>
   <div class="diary">
+    <!------------------------------ Diary ------------------------------>
     <div class="back page"></div>
     <div class="current page">
       <div class="header">
@@ -45,6 +46,7 @@
           <v-btn block color="secondary" dark>사진 수정하기<v-icon dark right>mdi-camera-plus</v-icon></v-btn>
           <v-img src="https://picsum.photos/510/300?random" aspect-ratio="2.0"></v-img>
         </div>
+        <!-- 글 작성 start -->
         <v-container style="padding-top: 0px;padding-bottom: 5px;">
           <v-row>
             <v-col cols="12" style="padding-top: 0px;">
@@ -58,6 +60,7 @@
             </v-col>
           </v-row>
         </v-container>
+        <!-- 글 작성 end -->
         <v-container class="px-3" fluid style="padding-top: 0px;">
           <v-row>
             <v-col>
@@ -66,8 +69,8 @@
                 :label="`공개 설정 : ${switch1.toString()}`"
               ></v-switch>
             </v-col>
-            <v-col>
-              <v-btn small color="error" style="float:right;">저장</v-btn>
+            <v-col style="padding-top:7px;">
+              <v-btn color="error" style="float:right;">저장</v-btn>
             </v-col>
           </v-row>
         </v-container>
@@ -75,7 +78,8 @@
     </div>
     <div class="next page"></div>
     <div style="float:right;">
-      <!--<div class="cd-player">
+      <!------------------------------ CD Player ------------------------------>
+      <div class="cd-player" id="player">
         <div class="cd-player-inner">
           <div class="play-cover">
 
@@ -92,14 +96,78 @@
             </div>
           </div>
         </div>
-      </div>-->
-      <div style="margin-right:30px;">
+      </div>
+      <!------------------------------ 노래 검색 모달 버튼 ------------------------------>
+      <div class="text-left">
+        <v-dialog
+          v-model="dialog"
+          width="500"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              color="red lighten-2"
+              dark
+              v-bind="attrs"
+              v-on="on"
+              width="500"
+            >
+              노래 검색하기
+            </v-btn>
+          </template>
+
+          <v-card>
+            <v-card-title class="headline grey lighten-2">
+              노래 검색
+            </v-card-title>
+
+            <v-card-text style="padding-top:20px;">
+              (검색 노래 목록)
+            </v-card-text>
+
+            <v-divider></v-divider>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="primary"
+                text
+                @click="dialog = false"
+              >
+                닫기
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </div>
+      <!------------------------------ 노래 플레이어 ------------------------------>
+      <h3 id="playing"><v-icon small left>mdi-music</v-icon>Now Playing : 헤이즈 - 비도 오고 그래서</h3>
+      <div id="audio">
+        <vuetify-audio :file="file" color="success" :ended="audioFinish"></vuetify-audio>
+      </div>
+      <!------------------------------ 추천 노래 리스트 ------------------------------>
+      <div style="margin-right:60px;margin-top:20px;">
         <v-sheet
           class="mx-auto"
-          elevation="8"
+          elevation="4"
           max-width="800"
         >
-          <h2 style="padding-top:20px;padding-left:30px;">이런 노래는 어떠세요?</h2>
+          <h2 style="padding-top:20px;padding-left:30px;">
+            이런 노래는 어떠세요?
+            <v-btn
+              class="ma-2"
+              :loading="loading4"
+              :disabled="loading4"
+              color="warning"
+              @click="loader = 'loading4'"
+            >
+              노래 추천받기
+              <template v-slot:loader>
+                <span class="custom-loader">
+                  <v-icon light>cached</v-icon>
+                </span>
+              </template>
+            </v-btn>
+          </h2>
           <v-slide-group
             v-model="model"
             class="pa-4"
@@ -141,13 +209,30 @@
 
 <script>
 export default {
+  components: {
+    VuetifyAudio: () => import('vuetify-audio'),
+  },
   data: () => ({
     date: new Date().toISOString().substr(0, 10),
     menu: false,
     diarytext: "",
     switch1: true,
     model: null,
+    file: 'http://www.hochmuth.com/mp3/Boccherini_Concerto_478-1.mp3',
+    loader: null,
+    loading4: false,
+    dialog: false,
   }),
+  watch: {
+    loader () {
+      const l = this.loader
+      this[l] = !this[l]
+
+      setTimeout(() => (this[l] = false), 3000)
+
+      this.loader = null
+    },
+  },
 }
 </script>
 
@@ -232,5 +317,59 @@ export default {
   cursor: pointer;
 }
 
+#player {
+  position: absolute;
+  right: 5%;
+  top : -5px;
+}
 
+#audio {
+  margin-top:15px;
+  width:500px;
+}
+
+#playing {
+  margin-top:15px;
+}
+
+.custom-loader {
+  animation: loader 1s infinite;
+  display: flex;
+}
+@-moz-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+</style>
+
+<style lang="scss">
+@import "@/style/cdplayer.scss";
 </style>
