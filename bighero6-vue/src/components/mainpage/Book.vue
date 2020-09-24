@@ -58,11 +58,11 @@
     </div>
   </div>
 </div>
-  <div  class ="musicPlayer" style="text-align: center;">
-  <player></player>
-  </div>
- </div> 
  
+ </div> 
+ <div v-if="diaryDetail"  class ="musicPlayer" style="text-align: center;">
+  <player></player>
+  </div> 
 
 
 
@@ -345,9 +345,11 @@ View the project on Github : https://github.com/akzhy/Vara
   cursor: pointer;
 }
 .musicPlayer{
-  position: relative;
-  left:-350px;
-  top:0px;
+  position: absolute;
+  top:10px;
+  right:350px;
+  width:200px;
+  height:90%;
 }
 </style>
 <style lang="scss">
