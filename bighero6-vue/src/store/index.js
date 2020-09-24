@@ -24,6 +24,7 @@ export default new Vuex.Store({
     authToken: VueCookies.get("auth-token"),
     refreshToken: VueCookies.get("refresh-token"),
     email: VueCookies.get("email"),
+    id: VueCookies.get("id"),
     drawer: false,
     items: [
       {
@@ -53,8 +54,7 @@ export default new Vuex.Store({
     isLoggedIn: (state) => !!state.authToken,
     // auth, articles
     config: (state) => ({
-      headers: { Authorization: `authToken ${state.authToken}`,
-                 refresh:       `refreshToken ${state.refreshToken}`,
+      headers: { Authorization: `Bearer ${state.authToken}`,
       },
     }),
  /*    categories: state => {
@@ -91,6 +91,10 @@ export default new Vuex.Store({
       state.email = email;
       VueCookies.set("email", email);
     },
+    UPDATE_ID(state, id){
+      state.id = id;
+      VueCookies.set("id", id);
+    },
     setDrawer: (state, payload) => (state.drawer = payload),
     toggleDrawer: state => (state.drawer = !state.drawer),
   },
@@ -109,6 +113,8 @@ export default new Vuex.Store({
         sessionStorage.setItem('jwt-auth-token', res.data.accessToken);
         sessionStorage.setItem('user-email', loginData.email);
         sessionStorage.setItem('jwt-refresh-token', res.data.refreshToken);
+        sessionStorage.setItem('user-id', res.data.userId);
+
         console.log(sessionStorage.getItem('user-email'));
         console.log(sessionStorage.getItem('jwt-auth-token'));
 

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // package ssafy.musicD.service;
 
 // import java.util.List;
@@ -39,7 +38,6 @@
 // 		return userRepo.checkNickname(nickname);
 // 	}
 // }
-=======
 //package ssafy.musicD.service;
 //
 //import java.util.List;
@@ -82,4 +80,3 @@
 ////		return userRepo.checkNickname(nickname);
 ////	}
 //}
->>>>>>> 5dbbe9beb8923ddc5ad0a5d9fa2cb0d746ec434d

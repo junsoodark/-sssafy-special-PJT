@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // package ssafy.musicD.repository;
 
 // import java.util.List;
@@ -75,7 +74,6 @@
 // 			return "FAIL";
 // 	}
 // }
-=======
 //package ssafy.musicD.repository;
 //
 //import java.util.List;
@@ -152,4 +150,3 @@
 //			return "FAIL";
 //	}
 //}
->>>>>>> 5dbbe9beb8923ddc5ad0a5d9fa2cb0d746ec434d
