@@ -50,20 +50,6 @@ package ssafy.musicD.controller;
 //		return entity;
 //	}
 //
-//	@ApiOperation(value="이메일 중복 체크", response=String.class)
-//	@PostMapping("/user/checkemail")
-//	public @ResponseBody String checkEmail(@RequestBody String email) {
-//
-//		return userService.checkEmail(email);
-//	}
-//
-//	@ApiOperation(value="닉네임 중복 체크", response=String.class)
-//	@PostMapping("/user/checknickname")
-//	public @ResponseBody String checkNickname(@RequestBody String nickname) {
-//
-//		return userService.checkNickname(nickname);
-//	}
-//
 //	/* 예외 처리 */
 //	private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
 //		Map<String, Object> resultMap = new HashMap<>();
@@ -78,8 +64,9 @@ package ssafy.musicD.controller;
 //		resultMap.put("data", e.getMessage());
 //		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
 //	}
-	
+
 import io.jsonwebtoken.ExpiredJwtException;
+import io.swagger.annotations.ApiOperation;
 import ssafy.musicD.Domain.Member;
 import ssafy.musicD.Domain.Token;
 import ssafy.musicD.jwt.JwtUtils;
@@ -122,22 +109,14 @@ public class UserController {
 	@Autowired
 	private PasswordEncoder bcryptEncoder;
 
-	// 회원정보삭제
-	@DeleteMapping(path = "/{userId}")
-//	@ApiOperation(value="회원정보삭제", response=String.class)
-	public void deleteUser(@PathVariable Long userId) {
-		logger.info("delete userId: " + userId);
-		Long result = userRepo.deleteById(userId);
-		logger.info("delete result: " + result);
-	}
-
-//    @GetMapping(path="/user/normal")
+//    @GetMapping(path="/normal")
 //    public ResponseEntity<?> onlyNormal() {
 //        return new ResponseEntity(HttpStatus.OK);
 //    }
 
 	// 로그아웃
 	@PostMapping(path = "/logout")
+	@ApiOperation(value = "로그아웃", response = String.class)
 	public ResponseEntity<?> logout(@RequestBody Map<String, String> m) {
 		String email = null;
 		String accessToken = m.get("accessToken");
@@ -168,6 +147,7 @@ public class UserController {
 
 	// 로그인
 	@PostMapping(path = "/login")
+	@ApiOperation(value = "로그인", response = String.class)
 	public Map<String, Object> login(@RequestBody Map<String, String> m) throws Exception {
 		final String email = m.get("email");
 		logger.info("input email: " + email);
@@ -192,18 +172,19 @@ public class UserController {
 		logger.info("generated access token: " + accessToken);
 		logger.info("generated refresh token: " + refreshToken);
 		Map<String, Object> map = new HashMap<>();
+		map.put("status", 200);
 		map.put("accessToken", accessToken);
 		map.put("refreshToken", refreshToken);
-		// 어떤 데이터를 넘겨줘야
+		map.put("userId", userRepo.findByEmail(email).getId().toString());
 		return map;
 	}
 
 	// 회원가입
 	@PostMapping(path = "/signup")
+	@ApiOperation(value = "회원 가입", response = String.class)
 	public Map<String, Object> addNewUser(@RequestBody Member user) {
 		String email = user.getEmail();
 		Map<String, Object> map = new HashMap<>();
-		System.out.println("회원가입요청 아이디: " + email + " 비번: " + user.getPassword());
 		if (userRepo.findByEmail(email) == null) {
 			user.setEmail(email);
 			if (user.getNickName().equals("admin")) {
@@ -212,11 +193,13 @@ public class UserController {
 				user.setRole("ROLE_USER");
 			}
 			user.setPassword(bcryptEncoder.encode(user.getPassword()));
-			map.put("success", true);
+			map.put("status", 200);
+			map.put("email", user.getEmail());
+			map.put("nickname", user.getNickName());
 			userRepo.save(user);
 			return map;
 		} else {
-			map.put("success", false);
+			map.put("status", 500);
 			map.put("message", "duplicated email");
 		}
 		return map;
@@ -224,20 +207,42 @@ public class UserController {
 
 	// 이메일 중복 확인
 	@PostMapping(path = "/checkemail")
+	@ApiOperation(value = "이메일 중복 확인", response = String.class)
 	public boolean checkEmail(@RequestBody Map<String, String> m) {
 		System.out.println("이메일 중복 체크: " + m.get("email"));
 		return userRepo.existsByEmail(m.get("email"));
 	}
-	
+
 	// 닉네임 중복 확인
 	@PostMapping(path = "/checknickname")
+	@ApiOperation(value = "닉네임 중복 확인", response = String.class)
 	public boolean checkNickName(@RequestBody Map<String, String> m) {
 		System.out.println("닉네임 중복 체크: " + m.get("nickName"));
 		return userRepo.existsByNickName(m.get("nickName"));
 	}
-	
+
+	// 회원 정보 조회
+	@GetMapping(path = "/{userId}")
+	@ApiOperation(value = "회원 정보 조회", response = String.class)
+	public Map<String, Object> getUser(@PathVariable String userId) {
+		Map<String, Object> map = new HashMap<>();
+		Member member = userRepo.findById(userId).orElse(null);
+		System.out.println(member);
+		if (member != null) {
+			member.setPassword("");
+			map.put("success", true);
+			map.put("member", member);			
+			return map;
+		} else {
+			map.put("success", false);
+			map.put("message", "can't find member");
+		}
+		return map;
+	}
+
 //	// 회원정보수정
 //	@PutMapping(path = "/")
+//	@ApiOperation(value = "회원정보수정", response = String.class)
 //	public Map<String, Object> modifyUser(@RequestBody Member user) {
 //		String email = user.getEmail();
 //		Map<String, Object> map = new HashMap<>();
@@ -260,33 +265,18 @@ public class UserController {
 //		return map;
 //	}
 
-	// 비밀번호 찾기 이메일 인증
-	
-	// 회원가입 이메일 인증
-	
-	
-	@PostMapping(path = "/check")
-	public Map<String, Object> checker(@RequestBody Map<String, String> m) {
-		String email = null;
-		Map<String, Object> map = new HashMap<>();
-		try {
-			email = jwtUtils.getEmailFromToken(m.get("accessToken"));
-		} catch (IllegalArgumentException e) {
-			logger.warn("Unable to get JWT Token");
-		} catch (ExpiredJwtException e) {
-		}
-
-		if (email != null) {
-			map.put("success", true);
-			map.put("email", email);
-		} else {
-			map.put("success", false);
-		}
-		return map;
+	// 회원정보삭제
+	@DeleteMapping(path = "/{userId}")
+	@ApiOperation(value = "회원 탈퇴", response = String.class)
+	public void deleteUser(@PathVariable Long userId) {
+		logger.info("delete userId: " + userId);
+		Long result = userRepo.deleteById(userId);
+		logger.info("delete result: " + result);
 	}
 
-	// 새로고침, accesstoken 재발급(refresh token이 만료 안된 경우)
+	// accesstoken 재발급(refresh token이 만료 안된 경우)
 	@PostMapping(path = "/refresh")
+	@ApiOperation(value = "재발급", response = String.class)
 	public Map<String, Object> requestForNewAccessToken(@RequestBody Map<String, String> m) {
 		String accessToken = null;
 		String refreshToken = null;
@@ -337,4 +327,28 @@ public class UserController {
 
 		return map;
 	}
+
+	// 비밀번호 찾기 이메일 인증
+
+	// 회원가입 이메일 인증
+
+//	@PostMapping(path = "/check")
+//	public Map<String, Object> checker(@RequestBody Map<String, String> m) {
+//		String email = null;
+//		Map<String, Object> map = new HashMap<>();
+//		try {
+//			email = jwtUtils.getEmailFromToken(m.get("accessToken"));
+//		} catch (IllegalArgumentException e) {
+//			logger.warn("Unable to get JWT Token");
+//		} catch (ExpiredJwtException e) {
+//		}
+//
+//		if (email != null) {
+//			map.put("success", true);
+//			map.put("email", email);
+//		} else {
+//			map.put("success", false);
+//		}
+//		return map;
+//	}
 }

@@ -25,7 +25,7 @@ public class Member {
 	private String password;
 	@Indexed(unique = true)
 	private String nickName;
-	private String name;
+//	private String name;
 //	private Date regdate;
 	private String profileURL;
 	private long[] playlist;
