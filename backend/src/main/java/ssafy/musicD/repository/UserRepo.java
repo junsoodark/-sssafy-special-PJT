@@ -1,14 +1,25 @@
 package ssafy.musicD.repository;
 
-import java.util.List;
+import java.util.Optional;
 
-import ssafy.musicD.dto.User;
+//	public void signUp(User user);
+//	public void updateUserInfo(User user);
+//	public void deleteUser(String userId);
+//	public String checkEmail(String email);
+//	public String checkNickname(String nickname);
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface UserRepo {
-	public void signUp(User user);
-	public User getUserInfo(String userId);
-	public void updateUserInfo(User user);
-	public void deleteUser(String userId);
-	public String checkEmail(String email);
-	public String checkNickname(String nickname);
+import ssafy.musicD.Domain.Member;
+
+public interface UserRepo extends MongoRepository<Member, String> {
+	Member findByEmail(String email);
+	
+//	Optional<Member> findById(String userId);
+	
+	Boolean existsByEmail(String email);
+	
+	Boolean existsByNickName(String nickName);
+	
+	Long deleteById(Long id);
+	
 }
