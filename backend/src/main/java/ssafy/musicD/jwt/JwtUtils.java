@@ -32,6 +32,7 @@ public class JwtUtils implements Serializable {
 
     //retrieve Email from jwt token
     public String getEmailFromToken(String token) {
+    	System.out.println(token);
         return getClaimFromToken(token, Claims::getSubject);
     }
     
@@ -55,7 +56,6 @@ public class JwtUtils implements Serializable {
         Map<String, Object> result = new HashMap<>();
         result.put("Email", parseInfo.getSubject());
         result.put("role", parseInfo.get("role", List.class));
-        System.out.println(result);
         return result;
     }
 

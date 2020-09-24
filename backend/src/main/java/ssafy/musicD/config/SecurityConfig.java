@@ -42,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						"/api/account/checknickname")
 				.permitAll() // 누구나 접속가능, ex) "/*/siginin",
 				// "/*/signup"
-//				.and().authorizeRequests().anyRequest().hasAnyRole("USER", "ADMIN") // 나머지 요청은 모두 인증된 회원만 접근 가능
+				.and().authorizeRequests().anyRequest().hasAnyRole("USER", "ADMIN") // 나머지 요청은 모두 인증된 회원만 접근 가능
 //				.antMatchers(HttpMethod.GET, "/exception/**").permitAll() // exception으로 시작하는 GET요청 리소스는 누구나 접근가능
 				.and().exceptionHandling().authenticationEntryPoint(authEntryPointJwt).and()
 				.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
