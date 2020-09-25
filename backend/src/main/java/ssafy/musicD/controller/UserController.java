@@ -69,6 +69,8 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.swagger.annotations.ApiOperation;
 import ssafy.musicD.Domain.Member;
 import ssafy.musicD.Domain.Token;
+import ssafy.musicD.dto.Diary;
+import ssafy.musicD.dto.Song;
 import ssafy.musicD.jwt.JwtUtils;
 import ssafy.musicD.repository.UserRepo;
 import ssafy.musicD.service.UserDetailsServiceImpl;
@@ -87,7 +89,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -187,7 +191,7 @@ public class UserController {
 		Map<String, Object> map = new HashMap<>();
 		if (userRepo.findByEmail(email) == null) {
 			user.setEmail(email);
-			if (user.getNickName().equals("admin")) {
+			if (user.getNickname().equals("admin")) {
 				user.setRole("ROLE_ADMIN");
 			} else {
 				user.setRole("ROLE_USER");
@@ -195,7 +199,8 @@ public class UserController {
 			user.setPassword(bcryptEncoder.encode(user.getPassword()));
 			map.put("status", 200);
 			map.put("email", user.getEmail());
-			map.put("nickname", user.getNickName());
+			map.put("nickname", user.getNickname());
+			user.setFriends(new ArrayList<Long>());
 			userRepo.save(user);
 			return map;
 		} else {
@@ -216,9 +221,9 @@ public class UserController {
 	// 닉네임 중복 확인
 	@PostMapping(path = "/checknickname")
 	@ApiOperation(value = "닉네임 중복 확인", response = String.class)
-	public boolean checkNickName(@RequestBody Map<String, String> m) {
-		System.out.println("닉네임 중복 체크: " + m.get("nickName"));
-		return userRepo.existsByNickName(m.get("nickName"));
+	public boolean checkNickname(@RequestBody Map<String, String> m) {
+		System.out.println("닉네임 중복 체크: " + m.get("nickname"));
+		return userRepo.existsByNickname(m.get("nickname"));
 	}
 
 	// 회원 정보 조회
@@ -240,30 +245,22 @@ public class UserController {
 		return map;
 	}
 
-//	// 회원정보수정
-//	@PutMapping(path = "/")
-//	@ApiOperation(value = "회원정보수정", response = String.class)
-//	public Map<String, Object> modifyUser(@RequestBody Member user) {
-//		String email = user.getEmail();
-//		Map<String, Object> map = new HashMap<>();
-//		System.out.println("요청 아이디: " + email + "비번: " + user.getPassword());
-//		if (userRepo.findByEmail(email) == null) {
-//			user.setEmail(email);
-//			if (user.getNickName().equals("admin")) {
-//				user.setRole("ROLE_ADMIN");
-//			} else {
-//				user.setRole("ROLE_USER");
-//			}
-//			user.setPassword(bcryptEncoder.encode(user.getPassword()));
-//			map.put("success", true);
-//			userRepo.save(user);
-//			return map;
-//		} else {
-//			map.put("success", false);
-//			map.put("message", "duplicated email");
-//		}
-//		return map;
-//	}
+	// 회원정보수정
+	@PutMapping(path = "/")
+	@ApiOperation(value = "회원정보수정", response = String.class)
+	public Map<String, Object> modifyUser(@RequestBody Member user) {
+		String email = user.getEmail();
+		Map<String, Object> map = new HashMap<>();
+		if (userRepo.findByEmail(email) != null) {
+			userRepo.save(user);
+			map.put("status", 200);
+			return map;
+		} else {
+			map.put("status", 500);
+			map.put("message", "duplicated email");
+		}
+		return map;
+	}
 
 	// 회원정보삭제
 	@DeleteMapping(path = "/{userId}")
