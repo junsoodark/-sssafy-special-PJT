@@ -24,7 +24,7 @@ public class JwtUtils implements Serializable {
     private static final long serialVersionUID = -2550185165626007488L;
 	private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-    public static final long JWT_ACCESS_TOKEN_VALIDITY = 10* 60; //10분
+    public static final long JWT_ACCESS_TOKEN_VALIDITY = 20* 60; //20분
     public static final long JWT_REFRESH_TOKEN_VALIDITY = 24 * 60 * 60 * 7; //일주일
     
     @Value("${jwt.secret}")

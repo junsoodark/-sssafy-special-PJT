@@ -24,7 +24,7 @@ public class User {
 	private Date regdate;
 	private String profileURL;
 	private int[] playlist;
-	private int[] diary;
+	private Diary[] diary;
 	private int[] friends;
 	private String role;
 	
