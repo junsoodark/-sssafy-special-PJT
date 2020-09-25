@@ -34,78 +34,66 @@
     <div class="bottom"></div>
     <div class="shadow"></div>
   </div>
+   <span v-if ="open" class="penIcon" @click="moveWriteDiary" >일기 쓰기 <v-icon    large color="black" >mdi-lead-pencil</v-icon></span>
 </div>
+
   <div v-if="diaryDetail" id="player" >
+  
       <div class="cd-player">
   <div class="cd-player-inner">
     <div class="play-cover">
 
     </div>
     <div class="cd">
-      <div class="album-cover spin">
+       <div class="album-cover spin">
         <img :src="albumUrl(diaryDetail.music.musicID)" alt="">
 
-      </div>
-      <div class="song-info">
+       </div>
+        <div class="song-info">
         <h2 class="song-title">{{diaryDetail.music.title}}</h2>
         <h3 class="song-singer">{{diaryDetail.music.singer}}</h3>
         <h4 class="song-hits"></h4>
-      </div>
+       </div>
+      
     </div>
   </div>
 </div>
-<!-- <div class="remoter">
-  <div class="btn btn-prev">
-    <div class="icon"></div>
-  </div>
-  <div class="btn btn-next">
-    <div class="icon"></div>
-  </div>
-  <div class="btn btn-repeat">
-    <div class="icon">REPEAT</div>
-  </div>
-  <div class="btn btn-pause">
-    <div class="icon"></div>
-  </div>
-  <div class="btn btn-vol-up">
-    <div class="icon"></div>
-  </div>
-
-  <div class="btn btn-vol-down">
-    <div class="icon"></div>
-  </div>
-  <label class="vol-label">VOLUME</label>
-</div> -->
+ 
  </div> 
- <div id ="diaryDetail">
- <v-card v-if="diaryDetail" class="note">
-  <!--<b></b><i></i>-->
-  <div class="off"><div><div spellcheck="false">
-    <h1>{{diaryDetail.date}}</h1><br/>
-     <img :src = "weather(diaryDetail.weather)" style ="width:50px;height:50px;margin:5px;">
-     <img :src = "emotion(diaryDetail.emotion)" style ="width:50px;height:50px;margin:5px;"><br>
-     <v-card>
-       <img src = "../../assets/instagram/rain.jpg" style ="width:100%;height:150px;">
-       <div class="diaryText">
-         {{diaryDetail.content}}
-     </div>
-     </v-card>
+ <div v-if="diaryDetail"  class ="musicPlayer" style="text-align: center;">
+  <player></player>
+  </div> 
+
+
+
+     <div id ="diaryDetail" class="note" v-if="diaryDetail">
+      <div class="header" >
+          <h1>{{diaryDetail.date}}</h1>
+          <h2>날씨 <img :src = "weather(diaryDetail.weather)" style ="width:30px;height:30px;"></h2>
+           <h2>기분 <img :src = "emotion(diaryDetail.emotion)" style ="width:30px;height:30px;"></h2>
+       
+        <div class="ma-3">
+          <v-img :src="diaryDetail.contentImg"  style ="width:100%;height:150px;"></v-img>
+       
+        <div class="mt-4 v-sheet theme--light elevation-3 diaryText" >
+               {{diaryDetail.content}}
+        </div>
+         </div>
+      </div>
     </div>
-   
-    </div></div></v-card>
-    </div>
 
 
-
-<div data-video="JC08Fu3QfJg" data-autoplay="0" data-loop="1" id="youtube-audio1"></div>
  </div>
+
 
   
 </template>
 
 <style scoped>
-
-
+@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap');
+span{
+  font-family: 'Do Hyeon', sans-serif;
+}
 /*
 
 Click the diary to start animating.
@@ -322,54 +310,46 @@ View the project on Github : https://github.com/akzhy/Vara
   top : 145px;
   height: 500px;
   z-index:0;
+  
+
+ 
 }
 .note {
   font-size: 16px;
-  line-height: 22px; /* Adjusts font size line height. */
-  background: #fa8cd0;
-  /*background: linear-gradient(#f8f1c6 0%, #f8f1c6 96%, #cfceab 100%); */
-  background-size: 2px 22px; /* This property adds the grey line height */
   border-radius: 2px;
   border: 1px solid #C4C296;
-  color: #878260;
   width: 500px;
   margin: 20px auto;
+  background:white;
+  overflow:hidden;
+  transform-origin: 0% 0%;
+  position:absolute;
+  padding: 0px 15px;
 
 }
 .diaryText{
   text-align: center;
   padding:10% 10%;
+  border: 1px solid #faf375ea;
+  font-size:20px;
+  background: #fcd875;
+  width:100%; 
+  height:180px;
+  font-family: 'Do Hyeon', sans-serif;
 }
-.note > div > div > div > span {
-  color: #9C9778;
-  font-weight: bold;
-} /* Title H1 style */
 
-.note > div > div, 
-.note > div > div > div {
-  height: 500px;
-  border-left: 1px solid #ddbbb8;
-  box-shadow: 0 0 1px rgba(221,187,184,0.4),
-              inset 0 0 1px rgba(221,187,184,0.4);
-} /* These are the 2 lines on the right */
-
-
-.note > div > div {
-  margin-left: 40px;
-}  /* Adds margin to extend the note app to the left. */
-
-.note > div > div > div {
-  padding: 22px 20px 21px 20px;
-  margin-left: 4px;
-  outline: none;
-} /* Padding to add the space around the shape. */
-
-/* ---------------- pen ------------*/
-.pen{
-  height: 500px;
+.penIcon{
+  position:absolute;
+  left:45%;
+  top:40px;
+  cursor: pointer;
+}
+.musicPlayer{
   position: absolute;
-  right: 1px;
-  top:250px;
+  top:10px;
+  right:350px;
+  width:200px;
+  height:90%;
 }
 </style>
 <style lang="scss">
@@ -382,6 +362,7 @@ export default {
 components: {
    
     calendar: () => import('@/components/mainpage/Calendar'),
+    player: () => import('@/components/mainpage/Player'),
 },
   data() {
     return {
@@ -391,11 +372,11 @@ components: {
   },
 methods : {
   weather(w) {
-          return require('../../assets/weather/'+w+'.png'); 
+          return require('../../assets/img/weather/'+w+'.png'); 
       }
       ,
   emotion(e) {
-          return require('../../assets/emotion/'+e+'.png'); 
+          return require('../../assets/img/emotion/'+e+'.png'); 
       }
       ,
   openBook(){
@@ -412,15 +393,8 @@ methods : {
     console.log(data);
     this.diaryDetail = data ; 
   },
-
-parse_str(str) {
-    return str.split('&').reduce(function(params, param) {
-        var paramSplit = param.split('=').map(function(value) {
-            return decodeURIComponent(value.replace('+', ' '));
-        });
-        params[paramSplit[0]] = paramSplit[1];
-        return params;
-    }, {});
+moveWriteDiary(){
+    this.$router.push('/writeDiary');
 }
 },
 mounted(){
