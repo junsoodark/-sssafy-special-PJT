@@ -1,9 +1,0 @@
-spring:
-  data:
-    mongodb:
-      host: localhost
-      port: 27017
-#      authentication-database: admin
-      database: musicD
-#      username: bh6
-#      password: bh66hb
