@@ -1,76 +1,9 @@
 package ssafy.musicD.controller;
 
-//	@ApiOperation(value="회원 가입", response=String.class)
-//	@PostMapping("/user/signup")
-//	public ResponseEntity<Map<String, Object>> signUp(@RequestBody User user) {
-//		ResponseEntity<Map<String, Object>> entity = null;
-//		try {
-//			userService.signUp(user);
-//			entity = handleSuccess(user.getNickname() + "님 회원 가입");
-//		} catch (Exception e) {
-//			entity = handleException(e);
-//		}
-//
-//		return entity;
-//	}
-//	
-//	@ApiOperation(value="회원 정보 조회", response=String.class)
-//	@GetMapping("/user/{userId}")
-//	public User getAccountInfo(@PathVariable String userId) {
-//		User user = userService.getUserInfo(userId);
-//
-//		return user;
-//	}
-//
-//	@ApiOperation(value="회원 정보 수정", response=String.class)
-//	@PutMapping("/user")
-//	public ResponseEntity<Map<String, Object>> updateUser(@RequestBody User user) {
-//		ResponseEntity<Map<String, Object>> entity = null;
-//		try {
-//			userService.updateUserInfo(user);
-//			entity = handleSuccess(user.get_id() + "번 회원 정보 수정");;
-//		} catch (Exception e) {
-//			entity = handleException(e);
-//		}
-//
-//		return entity;
-//	}
-//
-//	@ApiOperation(value="계정 탈퇴", response=String.class)
-//	@DeleteMapping("/user/{userId}")
-//	public ResponseEntity<Map<String, Object>> delete(@PathVariable String userId) {
-//		ResponseEntity<Map<String, Object>> entity = null;
-//		try {
-//			userService.deleteUser(userId);
-//			entity = handleSuccess(userId + "번 회원 삭제");
-//		} catch (RuntimeException e) {
-//			entity = handleException(e);
-//		}
-//
-//		return entity;
-//	}
-//
-//	/* 예외 처리 */
-//	private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
-//		Map<String, Object> resultMap = new HashMap<>();
-//		resultMap.put("status", true);
-//		resultMap.put("data", data);
-//		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
-//	}
-//
-//	private ResponseEntity<Map<String, Object>> handleException(Exception e) {
-//		Map<String, Object> resultMap = new HashMap<>();
-//		resultMap.put("status", false);
-//		resultMap.put("data", e.getMessage());
-//		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.INTERNAL_SERVER_ERROR);
-//	}
-
 import io.jsonwebtoken.ExpiredJwtException;
 import io.swagger.annotations.ApiOperation;
 import ssafy.musicD.Domain.Member;
 import ssafy.musicD.Domain.Token;
-import ssafy.musicD.dto.Diary;
-import ssafy.musicD.dto.Song;
 import ssafy.musicD.jwt.JwtUtils;
 import ssafy.musicD.repository.UserRepo;
 import ssafy.musicD.service.UserDetailsServiceImpl;
@@ -91,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -200,7 +132,8 @@ public class UserController {
 			map.put("status", 200);
 			map.put("email", user.getEmail());
 			map.put("nickname", user.getNickname());
-			user.setFriends(new ArrayList<Long>());
+			user.setFriends(new ArrayList<String>());
+			user.setWaitFriends(new ArrayList<String>());
 			userRepo.save(user);
 			return map;
 		} else {
