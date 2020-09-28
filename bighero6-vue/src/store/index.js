@@ -24,7 +24,7 @@ export default new Vuex.Store({
     authToken: VueCookies.get("auth-token"),
     refreshToken: VueCookies.get("refresh-token"),
     email: VueCookies.get("email"),
-    id: VueCookies.get("id"),
+    userId: VueCookies.get("userId"),
     drawer: false,
     items: [
       {
@@ -88,8 +88,8 @@ export default new Vuex.Store({
       VueCookies.set("email", email);
     },
     UPDATE_ID(state, id){
-      state.id = id;
-      VueCookies.set("id", id);
+      state.userId = id;
+      VueCookies.set("userId", id);
     },
     setDrawer: (state, payload) => (state.drawer = payload),
     toggleDrawer: state => (state.drawer = !state.drawer),
@@ -109,14 +109,17 @@ export default new Vuex.Store({
         sessionStorage.setItem('jwt-auth-token', res.data.accessToken);
         sessionStorage.setItem('user-email', loginData.email);
         sessionStorage.setItem('jwt-refresh-token', res.data.refreshToken);
-        sessionStorage.setItem('user-id', res.data.userId);
+        sessionStorage.setItem('userId', res.data.userId);
 
         console.log(sessionStorage.getItem('user-email'));
         console.log(sessionStorage.getItem('jwt-auth-token'));
+        console.log(sessionStorage.getItem('userId'));
 
         alert("로그인")
         
         router.push({ name: 'home' })
+        console.log(this.state.userId);
+        
       })
       .catch(err => {
         alert(err.response.data)
