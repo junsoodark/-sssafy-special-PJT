@@ -14,7 +14,7 @@
             <v-col cols="12" sm="1">
             </v-col>
             <v-col cols="12" sm="2">
-              <v-btn depressed small color = "primary">인증코드 발송</v-btn>
+              <v-btn depressed small color = "primary" @click="sendCode">인증코드 발송</v-btn>
             </v-col>
         </v-row>
         <v-text-field v-model="certicode"
@@ -50,7 +50,7 @@
         ></v-text-field>
       </v-form>
       <div align="right" class="my-4">
-        <v-btn depressed small color = "primary">회원가입</v-btn>
+        <v-btn depressed small color = "primary" @click="signup">회원가입</v-btn>
       </div>
     </div>
     </v-container>
@@ -86,6 +86,12 @@ export default {
     };
   },
   methods: {
+    sendCode:function(){
+      // this.$router.push({ name: 'home' })
+    },
+    signup: function(){
+
+    },
   },
 };
 </script>

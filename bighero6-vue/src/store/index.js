@@ -17,7 +17,8 @@ const plugins = [
     paths: ["moduleName"],
   }),
 ];
-const API_URL = process.env.VUE_APP_LOCAL_URL;
+// const API_URL = process.env.VUE_APP_LOCAL_URL;
+const API_URL = j3a107.p.ssafy.io;
 
 export default new Vuex.Store({
   state: {
