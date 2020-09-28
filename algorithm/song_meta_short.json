@@ -1,0 +1,204 @@
+[
+  {
+    "song_gn_dtl_gnr_basket" : [
+      "GN0901"
+    ],
+    "issue_date" : "20140512",
+    "album_name" : "불후의 명곡 - 7080 추억의 얄개시대 팝송베스트",
+    "album_id" : 2255639,
+    "artist_id_basket" : [
+      2727
+    ],
+    "song_name" : "Feelings",
+    "song_gn_gnr_basket" : [
+      "GN0900"
+    ],
+    "artist_name_basket" : [
+      "Various Artists"
+    ],
+    "id" : 0
+  },
+  {
+    "song_gn_dtl_gnr_basket" : [
+      "GN1601",
+      "GN1606"
+    ],
+    "issue_date" : "20080421",
+    "album_name" : "Bach : Partitas Nos. 2, 3 & 4",
+    "album_id" : 376431,
+    "artist_id_basket" : [
+      29966
+    ],
+    "song_name" : "Bach : Partita No. 4 In D Major, BWV 828 - II. Allemande",
+    "song_gn_gnr_basket" : [
+      "GN1600"
+    ],
+    "artist_name_basket" : [
+      "Murray Perahia"
+    ],
+    "id" : 1
+  },
+  {
+    "song_gn_dtl_gnr_basket" : [
+      "GN1102",
+      "GN1101"
+    ],
+    "issue_date" : "20151016",
+    "album_name" : "Feeling Right (Everything Is Nice) (Feat. Popcaan & Wale)",
+    "album_id" : 2644882,
+    "artist_id_basket" : [
+      838543
+    ],
+    "song_name" : "Feeling Right (Everything Is Nice) (Feat. Popcaan & Wale)",
+    "song_gn_gnr_basket" : [
+      "GN1100"
+    ],
+    "artist_name_basket" : [
+      "Matoma"
+    ],
+    "id" : 3
+  },
+  {
+    "song_gn_dtl_gnr_basket" : [
+      "GN1802",
+      "GN1801"
+    ],
+    "issue_date" : "20110824",
+    "album_id" : 2008470,
+    "artist_id_basket" : [
+      560160
+    ],
+    "song_name" : "그남자 그여자",
+    "song_gn_gnr_basket" : [
+      "GN1800"
+    ],
+    "album_name" : "그남자 그여자",
+    "artist_name_basket" : [
+      "Jude Law"
+    ],
+    "id" : 4
+  },
+  {
+    "song_gn_dtl_gnr_basket" : [
+      "GN1701"
+    ],
+    "issue_date" : "20100602",
+    "album_name" : "Bye, Lupita",
+    "album_id" : 911754,
+    "artist_id_basket" : [
+      475840
+    ],
+    "song_name" : "Para Los Enamorados",
+    "song_gn_gnr_basket" : [
+      "GN1700"
+    ],
+    "artist_name_basket" : [
+      "Bye, Lupita"
+    ],
+    "id" : 5
+  },
+  {
+    "song_gn_dtl_gnr_basket" : [
+      "GN1601",
+      "GN1602",
+      "GN1614"
+    ],
+    "issue_date" : "20170208",
+    "album_name" : "Sibelius: Symphony No. 2; Tapiola; Valse triste",
+    "album_id" : 10038397,
+    "artist_id_basket" : [
+      162097,
+      100237
+    ],
+    "song_name" : "Sibelius : Valse Triste Op.44 (시벨리우스 : 슬픈 왈츠 작품번호 44)",
+    "song_gn_gnr_basket" : [
+      "GN1600"
+    ],
+    "artist_name_basket" : [
+      "Herbert Blomstedt",
+      "San Francisco Symphony"
+    ],
+    "id" : 6
+  },
+  {
+    "song_gn_dtl_gnr_basket" : [
+      "GN1601",
+      "GN1602",
+      "GN1614"
+    ],
+    "issue_date" : "20190315",
+    "album_name" : "Celebrating John Williams (Live At Walt Disney Concert Hall, Los Angeles / 2019)",
+    "album_id" : 10261160,
+    "artist_id_basket" : [
+      105210,
+      261542
+    ],
+    "song_name" : "Superman March (From &#34;Superman&#34; / Live At Walt Disney Concert Hall, Los Angeles / 2019)",
+    "song_gn_gnr_basket" : [
+      "GN1600"
+    ],
+    "artist_name_basket" : [
+      "Los Angeles Philharmonic Orchestra",
+      "Gustavo Dudamel"
+    ],
+    "id" : 7
+  },
+  {
+    "song_gn_dtl_gnr_basket" : [
+      "GN0301"
+    ],
+    "issue_date" : "20070625",
+    "album_name" : "Sexualmetro",
+    "album_id" : 353020,
+    "artist_id_basket" : [
+      224583
+    ],
+    "song_name" : "Lovers’ Leap (Feat. Qypthone)",
+    "song_gn_gnr_basket" : [
+      "GN0300"
+    ],
+    "artist_name_basket" : [
+      "애플스"
+    ],
+    "id" : 8
+  },
+  {
+    "song_gn_dtl_gnr_basket" : [
+      "GN0105",
+      "GN0101"
+    ],
+    "issue_date" : "20170320",
+    "album_name" : "Pastel Reflection",
+    "album_id" : 10047088,
+    "artist_id_basket" : [
+      753752
+    ],
+    "song_name" : "사랑, 그대라는 멜로디",
+    "song_gn_gnr_basket" : [
+      "GN0100"
+    ],
+    "artist_name_basket" : [
+      "진호"
+    ],
+    "id" : 9
+  },
+  {
+    "song_gn_dtl_gnr_basket" : [
+      "GN1201"
+    ],
+    "issue_date" : "20170407",
+    "album_name" : "Luv.Loops",
+    "album_id" : 10053652,
+    "artist_id_basket" : [
+      1625859
+    ],
+    "song_name" : "Hi (Heyoo)",
+    "song_gn_gnr_basket" : [
+      "GN1200"
+    ],
+    "artist_name_basket" : [
+      "Miraa."
+    ],
+    "id" : 10
+  }
+]
