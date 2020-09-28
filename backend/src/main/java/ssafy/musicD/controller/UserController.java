@@ -29,7 +29,8 @@ import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/api/account")
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+//@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+@CrossOrigin(origins = "*")
 public class UserController {
 	private Logger logger = LoggerFactory.getLogger(ApplicationRunner.class);
 	@Autowired
