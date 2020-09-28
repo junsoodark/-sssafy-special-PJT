@@ -20,7 +20,8 @@ import ssafy.musicD.service.DiaryService;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+//@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+@CrossOrigin(origins = "*")
 public class DiaryController {
 	@Autowired
 	private DiaryService diaryService;
