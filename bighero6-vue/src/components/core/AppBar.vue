@@ -20,16 +20,19 @@
           @click="$vuetify.goTo(0)"
         />
 
-        <v-btn
+        <v-btn 
           v-for="(link, i) in links"
           :key="i"
           v-bind="link"
           class="hidden-sm-and-down"
+          v-show="link.text!=LOGIN"
           text
           @click="onClick($event, link)"
         >
           {{ link.text }}
         </v-btn>
+
+    
 
         <v-spacer />
 
