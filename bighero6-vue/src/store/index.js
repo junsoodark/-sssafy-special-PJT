@@ -21,8 +21,10 @@ const API_URL = constants.baseUrl;
 
 export default new Vuex.Store({
   state: {
-    articles: require('@/data/articles.json'),
     authToken: VueCookies.get("auth-token"),
+    refreshToken: VueCookies.get("refresh-token"),
+    email: VueCookies.get("email"),
+    userId: VueCookies.get("userId"),
     drawer: false,
     items: [
       {
@@ -48,7 +50,8 @@ export default new Vuex.Store({
     isLoggedIn: (state) => !!state.authToken,
     // auth, articles
     config: (state) => ({
-      headers: { Authorization: `Token ${state.authToken}` },
+      headers: { Authorization: `Bearer ${state.authToken}`,
+      },
     }),
  /*    categories: state => {
       const categories = []
@@ -80,6 +83,14 @@ export default new Vuex.Store({
       state.authToken = token;
       VueCookies.set("auth-token", token);
     },
+    UPDATE_EMAIL(state, email){
+      state.email = email;
+      VueCookies.set("email", email);
+    },
+    UPDATE_ID(state, id){
+      state.userId = id;
+      VueCookies.set("userId", id);
+    },
     setDrawer: (state, payload) => (state.drawer = payload),
     toggleDrawer: state => (state.drawer = !state.drawer),
   },
@@ -92,36 +103,23 @@ export default new Vuex.Store({
       var JsonForm = JSON.stringify(params)
       Axios({method:'POST',url: constants.baseUrl+`/account/login`,params:params,data:JsonForm,headers:{'Content-Type': 'application/json; charset=utf-8'}})
       .then(res => {
-        commit('SET_TOKEN', res.data.token)
+        commit('SET_TOKEN', res.data.accessToken)
         commit('UPDATE_EMAIL', loginData.email)
 
-        sessionStorage.setItem('jwt-auth-token', res.data.token);
+        sessionStorage.setItem('jwt-auth-token', res.data.accessToken);
         sessionStorage.setItem('user-email', loginData.email);
+        sessionStorage.setItem('jwt-refresh-token', res.data.refreshToken);
+        sessionStorage.setItem('userId', res.data.userId);
 
-        // 로그인 시간 저장
-        let date = new Date()
-        var loginH = date.getHours()
-        var loginM = date.getMinutes()
-        var loginS = date.getSeconds()
+        console.log(sessionStorage.getItem('user-email'));
+        console.log(sessionStorage.getItem('jwt-auth-token'));
+        console.log(sessionStorage.getItem('userId'));
 
-        if (loginH < 10) {
-          loginH = '0' + loginH
-        }
-        if (loginM < 10) {
-          loginM = '0' + loginM
-        }
-        if (loginS < 10) {
-          loginS = '0' + loginS
-        }
-
-        const loginTime = loginH + ":" + loginM + ":" + loginS
-        commit('UPDATE_LOGIN_TIME', loginTime)
-
-        
-        
         alert("로그인")
-
+        
         router.push({ name: 'home' })
+        console.log(this.state.userId);
+        
       })
       .catch(err => {
         alert(err.response.data)
