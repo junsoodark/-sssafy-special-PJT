@@ -16,7 +16,7 @@
 
     <v-form>
         <v-text-field
-        v-model="nickName"
+        v-model="nickname"
         :counter="10"
         :rules="nameRules"
         label="닉네임"
@@ -40,6 +40,8 @@
 import config from "../../lib/FireBaseConfig";
 import firebase from "firebase"; // 파이어베이스 import 
 //import "firebase/storage";
+import constants from "../../lib/constants"
+import axios from 'axios'
 
 // Initialize Firebase
 firebase.initializeApp(config.apiKey);
@@ -48,7 +50,7 @@ firebase.initializeApp(config.apiKey);
   export default {
     data () {
       return {
-        nickName : "빅히어로",
+        nickname : "빅히어로",
         email:"bigHero@naver.com",
         imgSrc:"https://firebasestorage.googleapis.com/v0/b/music-diary-710d3.appspot.com/o/profile%2Fuser2.jpeg?alt=media",
         file:""
@@ -73,6 +75,14 @@ firebase.initializeApp(config.apiKey);
       this.$refs.imageInput.value="";
     },
     },
+    created(){
+      axios
+      .get(constants.baseUrl + "/account/" + this.$store.state.userId,{ headers : {'Authorizatioin': "Bearer "+ this.$store.state.authToken} })
+      .then(({ data }) => {
+        this.nickname = data.nickname;
+        this.email = data.email;
+      });
+    }
        
   }
 </script>
