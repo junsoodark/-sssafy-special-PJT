@@ -51,7 +51,7 @@ firebase.initializeApp(config.apiKey);
     data () {
       return {
         nickname : "빅히어로",
-        email:"bigHero@naver.com",
+        email:"",
         imgSrc:"https://firebasestorage.googleapis.com/v0/b/music-diary-710d3.appspot.com/o/profile%2Fuser2.jpeg?alt=media",
         file:""
       }
@@ -67,7 +67,7 @@ firebase.initializeApp(config.apiKey);
       this.imgSrc = URL.createObjectURL(this.file); // 미리보기용으로 url 생성
 
       //var profileRef = firebase.storage().ref().child("profile/user");
-       this.imgSrc = "https://firebasestorage.googleapis.com/v0/b/music-diary-710d3.appspot.com/o/profile%2Fuser1.jpg?alt=media";
+      // this.imgSrc = "https://firebasestorage.googleapis.com/v0/b/music-diary-710d3.appspot.com/o/profile%2Fuser1.jpg?alt=media";
         
     },
     removeImage(){
@@ -76,11 +76,14 @@ firebase.initializeApp(config.apiKey);
     },
     },
     created(){
+     console.log(this.$store.state)
       axios
-      .get(constants.baseUrl + "/account/" + this.$store.state.userId,{ headers : {'Authorizatioin': "Bearer "+ this.$store.state.authToken} })
+      .get(constants.baseUrl + "/account/" + this.$store.state.userId ,{ headers : {'Authorizatioin': "Bearer "+ sessionStorage.getItem('auth-token')} })
       .then(({ data }) => {
-        this.nickname = data.nickname;
-        this.email = data.email;
+        console.log(data)
+        var member = data.member
+        this.nickname = member.nickname;
+        this.email = member.email;
       });
     }
        

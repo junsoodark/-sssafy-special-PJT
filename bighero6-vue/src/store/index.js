@@ -9,22 +9,22 @@ import moduleName from "./test_moduleName";
 
 Vue.use(Vuex)
 
-const modules = {
-  moduleName,
-};
-const plugins = [
-  createPersistedState({
-    paths: ["moduleName"],
-  }),
-];
+// const modules = {
+//   moduleName,
+// };
+// const plugins = [
+//   createPersistedState({
+//     paths: ["moduleName"],
+//   }),
+// ];
 const API_URL = constants.baseUrl;
 
 export default new Vuex.Store({
   state: {
-    authToken: VueCookies.get("auth-token"),
-    refreshToken: VueCookies.get("refresh-token"),
-    email: VueCookies.get("email"),
-    userId: VueCookies.get("userId"),
+    authToken: '',
+    refreshToken: '',
+    email: '',
+    userId: '',
     drawer: false,
     items: [
       {
@@ -105,20 +105,28 @@ export default new Vuex.Store({
       .then(res => {
         commit('SET_TOKEN', res.data.accessToken)
         commit('UPDATE_EMAIL', loginData.email)
-
-        sessionStorage.setItem('jwt-auth-token', res.data.accessToken);
-        sessionStorage.setItem('user-email', loginData.email);
-        sessionStorage.setItem('jwt-refresh-token', res.data.refreshToken);
-        sessionStorage.setItem('userId', res.data.userId);
-
-        console.log(sessionStorage.getItem('user-email'));
-        console.log(sessionStorage.getItem('jwt-auth-token'));
-        console.log(sessionStorage.getItem('userId'));
+        commit('UPDATE_ID', res.data.userId)
+         
+        // sessionStorage.setItem('jwt-auth-token', res.data.accessToken);
+        // sessionStorage.setItem('user-email', loginData.email);
+        // sessionStorage.setItem('jwt-refresh-token', res.data.refreshToken);
+        // sessionStorage.setItem('userId', res.data.userId);
+        console.log(res.data)
+   
+        this.state.userId =res.data.userId ; 
+        this.state.authToken =  res.data.accessToken;
+        this.state.email = loginData.email;
+        this.state.refreshToken = res.data.refreshToken;
+        console.log(this.state.authToken)
+        // console.log(sessionStorage.getItem('user-email'));
+        // console.log(sessionStorage.getItem('jwt-auth-token'));
+        // console.log(sessionStorage.getItem('userId'));
 
         alert("로그인")
         
-        router.push({ name: 'home' })
-        console.log(this.state.userId);
+         router.push({ name: 'home' })
+         console.log(this.state.userId);
+         
         
       })
       .catch(err => {
@@ -138,7 +146,7 @@ export default new Vuex.Store({
       var JsonForm = JSON.stringify(form);
       Axios({
         method: "POST",
-        url: `${API_URL}user/signUp`,
+        url: constants.baseUrl+`/account/signUp`,
         params: params,
         data: JsonForm,
         headers: { "Content-Type": "application/json; charset=utf-8" },
@@ -176,4 +184,8 @@ export default new Vuex.Store({
 
 
   },
+  plugins : [
+    createPersistedState({ storage: window.sessionStorage })
+    //로컬스토리지 대신 세션스토리지 사용 : 브라우저 창을 닫으면 자동으로 로그아웃됨 
+  ]
 })
