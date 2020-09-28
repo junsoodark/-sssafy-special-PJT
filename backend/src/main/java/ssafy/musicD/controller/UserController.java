@@ -96,7 +96,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-@RequestMapping("/api/account")
+@RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 public class UserController {
 	private Logger logger = LoggerFactory.getLogger(ApplicationRunner.class);
@@ -119,7 +119,7 @@ public class UserController {
 //    }
 
 	// 로그아웃
-	@PostMapping(path = "/logout")
+	@PostMapping(path = "/account/logout")
 	@ApiOperation(value = "로그아웃", response = String.class)
 	public ResponseEntity<?> logout(@RequestBody Map<String, String> m) {
 		String email = null;
@@ -150,7 +150,7 @@ public class UserController {
 	}
 
 	// 로그인
-	@PostMapping(path = "/login")
+	@PostMapping(path = "/account/login")
 	@ApiOperation(value = "로그인", response = String.class)
 	public Map<String, Object> login(@RequestBody Map<String, String> m) throws Exception {
 		final String email = m.get("email");
@@ -184,7 +184,7 @@ public class UserController {
 	}
 
 	// 회원가입
-	@PostMapping(path = "/signup")
+	@PostMapping(path = "/account/signup")
 	@ApiOperation(value = "회원 가입", response = String.class)
 	public Map<String, Object> addNewUser(@RequestBody Member user) {
 		String email = user.getEmail();
@@ -211,7 +211,7 @@ public class UserController {
 	}
 
 	// 이메일 중복 확인
-	@PostMapping(path = "/checkemail")
+	@PostMapping(path = "/account/checkemail")
 	@ApiOperation(value = "이메일 중복 확인", response = String.class)
 	public boolean checkEmail(@RequestBody Map<String, String> m) {
 		System.out.println("이메일 중복 체크: " + m.get("email"));
@@ -219,7 +219,7 @@ public class UserController {
 	}
 
 	// 닉네임 중복 확인
-	@PostMapping(path = "/checknickname")
+	@PostMapping(path = "/account/checknickname")
 	@ApiOperation(value = "닉네임 중복 확인", response = String.class)
 	public boolean checkNickname(@RequestBody Map<String, String> m) {
 		System.out.println("닉네임 중복 체크: " + m.get("nickname"));
@@ -227,7 +227,7 @@ public class UserController {
 	}
 
 	// 회원 정보 조회
-	@GetMapping(path = "/{userId}")
+	@GetMapping(path = "/account/{userId}")
 	@ApiOperation(value = "회원 정보 조회", response = String.class)
 	public Map<String, Object> getUser(@PathVariable String userId) {
 		Map<String, Object> map = new HashMap<>();
@@ -246,7 +246,7 @@ public class UserController {
 	}
 
 	// 회원정보수정
-	@PutMapping(path = "/")
+	@PutMapping(path = "/account/")
 	@ApiOperation(value = "회원정보수정", response = String.class)
 	public Map<String, Object> modifyUser(@RequestBody Member user) {
 		String email = user.getEmail();
@@ -263,7 +263,7 @@ public class UserController {
 	}
 
 	// 회원정보삭제
-	@DeleteMapping(path = "/{userId}")
+	@DeleteMapping(path = "/account/{userId}")
 	@ApiOperation(value = "회원 탈퇴", response = String.class)
 	public void deleteUser(@PathVariable Long userId) {
 		logger.info("delete userId: " + userId);
@@ -272,7 +272,7 @@ public class UserController {
 	}
 
 	// accesstoken 재발급(refresh token이 만료 안된 경우)
-	@PostMapping(path = "/refresh")
+	@PostMapping(path = "/account/refresh")
 	@ApiOperation(value = "재발급", response = String.class)
 	public Map<String, Object> requestForNewAccessToken(@RequestBody Map<String, String> m) {
 		String accessToken = null;
