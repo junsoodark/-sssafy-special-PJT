@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import Axios from "axios";
 import router from "@/router";
 import VueCookies from "vue-cookies";
-
+import constants from "../lib/constants"
 import createPersistedState from "vuex-persistedstate";
 import moduleName from "./test_moduleName";
 
@@ -17,7 +17,7 @@ const plugins = [
     paths: ["moduleName"],
   }),
 ];
-const API_URL = process.env.VUE_APP_LOCAL_URL;
+const API_URL = constants.baseUrl;
 
 export default new Vuex.Store({
   state: {
@@ -27,10 +27,6 @@ export default new Vuex.Store({
     id: VueCookies.get("id"),
     drawer: false,
     items: [
-      {
-        text: 'Home',
-        href: '/',
-      },
       {
         text: 'Diary',
         href: 'diary',
@@ -105,7 +101,7 @@ export default new Vuex.Store({
         'password' : loginData.password
       }
       var JsonForm = JSON.stringify(params)
-      Axios({method:'POST',url:`http://localhost:8080/api/account/login`,params:params,data:JsonForm,headers:{'Content-Type': 'application/json; charset=utf-8'}})
+      Axios({method:'POST',url: constants.baseUrl+`/account/login`,params:params,data:JsonForm,headers:{'Content-Type': 'application/json; charset=utf-8'}})
       .then(res => {
         commit('SET_TOKEN', res.data.accessToken)
         commit('UPDATE_EMAIL', loginData.email)

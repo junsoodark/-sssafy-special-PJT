@@ -30,7 +30,8 @@ public class Member {
 //	private String name;
 //	private Date regdate;
 	private String profileURL;
-	private List<Long> friends;
+	private List<String> friends;
+	private List<String> waitFriends;
 
 	private String role;
 	

@@ -140,9 +140,8 @@
         </v-dialog>
       </div>
       <!------------------------------ 노래 플레이어 ------------------------------>
-      <h3 id="playing"><v-icon small left>mdi-music</v-icon>Now Playing : 헤이즈 - 비도 오고 그래서</h3>
       <div id="audio">
-        <vuetify-audio :file="file" color="success" :ended="audioFinish"></vuetify-audio>
+        <tape />
       </div>
       <!------------------------------ 추천 노래 리스트 ------------------------------>
       <div style="margin-right:60px;margin-top:20px;">
@@ -210,7 +209,7 @@
 <script>
 export default {
   components: {
-    VuetifyAudio: () => import('vuetify-audio'),
+    tape: () => import('@/components/writediarypage/Tape'),
   },
   data: () => ({
     date: new Date().toISOString().substr(0, 10),
@@ -253,7 +252,7 @@ export default {
   transform-origin: 0% 0%;
   position:absolute;
   width:400px;
-  height:600px;
+  height:610px;
   box-shadow:0 0 3px 1px rgba(0,0,0,.3); 
   border-top-left-radius:2px;
   border-bottom-left-radius:2px;
@@ -324,8 +323,9 @@ export default {
 }
 
 #audio {
+  margin-left:100px;
   margin-top:15px;
-  width:500px;
+  width:300px;
 }
 
 #playing {

@@ -21,8 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(
-		 securedEnabled = true,
+@EnableGlobalMethodSecurity(securedEnabled = true,
 		// jsr250Enabled = true,
 		prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -38,8 +37,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.csrf().disable() // csrf 보안 사용안함
 				.cors().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 사용안함
 				.and().authorizeRequests() // 다음 리퀘스트에 대한 사용권한 체크
-				.antMatchers("/swagger-ui.html", "/api/account/login", "/api/account/signup", "/api/account/checkemail",
-						"/api/account/checknickname", "/api/account/refresh")
+				.antMatchers("/api/account/login", "/api/account/signup", "/api/account/checkemail",
+						"/api/account/checknickname", "/api/account/refresh", "/api/account/**")
 				.permitAll() // 누구나 접속가능, ex) "/*/siginin",
 				// "/*/signup"
 				.and().authorizeRequests().anyRequest().hasAnyRole("USER", "ADMIN") // 나머지 요청은 모두 인증된 회원만 접근 가능
@@ -47,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.and().exceptionHandling().authenticationEntryPoint(authEntryPointJwt).and()
 				.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
-	
+
 	@Bean
 	public JwtRequestFilter authenticationJwtTokenFilter() {
 		return new JwtRequestFilter();
@@ -61,7 +60,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		// static 디렉터리의 하위 파일 목록은 인증 무시 ( = 항상통과 )
-		web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/lib/**");
+		web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/lib/**", "/v2/api-docs", "/configuration/ui",
+				"/swagger-resources/**", "/configuration/security", "/swagger-ui.html", "/webjars/**");
 	}
 
 	@Bean
