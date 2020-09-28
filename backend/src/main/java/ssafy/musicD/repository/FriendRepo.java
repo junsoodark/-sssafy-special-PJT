@@ -6,17 +6,19 @@ import java.util.List;
 
 public interface FriendRepo {
 
-	public List<User> searchFriends(String keyword);
+	public List<User> searchFriends(String keyword,String userId);
 
-	public List<User> waitFriendList(String userId);
+	public List<User> waitFriendList(User user);
 
-	public List<User> searchNonFriend(String keyword);
+	public List<User> searchNonFriend(String keyword,String userId);
 
-	public List<User> friendList(User user);
+	public List<User> friendList(String userId);
 
-	public void requestFriend(User user);
+	public void requestFriend(String userId,String friendId);
 
-	public void deleteFriend(User user);
+	public void acceptFriend(String userId,String friendId);
+
+	public void deleteFriend(String userId,String friendId);
 
 }
 

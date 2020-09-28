@@ -29,38 +29,41 @@ public class FriendController {
     private FriendServicelmpl friendService;
 
     @ApiOperation(value = "친구 검색", response = String.class)
-    @GetMapping("/friend/{keyword}")
-    public List<User> searchFriends(@PathVariable String keyword) {
-        List<User> searchFriendList = friendService.searchFriends(keyword);
+    @GetMapping("/friend")
+    public List<User> searchFriends(@RequestParam String keyword,@RequestBody Map<String, String> map) {
+        String userId = map.get("userId");
+        List<User> searchFriendList = friendService.searchFriends(keyword,userId);
         return searchFriendList;
     }
 
-//    @ApiOperation(value = "친구 아닌 유저 검색", response = String.class)
-//    @GetMapping("/nonfriend/{keyword}")
-//    public List<User> searchNonFriends(@PathVariable String keyword) {
-//        List<User> searchNonFriendList = friendService.searchNonFriend(keyword);
-//        return searchNonFriendList;
-//    }
-//
-//    @ApiOperation(value = "친구 목록 조회", response = String.class)
-//    @GetMapping("/friend/")
-//    public List<User> friendList() {
-//        List<User> friendList = friendService.friendList();
-//        return friendList;
-//    }
-//
+    @ApiOperation(value = "친구 아닌 유저 검색", response = String.class)
+    @GetMapping("/nonfriend")
+    public List<User> searchNonFriends(@RequestParam String keyword,@RequestBody Map<String, String> map) {
+        String userId = map.get("userId");
+        List<User> searchNonFriendList = friendService.searchNonFriend(keyword,userId);
+        return searchNonFriendList;
+    }
+
+    @ApiOperation(value = "친구 목록 조회", response = String.class)
+    @GetMapping("/friend/{userId}")
+    public List<User> friendList(@PathVariable String userId) {
+        List<User> friendList = friendService.friendList(userId);
+        return friendList;
+    }
+
     @ApiOperation(value = "친구 요청 보내기", response = String.class)
-    @PostMapping("/friend/request/{userId}")
-    public ResponseEntity<Map<String,Object>> requestFriend(@PathVariable String userId, HttpServletRequest req, HttpServletResponse res) {
+    @PostMapping("/friend/request")
+    public ResponseEntity<Map<String,Object>> requestFriend(@RequestBody Map<String, Object> map) {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = null;
-
+        String userId = (String)map.get("userId");
+        String friendId = (String)map.get("friendId");
         try {
-            friendService.requestFriend(userId);
+            friendService.requestFriend(userId,friendId);
             status = HttpStatus.OK;
-            resultMap.put("message", "친구신청 성공하였습니다.");
+            resultMap.put("message", "친구 신청이 완료되었습니다.");
 
-        } catch (RuntimeException | SQLException e) {
+        } catch (RuntimeException e) {
             status = HttpStatus.BAD_REQUEST;
             resultMap.put("status", status.value());
             resultMap.put("message", e.getMessage());
@@ -68,45 +71,51 @@ public class FriendController {
 
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
-//    @ApiOperation(value = "친구 요청 수락", response = String.class)
-//    @PostMapping("/friend/accept/")
-//    public ResponseEntity<Map<String,Object>> acceptFriend(HttpServletRequest req,HttpServletResponse res){
-//        Map<String,Object> resultMap = new HashMap<>();
-//        HttpStatus status = null;
-//        try{
-//            status = HttpStatus.OK;
-//            resultMap.put("message", "친구 요청에 수락하셨습니다.");
-//        } catch (RuntimeException | SQLException e) {
-//            status = HttpStatus.BAD_REQUEST;
-//            resultMap.put("status", status.value());
-//            resultMap.put("message", e.getMessage());
-//        }
-//        return new ResponseEntity<Map<String, Object>>(resultMap, status);
-//    }
-//
-//    @ApiOperation(value = "나에게 친구요청한 유저 목록 조회", response = String.class)
-//    @GetMapping("/friend/request/list/")
-//    public List<User> waitFriendList() {
-//        List<User> waitFriendList = friendService.waitFriendList();
-//        return waitFriendList;
-//    }
-//
-//    @ApiOperation(value="친구 삭제", response=String.class)
-//    @DeleteMapping("/friend/{userId}")
-//    public ResponseEntity<Map<String, Object>> deleteFriend(@PathVariable String userId) {
-//        Map<String, Object> resultMap = null;
-//        HttpStatus status = null;
-//        try {
-//            friendService.deleteFriend(userId);
-//            status = HttpStatus.OK;
-//            resultMap.put("message", "친구 삭제하셨습니다.");
-//        } catch (RuntimeException | SQLException e) {
-//            status = HttpStatus.BAD_REQUEST;
-//            resultMap.put("status", status.value());
-//            resultMap.put("message", e.getMessage());
-//        }
-//
-//        return new ResponseEntity<Map<String, Object>>(resultMap, status);
-//    }
+
+    @ApiOperation(value = "친구 요청 수락", response = String.class)
+    @PostMapping("/friend/accept")
+    public ResponseEntity<Map<String,Object>> acceptFriend(@RequestBody Map<String, Object> map){
+        Map<String,Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+        String userId = (String)map.get("userId");
+        String friendId = (String)map.get("friendId");
+        try{
+            friendService.acceptFriend(userId,friendId);
+            status = HttpStatus.OK;
+            resultMap.put("message", "친구 요청에 수락하셨습니다.");
+        } catch (RuntimeException e) {
+            status = HttpStatus.BAD_REQUEST;
+            resultMap.put("status", status.value());
+            resultMap.put("message", e.getMessage());
+        }
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
+
+    @ApiOperation(value = "나에게 친구요청한 유저 목록 조회", response = String.class)
+    @GetMapping("/friend/request/list")
+    public List<User> waitFriendList(@RequestBody Map<String, String> map) {
+        String userId = map.get("userId");
+        List<User> waitFriendList = friendService.waitFriendList(userId);
+        return waitFriendList;
+    }
+
+    @ApiOperation(value="친구 삭제", response=String.class)
+    @DeleteMapping("/friend")
+    public ResponseEntity<Map<String, Object>> deleteFriend(@RequestParam String friendId, @RequestBody Map<String, String> map) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+        String userId = map.get("userId");
+        try{
+            friendService.deleteFriend(userId,friendId);
+            status = HttpStatus.OK;
+            resultMap.put("message", "친구를 삭제하셨습니다..");
+        } catch (RuntimeException e) {
+            status = HttpStatus.BAD_REQUEST;
+            resultMap.put("status", status.value());
+            resultMap.put("message", e.getMessage());
+        }
+
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
 
 }

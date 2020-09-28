@@ -12,18 +12,20 @@ public class FriendServicelmpl implements FriendService{
     @Autowired
     private FriendRepolmpl friendRepo;
 
-    public List<User> searchFriends(String keyword){
-        return friendRepo.searchFriends(keyword);
+    public List<User> searchFriends(String keyword , String userId){
+        return friendRepo.searchFriends(keyword,userId);
     }
 
-//    public List<User> waitFriendList(String userId) { return friendRepo.waitFriendList(userId); }
-//
-//    public List<User> searchNonFriend(String keyword) { return friendRepo.searchNonFriend(keyword);}
-//
-//    public List<User> friendList(User user) { return friendRepo.friendList(user);}
-//
-    public void requestFriend(User user) {friendRepo.requestFriend(user);}
-//
-//    public void deleteFriend(User user) {friendRepo.deleteFriend(user);}
+    public List<User> waitFriendList(String userId) { return friendRepo.waitFriendList(userId); }
+
+    public List<User> searchNonFriend(String keyword,String userId) { return friendRepo.searchNonFriend(keyword,userId);}
+
+    public List<User> friendList(String userId) { return friendRepo.friendList(userId);}
+
+    public void requestFriend(String userId, String friendId) {friendRepo.requestFriend(userId,friendId);}
+
+    public void acceptFriend(String userId,String friendId) {friendRepo.acceptFriend(userId,friendId);}
+
+    public void deleteFriend(String userId,String friendId) {friendRepo.deleteFriend(userId,friendId);}
 
 }

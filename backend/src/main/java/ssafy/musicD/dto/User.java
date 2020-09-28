@@ -1,11 +1,13 @@
 package ssafy.musicD.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -15,10 +17,13 @@ public class User {
 	@Id
 	private String _id;
 	private String email;
+	private String password;
 	private String name;
+	private String nickname;
 	private String profileURL;
 	private int[] playlist;
 	private int[] diary;
-	private int[] friends;
-	private int[] friends_wait;
+	private List<String> friends;
+	private List<String> waitFriends;
+
 }
