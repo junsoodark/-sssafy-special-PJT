@@ -25,7 +25,7 @@
             <v-btn type="submit" depressed small color = "primary">로그인</v-btn>
         </v-col>
         <v-col cols="12" sm="3" class="my-5">
-            <v-btn depressed small color = "primary">회원가입</v-btn>
+            <v-btn depressed small color = "primary" @click="signup">회원가입</v-btn>
         </v-col>
       </v-row>
       </v-form>
@@ -58,6 +58,9 @@ export default {
   },
   methods: {
     ...mapActions(["login"]),
+    signup: function(){
+      this.$router.push({ name: 'signup' })
+    },
   },
 };
 </script>
