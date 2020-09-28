@@ -2,6 +2,11 @@
 # Created by https://www.toptal.com/developers/gitignore/api/macos,visualstudio,eclipse
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,visualstudio,eclipse
 
+### yml ###
+jwt.yml
+mongodb.yml
+redis.yml
+
 ### Eclipse ###
 .metadata
 bin/

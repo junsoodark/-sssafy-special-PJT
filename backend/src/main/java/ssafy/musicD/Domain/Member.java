@@ -1,5 +1,7 @@
 package ssafy.musicD.Domain;
 
+import java.util.List;
+
 //import java.util.HashSet;
 //import java.util.Set;
 
@@ -24,13 +26,11 @@ public class Member {
 	private String email;
 	private String password;
 	@Indexed(unique = true)
-	private String nickName;
+	private String nickname;
 //	private String name;
 //	private Date regdate;
 	private String profileURL;
-	private long[] playlist;
-	private long[] friends;
-	private long[] diary;
+	private List<Long> friends;
 
 	private String role;
 	

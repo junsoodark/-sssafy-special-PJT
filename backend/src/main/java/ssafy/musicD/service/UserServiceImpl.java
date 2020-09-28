@@ -53,30 +53,13 @@
 //public class UserServiceImpl implements UserService {
 //	
 //	@Autowired
-//	private UserRepo userRepo;
-//
-//	@Override
-//	public Optional<Member> findById(String userId) {
-//	    return userRepo.findById(userId);
-//	}
-//	
-//	public void signUp(Member user) {
-////		userRepo.signUp(user);
-//	}
+//	private UserRepo2 userRepo;
 //
 //	public void updateUserInfo(Member user) {
-////		userRepo.updateUserInfo(user);
+//		userRepo.updateUserInfo(user);
 //	}
 //
 //	public void deleteUser(String userId) {
 ////		userRepo.deleteUser(userId);
 //	}
-//
-////	public String checkEmail(String email) {
-////		return userRepo.checkEmail(email);
-////	}
-////
-////	public String checkNickname(String nickname) {
-////		return userRepo.checkNickname(nickname);
-////	}
 //}
