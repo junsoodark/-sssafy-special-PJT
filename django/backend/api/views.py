@@ -2,6 +2,10 @@ from api import models, serializers
 from rest_framework import viewsets
 from rest_framework.pagination import PageNumberPagination
 # from .models import User
+from django.http import HttpResponse
+import json
+ 
+from musicD.MongoDbManager import MongoDbManager
 
 class SmallPagination(PageNumberPagination):
     page_size = 10
