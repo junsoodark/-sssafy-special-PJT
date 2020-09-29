@@ -26,21 +26,33 @@
         </v-menu>
         <div style="text-align:left;">
           <span class="setting">날씨</span>
-          <img class="settingimg" src="@/assets/img/weather/sunny.png" />
-          <img class="settingimg" src="@/assets/img/weather/cloudy-day.png" />
-          <img class="settingimg" src="@/assets/img/weather/cloud.png" />
-          <img class="settingimg" src="@/assets/img/weather/windy.png" />
-          <img class="settingimg" src="@/assets/img/weather/umbrella (1).png" />
-          <img class="settingimg" src="@/assets/img/weather/storm.png" />
-          <img class="settingimg" src="@/assets/img/weather/snowing.png" />
+          <img class="settingimg" src="@/assets/img/weather/sunny.png" v-if="wthr_sunny" />
+          <img class="settingimg" src="@/assets/img/weather/sunny (1).png" v-else />
+          <img class="settingimg" src="@/assets/img/weather/cloudy-day.png" v-if="wthr_cloudy" />
+          <img class="settingimg" src="@/assets/img/weather/cloudy.png" v-else />
+          <img class="settingimg" src="@/assets/img/weather/cloud.png" v-if="wthr_cloud" />
+          <img class="settingimg" src="@/assets/img/weather/cloud (1).png" v-else />
+          <img class="settingimg" src="@/assets/img/weather/windy (1).png" v-if="whtr_windy" />
+          <img class="settingimg" src="@/assets/img/weather/windy.png" v-else />
+          <img class="settingimg" src="@/assets/img/weather/umbrella (1).png" v-if="whtr_rainy" />
+          <img class="settingimg" src="@/assets/img/weather/umbrella.png" v-else />
+          <img class="settingimg" src="@/assets/img/weather/storm (1).png" v-if="whtr_storm" />
+          <img class="settingimg" src="@/assets/img/weather/storm.png" v-else />
+          <img class="settingimg" src="@/assets/img/weather/snowing (1).png" v-if="whtr_snowing" />
+          <img class="settingimg" src="@/assets/img/weather/snowing.png" v-else />
         </div>
         <div style="text-align:left;">
           <span class="setting">기분</span>
-          <img class="settingimg" src="@/assets/img/emotion/smile.png" />
-          <img class="settingimg" src="@/assets/img/emotion/happy.png" />
-          <img class="settingimg" src="@/assets/img/emotion/meh (1).png" />
-          <img class="settingimg" src="@/assets/img/emotion/crying.png" />
-          <img class="settingimg" src="@/assets/img/emotion/sad.png" />
+          <img class="settingimg" src="@/assets/img/emotion/smile.png" v-if="feel_smile" />
+          <img class="settingimg" src="@/assets/img/emotion/smile (1).png" v-else />
+          <img class="settingimg" src="@/assets/img/emotion/happy.png" v-if="feel_happy" />
+          <img class="settingimg" src="@/assets/img/emotion/happy (1).png" v-else />
+          <img class="settingimg" src="@/assets/img/emotion/meh.png" v-if="feel_meh" />
+          <img class="settingimg" src="@/assets/img/emotion/meh (1).png" v-else />
+          <img class="settingimg" src="@/assets/img/emotion/crying.png" v-if="feel_crying" />
+          <img class="settingimg" src="@/assets/img/emotion/crying (1).png" v-else />
+          <img class="settingimg" src="@/assets/img/emotion/sad.png" v-if="feel_sad" />
+          <img class="settingimg" src="@/assets/img/emotion/sad (1).png" v-else />
         </div>
         <div class="ma-3">
           <v-btn block color="secondary" dark>사진 수정하기<v-icon dark right>mdi-camera-plus</v-icon></v-btn>
@@ -221,6 +233,20 @@ export default {
     loader: null,
     loading4: false,
     dialog: false,
+    /*날씨*/
+    wthr_sunny: true,
+    wthr_cloudy: true,
+    wthr_cloud: true,
+    wthr_windy: true,
+    wthr_rainy: true,
+    wthr_storm: true,
+    wthr_snowing: true,
+    /*기분*/
+    feel_smile: true,
+    feel_happy: true,
+    feel_meh: true,
+    feel_crying: true,
+    feel_sad: true,
   }),
   watch: {
     loader () {
