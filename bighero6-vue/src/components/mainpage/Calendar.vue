@@ -97,15 +97,12 @@ export default {
           +this.item.weather+".png"; 
      */
   },
-  created(){
-    this.changeMonth(9)
-
-  },
   methods: {
-       changeMonth(varmonth){
-      
-    }
-    ,
+
+    deleteDiary(id){
+      this.dateData = this.dateData.filter(item => item.id !== id);
+
+    },
     weather(w) {
           return require('../../assets/img/weather/'+w+' (1).png'); 
       }
@@ -159,10 +156,10 @@ export default {
          .post(constants.baseUrl + "/diary/search", {
            userId : this.$store.state.userId,
            month: this.todayMonth
-         },{ headers : {"Authorization": "Bearer "+ this.$store.state.authToken} }) // 토큰 인증을 위해 헤더에 내용 추가
+         },{ headers : { "Authorization": "Bearer "+ this.$store.state.authToken} }) // 토큰 인증을 위해 헤더에 내용 추가
          .then(({ data }) => {
             this.dateData = data.diarys
-           console.log(data)
+           //console.log(data)
            //alert("수정 완료되었습니다.")
          })
         .catch(function (error) {
