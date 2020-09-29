@@ -7,7 +7,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,11 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
-import ssafy.musicD.dto.Diary;
+import ssafy.musicD.Domain.Diary;
+import ssafy.musicD.dto.StrDiary;
 import ssafy.musicD.service.DiaryService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/diary")
 //@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 @CrossOrigin(origins = "*")
 public class DiaryController {
@@ -27,7 +27,7 @@ public class DiaryController {
 	private DiaryService diaryService;
 	
 	// 일기 전체 조회 (월별)
-	@GetMapping("/diary")
+	@PostMapping("/search")
 	@ApiOperation(value = "일기 전체 조회 (월별)", response = String.class)
 	public Map<String, Object> searchAll(@RequestBody Map<String, Object> m) {
 		Map<String, Object> map = new HashMap<>();
@@ -36,7 +36,7 @@ public class DiaryController {
 		System.out.println(userId);
 		System.out.println(month);
 		try {
-			List<Diary> diarys = diaryService.findDiaryByMonth(userId, month);
+			List<StrDiary> diarys = diaryService.findDiaryByMonth(userId, month);
 			map.put("status", 200);
 			map.put("diarys", diarys);
 		} catch (Exception e) {
@@ -46,10 +46,10 @@ public class DiaryController {
 	}
 	
 	// 일기 삭제
-	@DeleteMapping("/diary")
+	@DeleteMapping
 	@ApiOperation(value = "일기 삭제", response = String.class)
-	public Map<String, Object> deleteDiary(@RequestBody Map<String, Object> m) {
-		String diaryId = (String)m.get("diaryId");
+	public Map<String, Object> deleteDiary(@RequestBody Map<String, String> m) {
+		String diaryId = m.get("id");
 		diaryService.deleteDiary(diaryId);
 		Map<String, Object> map = new HashMap<>();
 		map.put("status", 200);
@@ -57,9 +57,11 @@ public class DiaryController {
 	}
 	
 	// 일기 등록
-	@PostMapping("/diary")
+	@PostMapping
 	@ApiOperation(value = "일기 등록", response = String.class)
-	public Map<String, Object> registerDiary(@RequestBody Diary diary) {
+	public Map<String, Object> registerDiary(@RequestBody StrDiary strDiary) {
+		Diary diary = new Diary();
+		diary.convertId(strDiary);
 		diaryService.insertDiary(diary);
 		Map<String, Object> map = new HashMap<>();
 		map.put("status", 200);
@@ -67,9 +69,11 @@ public class DiaryController {
 	}
 	
 	// 일기 수정
-	@PutMapping("/diary")
+	@PutMapping
 	@ApiOperation(value = "일기 수정", response = String.class)
-	public Map<String, Object> updateDiary(@RequestBody Diary diary) {
+	public Map<String, Object> updateDiary(@RequestBody StrDiary strDiary) {
+		Diary diary = new Diary();
+		diary.convertId(strDiary);
 		diaryService.updateDiary(diary);
 		Map<String, Object> map = new HashMap<>();
 		map.put("status", 200);

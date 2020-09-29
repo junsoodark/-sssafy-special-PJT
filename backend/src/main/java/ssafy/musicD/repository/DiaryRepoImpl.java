@@ -1,5 +1,6 @@
 package ssafy.musicD.repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -12,8 +13,9 @@ import org.springframework.stereotype.Repository;
 
 import com.mongodb.BasicDBObject;
 
+import ssafy.musicD.Domain.Diary;
 import ssafy.musicD.Domain.Member;
-import ssafy.musicD.dto.Diary;
+import ssafy.musicD.dto.StrDiary;
 
 @Repository
 public class DiaryRepoImpl implements DiaryRepo {
@@ -21,16 +23,22 @@ public class DiaryRepoImpl implements DiaryRepo {
 	private MongoTemplate mongoTemplate;
 
 	@Override
-	public List<Diary> findDiary(String userId, int month) {
+	public List<StrDiary> findDiary(String userId, int month) {
 		Query query = new Query();
 		query.addCriteria(new Criteria().andOperator(
-				Criteria.where("userId").is(new ObjectId(userId)),
+				Criteria.where("userId").is(userId),
 				Criteria.where("month").is(month)
 				));
-		List<Diary> result = mongoTemplate.find(query, Diary.class);
-
-		for (Diary diary : result) {
-			System.out.println("result - " + diary);
+		List<Diary> tmp = mongoTemplate.find(query, Diary.class);
+		List<StrDiary> result = new ArrayList();
+		
+		for (Diary diary : tmp) {
+			StrDiary tmpStrDIary = new StrDiary();
+			tmpStrDIary.convertId(diary);
+			result.add(tmpStrDIary);
+		}
+		for (StrDiary strDiary : result) {
+			System.out.println("result - " + strDiary);
 		}
 
 		return result;
@@ -38,7 +46,6 @@ public class DiaryRepoImpl implements DiaryRepo {
 
 	@Override
 	public Boolean insertDiary(Diary diary) {
-		diary.setUserId(diary.getUserId());
 		mongoTemplate.save(diary);
 		return true;
 	}
