@@ -20,6 +20,25 @@ class StoreViewSet(viewsets.ModelViewSet):
         )
         return queryset
 
+
+def all_users( request):
+    def get():
+        dbUserData = MongoDbManager().get_users_from_collection({})
+
+        userData = []
+        for user in dbUserData:
+            del user['_id']
+            userData.append(user)
+
+        template = loader.get_template('user.html')
+        return HttpResponse(template.render({'userData': userData}, request))
+ 
+    if request.method == 'GET':
+        return get()
+    else:
+        return HttpResponse( status=405)
+
+
 # class UserViewSet(viewsets.ModelViewSet):
 #     queryset = User.objects.all()
 #     serializer_class = serializers.UserSerializer

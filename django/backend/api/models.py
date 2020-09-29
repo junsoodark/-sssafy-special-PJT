@@ -18,10 +18,10 @@ class Store(models.Model):
         return self.category.split("|") if self.category else []
 
 
-# class User(model.Model):
-#     _id= model.ObjectIdField(primary_key=True)
-#     email= model.CharField(max_length=20, null=True)
-#     password= model.CharField(max_length=20, null=True)
-#     nickname = model.CharField(max_length=20, null=True)
+class User(model.Model):
+    _id= model.ObjectIdField(primary_key=True)
+    email= model.CharField(max_length=20, null=True)
+    password= model.CharField(max_length=20, null=True)
+    nickname = model.CharField(max_length=20, null=True)
 
 
