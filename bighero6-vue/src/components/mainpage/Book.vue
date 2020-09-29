@@ -46,12 +46,12 @@
     </div>
     <div class="cd">
        <div class="album-cover spin">
-        <img :src="albumUrl(diaryDetail.music.musicID)" alt="">
+        <img :src="albumUrl(diaryDetail.song.songId)" alt="">
 
        </div>
         <div class="song-info">
-        <h2 class="song-title">{{diaryDetail.music.title}}</h2>
-        <h3 class="song-singer">{{diaryDetail.music.singer}}</h3>
+        <h2 class="song-title">{{diaryDetail.song.title}}</h2>
+        <h3 class="song-singer">{{diaryDetail.song.singer}}</h3>
         <h4 class="song-hits"></h4>
        </div>
       
@@ -60,8 +60,8 @@
 </div>
  
  </div> 
- <div v-if="diaryDetail"  class ="musicPlayer" style="text-align: center;">
-  <player></player>
+ <div v-if="diaryDetail"  class ="musicPlayer">
+  <player  :diaryDetail="diaryDetail"></player>
   </div> 
 
 
@@ -70,13 +70,13 @@
       <div class="header" >
           <h1>{{diaryDetail.date}}</h1>
           <h2>날씨 <img :src = "weather(diaryDetail.weather)" style ="width:30px;height:30px;"></h2>
-           <h2>기분 <img :src = "emotion(diaryDetail.emotion)" style ="width:30px;height:30px;"></h2>
+           <h2>기분 <img :src = "emotion(diaryDetail.feel)" style ="width:30px;height:30px;"></h2>
        
         <div class="ma-3">
-          <v-img :src="diaryDetail.contentImg"  style ="width:100%;height:150px;"></v-img>
+          <v-img src="https://firebasestorage.googleapis.com/v0/b/music-diary-710d3.appspot.com/o/profile%2F5f7173aafeddb203628a7c5f?alt=media"  style ="width:100%;height:150px;"></v-img>
        
         <div class="mt-4 v-sheet theme--light elevation-3 diaryText" >
-               {{diaryDetail.content}}
+               {{diaryDetail.context}}
         </div>
          </div>
       </div>
@@ -346,10 +346,11 @@ View the project on Github : https://github.com/akzhy/Vara
 }
 .musicPlayer{
   position: absolute;
-  top:10px;
-  right:350px;
-  width:200px;
-  height:90%;
+  top:30px;
+  right:340px;
+  width:250px;
+  height:110px;
+ 
 }
 </style>
 <style lang="scss">
@@ -372,11 +373,11 @@ components: {
   },
 methods : {
   weather(w) {
-          return require('../../assets/img/weather/'+w+'.png'); 
+          return require('../../assets/img/weather/'+w+' (1).png'); 
       }
       ,
   emotion(e) {
-          return require('../../assets/img/emotion/'+e+'.png'); 
+          return require('../../assets/img/emotion/'+e+' (1).png'); 
       }
       ,
   openBook(){
@@ -390,7 +391,7 @@ methods : {
        return imgurl;
    },
   getDiaryDetail(data){
-    console.log(data);
+    //console.log(data);
     this.diaryDetail = data ; 
   },
 moveWriteDiary(){

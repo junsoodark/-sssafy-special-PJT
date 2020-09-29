@@ -4,15 +4,17 @@
     <!-- <v-btn @click="playVideo">play</v-btn>
     <v-btn @click="pauseVideo">pause</v-btn>
     <v-btn @click="stopVideo">stop</v-btn> -->
-     <h4 id="playing" style ="font-family: 'Do Hyeon', sans-serif; "><v-icon small left>mdi-music</v-icon>harrystyles-watermelonsugar</h4>
+     
     <youtube hidden :video-id="videoId" ref="youtube" v-on:ended="ended" @playing.native="_handlePlayingUI" ></youtube>
 <v-card style="text-align: center; " :flat="flat == undefined || flat == false  ? false : true">
+      <h4 id="playing" style ="font-family: 'Do Hyeon', sans-serif;" class="pt-2"><v-icon small left>mdi-music</v-icon>{{diaryDetail.song.singer}}<v-icon small left>mdi-music</v-icon></h4>
+      <h4 id="playing" style ="font-family: 'Do Hyeon', sans-serif; ">{{diaryDetail.song.title}}</h4>
         <v-card-text>
-            <v-btn outlined icon class="ma-1" :color="color" @click.native="playing ? pause() : play()" >
+            <v-btn outlined icon class="mx-1" :color="color" @click.native="playing ? pause() : play()" >
                 <v-icon   v-if="!playing || paused" >mdi-play</v-icon>
                 <v-icon  v-else >mdi-pause</v-icon>
             </v-btn>
-            <v-btn outlined icon class="ma-1" :color="color" @click.native="stop()">
+            <v-btn outlined icon class="mx-1" :color="color" @click.native="stop()">
                 <v-icon>mdi-stop</v-icon>
             </v-btn>
            <!--  <v-btn outlined icon class="ma-2" :color="color" @click.native="mute()" :disabled="!loaded">
@@ -38,6 +40,8 @@
 <script>
 import Vue from 'vue'
 import VueYoutube from 'vue-youtube'
+import axios from 'axios'
+import cheerio from 'cheerio'
  
 Vue.use(VueYoutube)
 
@@ -61,6 +65,7 @@ components: {
         },
 
      props: {
+           diaryDetail : Object ,
             flat: {
                 type: Boolean,
                 default: false
@@ -98,9 +103,19 @@ components: {
                 return this.totalDuration;
             },  
         },
-        
+   mounted () {
+      console.log("https://www.youtube.com/results?search_query="+this.diaryDetail.song.singer+"+"+this.diaryDetail.song.title);
+      this.getHTML()
+  } ,      
 
   methods: {
+    async getHTML() {
+        try {
+    return await axios.get("https://www.youtube.com/results?search_query="+this.diaryDetail.song.singer+"+"+this.diaryDetail.song.title);
+  } catch (error) {
+    console.error(error);
+  }
+    }, 
     play() {
       this.player.playVideo()
        this.playing=true;
@@ -185,10 +200,9 @@ components: {
             _handleEnded () {
                 this.paused = this.playing = false;
             },
-  mounted () {
-       /* this.init(); */
-  }
-  }
+ 
+  } ,
+  
 
 }
 </script>
