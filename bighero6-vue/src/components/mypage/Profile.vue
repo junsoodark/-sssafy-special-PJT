@@ -87,20 +87,20 @@ firebase.initializeApp(config.apiKey);
         +"?alt=media"; 
       } 
 
-      // axios
-      //   .put(constants.baseUrl + "/account/", {
-      //     id : this.$store.state.userId,
-      //     nickname: this.nickname,
-      //     /* profileURL: this.imgSrc, */
-      //     email : this.email
-      //   },{ headers : {"Authorization": "Bearer "+ this.$store.state.authToken} }) // 토큰 인증을 위해 헤더에 내용 추가
-      //   .then(({ data }) => {
-      //     this.$store.state.nickname= this.nickname;
-      //     alert("수정 완료되었습니다.")
-      //   })
-      //   .catch(function (error) {
-      //     console.log(error);
-      //   });
+      axios
+        .put(constants.baseUrl + "/account/", {
+          id : this.$store.state.userId,
+          nickname: this.nickname,
+          profileURL: this.imgSrc, 
+          email : this.email
+        },{ headers : {"Authorization": "Bearer "+ this.$store.state.authToken} }) // 토큰 인증을 위해 헤더에 내용 추가
+        .then(({ data }) => {
+          this.$store.state.nickname= this.nickname;
+          alert("수정 완료되었습니다.")
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
     deleteHandler() {
       if(this.originSrc){ // 원래 스토리지에 있던 경우에 삭제 수행
@@ -108,7 +108,7 @@ firebase.initializeApp(config.apiKey);
         profileRef.delete().then(function(){}).catch(function(err){console.log("해당되는 이미지가 없습니다.")});
       }
 
-    /*   axios
+       axios
         .delete(constants.baseUrl + "/account/" + this.$store.state.userId
         ,{ headers : {'Authorization':"Bearer "+this.$store.state.authToken} })
         .then(({ data }) => {
@@ -117,7 +117,7 @@ firebase.initializeApp(config.apiKey);
         })
         .catch(function (error) {
           console.log(error);
-        }); */
+        }); 
     },
     },
     created(){

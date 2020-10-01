@@ -136,7 +136,7 @@ export default function getCalendarData(d) {
   },
   {
     "userId" :"5f7173aafeddb203628a7c5f",
-    "date": 2020-09-17,
+    "date": "2020-09-17",
     "year" : 2020,
     "month" : "9",
     "day" : 17,
