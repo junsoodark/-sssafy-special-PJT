@@ -8,7 +8,7 @@
       @click="toggleDrawer"
     />
 
-    <v-container class="mx-auto py-0">
+    <v-container class="py-0">
       <v-row align="center">
       <v-img
           :src="require('@/assets/logo.png')"

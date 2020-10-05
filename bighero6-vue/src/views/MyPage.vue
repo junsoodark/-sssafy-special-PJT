@@ -6,7 +6,7 @@
       v-model="tab"
       background-color="primary"
       dark
-      
+
     >
       <v-tab
         v-for="item in items"
@@ -56,7 +56,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Noto+Sans+KR:wght@500&display=swap');
 #mypage{
-    background-image: url("../assets/diaryBanner2.png");
     background-repeat: no-repeat;
     background-size: cover; 
     background: url("https://static.pexels.com/photos/6663/desk-white-black-header.jpg") no-repeat center center fixed;
