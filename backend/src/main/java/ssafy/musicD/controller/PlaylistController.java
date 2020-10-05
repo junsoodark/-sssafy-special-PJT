@@ -56,12 +56,17 @@ public class PlaylistController {
 	}
 	
 	
-//	// 플레이리스트 생성
-//	@PostMapping
-//	@ApiOperation(value = "플레이리스트 생성", response = String.class)
-//	public void createPlaylist(@RequestBody Map<String, String> m) {
-//		
-//	}
+	// 플레이리스트 생성
+	@PostMapping
+	@ApiOperation(value = "플레이리스트 생성", response = String.class)
+	public Map<String, Object> createPlaylist(@RequestBody Map<String, String> m) {
+		String userId = m.get("userId");
+		String title = m.get("title");
+		playlistService.createPlaylist(userId, title);
+		Map<String, Object> map = new HashMap<>();
+		map.put("status", 200);
+		return map;
+	}
 //	
 //	// 플레이리스트 수정
 //	@PutMapping
