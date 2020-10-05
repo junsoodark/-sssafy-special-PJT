@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,10 +47,9 @@ public class DiaryController {
 	}
 	
 	// 일기 삭제
-	@DeleteMapping
+	@DeleteMapping("/{diaryId}")
 	@ApiOperation(value = "일기 삭제", response = String.class)
-	public Map<String, Object> deleteDiary(@RequestBody Map<String, String> m) {
-		String diaryId = m.get("id");
+	public Map<String, Object> deleteDiary(@PathVariable String diaryId) {
 		diaryService.deleteDiary(diaryId);
 		Map<String, Object> map = new HashMap<>();
 		map.put("status", 200);
