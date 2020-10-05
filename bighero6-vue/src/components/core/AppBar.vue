@@ -25,7 +25,7 @@
           :key="i"
           v-bind="link"
           class="hidden-sm-and-down"
-          v-show="link.text!=LOGIN"
+          v-show="link.text!='login'||false"
           text
           @click="onClick($event, link)"
         >

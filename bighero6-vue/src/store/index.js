@@ -95,6 +95,7 @@ export default new Vuex.Store({
     toggleDrawer: state => (state.drawer = !state.drawer),
   },
   actions: {
+
     login({ commit }, loginData) {
       const params = {
         'email' : loginData.email,
@@ -123,11 +124,45 @@ export default new Vuex.Store({
         // console.log(sessionStorage.getItem('userId'));
 
         alert("로그인")
-        
          router.push({ name: 'home' })
          console.log(this.state.userId);
-         
+      })
+      .catch(err => {
+        alert(err.response.data)
+      })
+    },
+
+    initSignUp({ commit }, loginData) {
+      const params = {
+        'email' : loginData.email,
+        'password' : loginData.password
+      }
+      var JsonForm = JSON.stringify(params)
+      Axios({method:'POST',url: constants.baseUrl+`/account/login`, params:params,data:JsonForm,headers:{'Content-Type': 'application/json; charset=utf-8'}})
+      .then(res => {
+        commit('SET_TOKEN', res.data.accessToken)
+        commit('UPDATE_EMAIL', loginData.email)
+        commit('UPDATE_ID', res.data.userId)
+        this.state.userId =res.data.userId ; 
+
         
+        // var fbpassword = res.data.fbpassword
+        // // firebase 사용자 로그인
+        // firebase.auth().signInWithEmailAndPassword(loginData.email, fbpassword)
+        // .then(() => {
+        
+        // })
+        // .catch(function(error) {
+        //   // Handle Errors here.
+        //   var errorMessage = error.message;
+        //   console.log('파이어베이스 로그인 에러')
+        //   console.log(errorMessage)
+        //   // ...
+        // })
+
+        alert("로그인")
+
+        router.push({ name: 'home' })
       })
       .catch(err => {
         alert(err.response.data)
@@ -135,23 +170,24 @@ export default new Vuex.Store({
     },
 
 
-    signup({ dispatch }, { code, email, nickname, password }) {
-      var params = new URLSearchParams();
-      params.append("code", code);
-      var form = {
-        email: email,
-        name: nickname,
-        password: password,
+    signup({ dispatch }, signupData) {
+      var params = {
+        email: signupData.email,
+        nickname: signupData.nickname,
+        password: signupData.password,
       };
-      var JsonForm = JSON.stringify(form);
+      var JsonForm = JSON.stringify(params);
       Axios({
         method: "POST",
-        url: constants.baseUrl+`/account/signUp`,
+        url: constants.baseUrl+`/account/signup`,
         params: params,
         data: JsonForm,
         headers: { "Content-Type": "application/json; charset=utf-8" },
       })
       .then((res) => {
+        console.log(params.email);
+        console.log(params.nickname);
+        console.log(params.password);
         //
         const loginData = {
           'email': email,
@@ -162,7 +198,7 @@ export default new Vuex.Store({
 
         //
         alert(res.data.msg);
-        // router.push({ name: "Login" });
+        router.push({ name: "login" });
       })
       .catch((err) => {
         alert(err.response.data);
