@@ -18,16 +18,15 @@
         <v-text-field
         v-model="nickname"
         :counter="10"
-        :rules="nameRules"
         label="닉네임"
         required
       ></v-text-field>
 
       <v-text-field
         v-model="email"
-        :rules="emailRules"
         label="이메일"
         required
+        readonly
       ></v-text-field>
     </v-form>   
          <v-btn class="mr-10" tile color="primary" dark  @click="deleteHandler">탈퇴</v-btn>
@@ -52,7 +51,8 @@ firebase.initializeApp(config.apiKey);
       return {
         nickname : "빅히어로",
         email:"",
-        imgSrc:"https://firebasestorage.googleapis.com/v0/b/music-diary-710d3.appspot.com/o/profile%2Fuser2.jpeg?alt=media",
+        imgSrc:"",
+        originSrc: "",
         file:""
       }
     },
@@ -74,17 +74,80 @@ firebase.initializeApp(config.apiKey);
       this.imgSrc=null;
       this.$refs.imageInput.value="";
     },
+     updateHandler() {
+      // 루트 경로기준에서 profileImage이라는 폴더에 user + userid 파일명으로 이미지를 넣어라
+     var profileRef = firebase.storage().ref().child("profile/"+this.$store.state.userId);
+
+      if(!this.imgSrc || this.imgSrc==null){ // 이미지가 없는 경우
+        this.imgSrc=null;
+        profileRef.delete().then(function(){}).catch(function(err){console.log("해당되는 이미지가 없습니다.")})
+      }else if(this.imgSrc!=this.originSrc){
+        profileRef.put(this.file).then(function(snapshot){}); // 파이어베이스 스토리지에 저장
+        this.imgSrc = "https://firebasestorage.googleapis.com/v0/b/music-diary-710d3.appspot.com/o/profile%2F"+this.$store.state.userId
+        +"?alt=media"; 
+      } 
+
+      axios
+        .put(constants.baseUrl + "/account/", {
+          id : this.$store.state.userId,
+          nickname: this.nickname,
+          profileURL: this.imgSrc, 
+          email : this.email
+        },{ headers : {"Authorization": "Bearer "+ this.$store.state.authToken} }) // 토큰 인증을 위해 헤더에 내용 추가
+        .then(({ data }) => {
+          this.$store.state.nickname= this.nickname;
+          alert("수정 완료되었습니다.")
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    deleteHandler() {
+      if(this.originSrc){ // 원래 스토리지에 있던 경우에 삭제 수행
+        var profileRef = firebase.storage().ref().child("profile/user"+this.$store.state.userId);
+        profileRef.delete().then(function(){}).catch(function(err){console.log("해당되는 이미지가 없습니다.")});
+      }
+
+       axios
+        .delete(constants.baseUrl + "/account/" + this.$store.state.userId
+        ,{ headers : {'Authorization':"Bearer "+this.$store.state.authToken} })
+        .then(({ data }) => {
+          this.$store.commit("logout");
+          this.$router.push("/");
+        })
+        .catch(function (error) {
+          console.log(error);
+        }); 
+    },
     },
     created(){
      console.log(this.$store.state)
       axios
-      .get(constants.baseUrl + "/account/" + this.$store.state.userId ,{ headers : {'Authorizatioin': "Bearer "+ sessionStorage.getItem('auth-token')} })
+      .get(constants.baseUrl + "/account/" + this.$store.state.userId ,{ headers : {"Authorization": "Bearer "+ this.$store.state.authToken} })
       .then(({ data }) => {
         console.log(data)
         var member = data.member
         this.nickname = member.nickname;
         this.email = member.email;
-      });
+        this.imgSrc = member.profileURL;
+        this.originSrc = member.profileURL;
+      }).catch(function (error) {
+          if (error.response) {
+            // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          } else if (error.request) {
+            // 요청이 이루어 졌으나 응답을 받지 못했습니다.
+            // `error.request`는 브라우저의 XMLHttpRequest 인스턴스 또는
+            // Node.js의 http.ClientRequest 인스턴스입니다.
+            console.log(error.request);
+          } else {
+            // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
+            console.log("Error", error.message);
+          }
+          console.log(error.config);
+        });;
     }
        
   }

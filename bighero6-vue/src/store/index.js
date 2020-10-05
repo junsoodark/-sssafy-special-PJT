@@ -112,12 +112,12 @@ export default new Vuex.Store({
         // sessionStorage.setItem('jwt-refresh-token', res.data.refreshToken);
         // sessionStorage.setItem('userId', res.data.userId);
         console.log(res.data)
-   
+        console.log(this.state.authToken)
         this.state.userId =res.data.userId ; 
-        this.state.authToken =  res.data.accessToken;
+        /* this.state.authToken =  res.data.accessToken;
         this.state.email = loginData.email;
         this.state.refreshToken = res.data.refreshToken;
-        console.log(this.state.authToken)
+        console.log(this.state.authToken) */
         // console.log(sessionStorage.getItem('user-email'));
         // console.log(sessionStorage.getItem('jwt-auth-token'));
         // console.log(sessionStorage.getItem('userId'));

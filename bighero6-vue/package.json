@@ -10,8 +10,10 @@
   },
   "dependencies": {
     "axios": "^0.20.0",
+    "cheerio": "^1.0.0-rc.3",
     "dayjs": "^1.8.36",
     "firebase": "^7.21.0",
+    "request": "^2.88.2",
     "vara": "^1.2.0",
     "vue": "^2.6.11",
     "vue-cookies": "^1.7.4",

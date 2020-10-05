@@ -14,7 +14,7 @@
     </div>
     <div class="second paper">
       <div class="page last front contents">
-        <calendar @showDetail="getDiaryDetail" v-if ="open" class="calendar"></calendar>
+        <calendar @showDetail="getDiaryDetail" v-if ="open" class="calendar" ref ="calendar"></calendar>
       </div>
       <div class="page back"></div>
     </div>
@@ -46,12 +46,12 @@
     </div>
     <div class="cd">
        <div class="album-cover spin">
-        <img :src="albumUrl(diaryDetail.music.musicID)" alt="">
+        <img :src="albumUrl(diaryDetail.song.songId)" alt="">
 
        </div>
         <div class="song-info">
-        <h2 class="song-title">{{diaryDetail.music.title}}</h2>
-        <h3 class="song-singer">{{diaryDetail.music.singer}}</h3>
+        <h2 class="song-title">{{diaryDetail.song.title}}</h2>
+        <h3 class="song-singer">{{diaryDetail.song.singer}}</h3>
         <h4 class="song-hits"></h4>
        </div>
       
@@ -60,8 +60,8 @@
 </div>
  
  </div> 
- <div v-if="diaryDetail"  class ="musicPlayer" style="text-align: center;">
-  <player></player>
+ <div v-if="diaryDetail"  class ="musicPlayer">
+  <player  :diaryDetail="diaryDetail"></player>
   </div> 
 
 
@@ -69,15 +69,45 @@
      <div id ="diaryDetail" class="note" v-if="diaryDetail">
       <div class="header" >
           <h1>{{diaryDetail.date}}</h1>
-          <h2>날씨 <img :src = "weather(diaryDetail.weather)" style ="width:30px;height:30px;"></h2>
-           <h2>기분 <img :src = "emotion(diaryDetail.emotion)" style ="width:30px;height:30px;"></h2>
-       
+          <h2>날씨 <img class="pt-2"  :src = "weather(diaryDetail.weather)" style ="width:30px;height:40px;"> 기분 <img class="pt-2" :src = "emotion(diaryDetail.feel)" style ="width:30px;height:40px;"></h2>
+      
         <div class="ma-3">
-          <v-img :src="diaryDetail.contentImg"  style ="width:100%;height:150px;"></v-img>
+          <v-img  v-if="diaryDetail.img" :src="diaryDetail.img"  style ="width:100%;height:150px;"></v-img>
+          <v-img v-else src="https://firebasestorage.googleapis.com/v0/b/music-diary-710d3.appspot.com/o/profile%2F5f7173aafeddb203628a7c5f?alt=media"  style ="width:100%;height:150px;"></v-img>
        
-        <div class="mt-4 v-sheet theme--light elevation-3 diaryText" >
-               {{diaryDetail.content}}
+        <div class="mt-3 mb-1 v-sheet theme--light elevation-3 diaryText" >
+               {{diaryDetail.context}}
         </div>
+        <div style="text-align:right;">
+        <v-btn small tile
+        class="ma-1"
+        color="blue"
+        dark
+        @click="updateDiary(diaryDetail)"
+      >
+        <strong>수정</strong>
+        <v-icon
+          dark
+          right
+        >
+          mdi-checkbox-marked-circle
+        </v-icon>
+      </v-btn>
+      <v-btn small tile
+        class="ma-1"
+        color="red"
+        dark
+        @click="deleteDiary(diaryDetail)"
+      >
+      <strong>삭제</strong>
+        <v-icon
+          dark
+          right
+        >
+          mdi-delete
+        </v-icon>
+      </v-btn>
+      </div>
          </div>
       </div>
     </div>
@@ -91,9 +121,10 @@
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap');
-span{
+span,h2 , h1, b{
   font-family: 'Do Hyeon', sans-serif;
 }
+
 /*
 
 Click the diary to start animating.
@@ -346,17 +377,18 @@ View the project on Github : https://github.com/akzhy/Vara
 }
 .musicPlayer{
   position: absolute;
-  top:10px;
-  right:350px;
-  width:200px;
-  height:90%;
+  top:20px;
+  right:340px;
+  width:250px;
+ 
 }
 </style>
 <style lang="scss">
 @import "@/style/cdplayer.scss";
 </style>
 <script>
-
+import axios from 'axios'
+import constants from "../../lib/constants"
 
 export default {
 components: {
@@ -371,12 +403,43 @@ components: {
     };
   },
 methods : {
+  updateDiary(diaryDetail){
+    /* 일기 수정페이지로 넘어감 */
+    this.$router.push({name:"writediary",params: diaryDetail}) ;
+  },
+  deleteDiary(diaryDetail){
+
+  if(confirm(diaryDetail.date+" 의 일기"+"\n정말삭제하시겠습니까? 😅")) {
+         axios
+         .delete(constants.baseUrl + "/diary/"+diaryDetail.id,{ headers : {"Authorization": "Bearer "+ this.$store.state.authToken} }            
+       ) // 토큰 인증을 위해 헤더에 내용 추가
+         .then(({ data }) => {
+            if(data.status==200){
+           this.$refs.calendar.deleteDiary(diaryDetail.id);
+           this.diaryDetail ='';
+           alert("삭제되었습니다. 😭")
+           } else {
+             alert("삭제과정중 오류가 발생했습니다. 다시 시도해주세요 ")
+           }
+         })
+        .catch(function (error) {
+           console.log(error);
+           alert("삭제과정중 오류가 발생했습니다. 다시 시도해주세요 ")
+         });   
+        /*   this.$refs.calendar.deleteDiary(id);
+          this.diaryDetail ='';
+           alert("삭제되었습니다. 😭") */
+ } 
+
+   
+  }
+  ,
   weather(w) {
-          return require('../../assets/img/weather/'+w+'.png'); 
+          return require('../../assets/img/weather/'+w+' (1).png'); 
       }
       ,
   emotion(e) {
-          return require('../../assets/img/emotion/'+e+'.png'); 
+          return require('../../assets/img/emotion/'+e+' (1).png'); 
       }
       ,
   openBook(){
@@ -390,7 +453,7 @@ methods : {
        return imgurl;
    },
   getDiaryDetail(data){
-    console.log(data);
+    //console.log(data);
     this.diaryDetail = data ; 
   },
 moveWriteDiary(){
