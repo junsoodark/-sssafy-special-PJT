@@ -21,16 +21,14 @@ public class FriendController {
 
     @ApiOperation(value = "친구 검색", response = String.class)
     @GetMapping("/friend")
-    public List<User> searchFriends(@RequestParam String keyword, @RequestBody Map<String, String> map) {
-        String userId = map.get("userId");
+    public List<User> searchFriends(@RequestParam String keyword,@RequestParam String userId) {
         List<User> searchFriendList = friendService.searchFriends(keyword, userId);
         return searchFriendList;
     }
 
     @ApiOperation(value = "친구 아닌 유저 검색", response = String.class)
     @GetMapping("/nonfriend")
-    public List<User> searchNonFriends(@RequestParam String keyword, @RequestBody Map<String, String> map) {
-        String userId = map.get("userId");
+    public List<User> searchNonFriends(@RequestParam String keyword, @RequestParam String userId) {
         List<User> searchNonFriendList = friendService.searchNonFriend(keyword, userId);
         return searchNonFriendList;
     }
@@ -83,19 +81,18 @@ public class FriendController {
     }
 
     @ApiOperation(value = "나에게 친구요청한 유저 목록 조회", response = String.class)
-    @GetMapping("/friend/request/list")
-    public List<User> waitFriendList(@RequestBody Map<String, String> map) {
-        String userId = map.get("userId");
+    @GetMapping("/friend/request/list/{userId}")
+    public List<User> waitFriendList(@PathVariable String userId) {
+
         List<User> waitFriendList = friendService.waitFriendList(userId);
         return waitFriendList;
     }
 
     @ApiOperation(value = "친구 삭제", response = String.class)
     @DeleteMapping("/friend")
-    public ResponseEntity<Map<String, Object>> deleteFriend(@RequestParam String friendId, @RequestBody Map<String, String> map) {
+    public ResponseEntity<Map<String, Object>> deleteFriend(@RequestParam String friendId, @RequestParam String userId) {
         Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status = null;
-        String userId = map.get("userId");
+        HttpStatus status = null;;
         try {
             friendService.deleteFriend(userId, friendId);
             status = HttpStatus.OK;
