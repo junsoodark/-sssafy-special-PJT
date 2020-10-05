@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar
+  <v-app-bar v-if="this.$route.name!=='home'"
     app
     flat
   >
@@ -10,7 +10,7 @@
 
     <v-container class="mx-auto py-0">
       <v-row align="center">
-        <v-img
+      <v-img
           :src="require('@/assets/logo.png')"
           class="mr-5"
           contain
@@ -18,20 +18,20 @@
           width="48"
           max-width="48"
           @click="$vuetify.goTo(0)"
-        />
+        /> 
 
         <v-btn 
           v-for="(link, i) in links"
           :key="i"
           v-bind="link"
           class="hidden-sm-and-down"
-          v-show="link.text!=LOGIN"
+          v-show="link.text!=='login'"
           text
           @click="onClick($event, link)"
         >
           {{ link.text }}
         </v-btn>
-
+        {{this.$store.state.nickname}}
     
 
         <v-spacer />
@@ -65,11 +65,13 @@
     methods: {
       ...mapMutations(['toggleDrawer']),
       onClick (e, item) {
-        e.stopPropagation()
-
-        if (item.to || !item.href) return
-
-        this.$vuetify.goTo(item.href.endsWith('!') ? 0 : item.href)
+      e.preventDefault()
+       console.log(item)
+       console.log(this.$store.state.userId)
+        if (this.$store.state.userId!=='') {
+            return  this.$router.push("/"+item.text)
+        }
+        else alert("로그인이 필요한 서비스입니다")
       },
     },
   }

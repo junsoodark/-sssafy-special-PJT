@@ -1,7 +1,6 @@
 <template>
 <div id = "main">
     <book/> 
-  <!--  <test/> -->
  </div>   
 </template>
 
