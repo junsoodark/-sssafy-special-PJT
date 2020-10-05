@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ssafy.musicD.dto.User;
+import ssafy.musicD.dto.MemberDto;
 import ssafy.musicD.service.FriendServicelmpl;
 
 import java.util.HashMap;
@@ -14,7 +14,8 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+//@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+@CrossOrigin(origins = "*")
 public class FriendController {
     @Autowired
     private FriendServicelmpl friendService;
@@ -35,8 +36,8 @@ public class FriendController {
 
     @ApiOperation(value = "친구 목록 조회", response = String.class)
     @GetMapping("/friend/{userId}")
-    public List<User> friendList(@PathVariable String userId) {
-        List<User> friendList = friendService.friendList(userId);
+    public List<MemberDto> friendList(@PathVariable String userId) {
+        List<MemberDto> friendList = friendService.friendList(userId);
         return friendList;
     }
 

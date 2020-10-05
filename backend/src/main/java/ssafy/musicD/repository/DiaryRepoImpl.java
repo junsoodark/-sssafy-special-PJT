@@ -15,7 +15,7 @@ import com.mongodb.BasicDBObject;
 
 import ssafy.musicD.Domain.Diary;
 import ssafy.musicD.Domain.Member;
-import ssafy.musicD.dto.StrDiary;
+import ssafy.musicD.dto.DiaryDto;
 
 @Repository
 public class DiaryRepoImpl implements DiaryRepo {
@@ -23,21 +23,21 @@ public class DiaryRepoImpl implements DiaryRepo {
 	private MongoTemplate mongoTemplate;
 
 	@Override
-	public List<StrDiary> findDiary(String userId, int month) {
+	public List<DiaryDto> findDiary(String userId, int month) {
 		Query query = new Query();
 		query.addCriteria(new Criteria().andOperator(
 				Criteria.where("userId").is(userId),
 				Criteria.where("month").is(month)
 				));
 		List<Diary> tmp = mongoTemplate.find(query, Diary.class);
-		List<StrDiary> result = new ArrayList();
+		List<DiaryDto> result = new ArrayList();
 		
 		for (Diary diary : tmp) {
-			StrDiary tmpStrDIary = new StrDiary();
+			DiaryDto tmpStrDIary = new DiaryDto();
 			tmpStrDIary.convertId(diary);
 			result.add(tmpStrDIary);
 		}
-		for (StrDiary strDiary : result) {
+		for (DiaryDto strDiary : result) {
 			System.out.println("result - " + strDiary);
 		}
 

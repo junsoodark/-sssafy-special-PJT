@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ssafy.musicD.dto.Song;
-import ssafy.musicD.dto.StrDiary;
+import ssafy.musicD.dto.DiaryDto;
 
 @NoArgsConstructor
 @Data
@@ -27,7 +27,7 @@ public class Diary {
 	private String img;
 	private String context;
 	
-	public void convertId(StrDiary strDiary) {
+	public void convertId(DiaryDto strDiary) {
 		if(strDiary.getId() != null)
 			id = new ObjectId(strDiary.getId());
 		userId = strDiary.getUserId();

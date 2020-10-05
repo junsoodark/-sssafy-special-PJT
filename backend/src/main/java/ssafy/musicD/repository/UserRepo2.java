@@ -1,10 +1,7 @@
 package ssafy.musicD.repository;
 
-import java.util.List;
-
-import ssafy.musicD.Domain.Diary;
-import ssafy.musicD.Domain.Member;
+import ssafy.musicD.dto.MemberDto;
 
 public interface UserRepo2 {
-	public void updateUserInfo(Member user);
+	public void updateUserInfo(MemberDto user);
 }

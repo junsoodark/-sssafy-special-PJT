@@ -1,12 +1,10 @@
 package ssafy.musicD.dto;
 
-import org.bson.types.ObjectId;
-
 import lombok.Data;
 import ssafy.musicD.Domain.Diary;
 
 @Data
-public class StrDiary {
+public class DiaryDto {
 	private String id;
 	private String userId;
 	private int year;
@@ -20,7 +18,6 @@ public class StrDiary {
 	private String img;
 	private String context;
 	
-
 	public void convertId(Diary Diary) {
 		if(Diary.getId() != null)
 			id = Diary.getId().toString();

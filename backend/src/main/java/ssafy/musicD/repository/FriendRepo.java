@@ -1,18 +1,18 @@
 package ssafy.musicD.repository;
 
-import ssafy.musicD.dto.User;
+import ssafy.musicD.dto.MemberDto;
 
 import java.util.List;
 
 public interface FriendRepo {
 
-    public List<User> searchFriends(String keyword,String userId);
+    public List<MemberDto> searchFriends(String keyword,String userId);
 
-    public List<User> waitFriendList(User user);
+    public List<MemberDto> waitFriendList(MemberDto user);
 
-    public List<User> searchNonFriend(String keyword,String userId);
+    public List<MemberDto> searchNonFriend(String keyword,String userId);
 
-    public List<User> friendList(String userId);
+    public List<MemberDto> friendList(String userId);
 
     public void requestFriend(String userId,String friendId);
 
