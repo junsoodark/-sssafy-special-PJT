@@ -179,7 +179,7 @@ export default new Vuex.Store({
       var JsonForm = JSON.stringify(params);
       Axios({
         method: "POST",
-        url: constants.baseUrl+`/account/signUp`,
+        url: constants.baseUrl+`/account/signup`,
         params: params,
         data: JsonForm,
         headers: { "Content-Type": "application/json; charset=utf-8" },
