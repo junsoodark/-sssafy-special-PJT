@@ -38,7 +38,6 @@ import Vue from 'vue'
 import VueYoutube from 'vue-youtube'
 const axios = require("axios"); 
 const cheerio = require("cheerio");
-const request = require("request");
 
  
 Vue.use(VueYoutube)
@@ -103,39 +102,33 @@ components: {
             },  
         },
    mounted () {
-      //console.log("https://www.youtube.com/results?search_query="+this.diaryDetail.song.singer+"+"+this.diaryDetail.song.title);
-    //   this.getHTML().
-    //   then(html => { let ulList = []; const $ = cheerio.load(html.data); const $bodyList = $("div.ah_list.PM_CL_realtimeKeyword_list_base ul.ah_l").children("li.ah_item"); $bodyList.each(function(i, elem) { ulList[i] = { title: $(this).find('span.ah_k').text(), url: $(this).find('a.ah_a').attr('href') }; }); const data = ulList.filter(n => n.title); return data; }) .then(res => log(res));
-   const options = {
-    url: 'https://www.naver.com',
-    headers: {
-        'User-Agent': 'request'
-    }
-};
+   this.test('https://www.youtube.com/results?search_query='+'헤이즈+비도오고그래서?1')
 
-const callback = ((error, response, body) => {
-    if (!error && response.statusCode == 200) {
-        const $ = cheerio.load(body);
-        const search = $('.ah_roll_area  > .ah_l > .ah_item > a > .ah_k');
-        search.each((index, item) => {
-            console.log(`${index + 1} - ${$(item).text()}`);
-        });
-    }
-});
-request(options, callback);
 
-  } ,      
+
+   },    
 
   methods: {
-    async getHTML() {
-        try {
-    //return await axios.get("https://www.youtube.com/results?search_query="+this.diaryDetail.song.singer+"+"+this.diaryDetail.song.title);
-     return await axios.get('https://www.naver.com/',{headers : {"Access-Control-Allow-Origin" : "*"}});
-     //{headers : {'Access-Control-Allow-Origin' : '*'}}
-  } catch (error) {
-    console.error(error);
+      test (url) {
+  var optionAxios = {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization, Content-Length, X-Requested-With'
+        }
   }
-    }, 
+  axios.get('https://cors-anywhere.herokuapp.com/' + url, optionAxios)
+    .then((response) => {
+      var htmlText = response.data;
+      const $ = cheerio.load(response.data);
+      var x = $('a#thumbnail');
+      
+      console.log($('ytd-video-renderer ytd-thumbnail')[0]);
+  
+    })
+},
+      
     updateVolume(volume){
         this.player.setVolume(volume)
     },
