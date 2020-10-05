@@ -6,6 +6,7 @@
       v-model="tab"
       background-color="primary"
       dark
+      
     >
       <v-tab
         v-for="item in items"
