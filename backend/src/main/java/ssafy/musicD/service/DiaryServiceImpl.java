@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ssafy.musicD.Domain.Diary;
-import ssafy.musicD.dto.StrDiary;
+import ssafy.musicD.dto.DiaryDto;
 import ssafy.musicD.repository.DiaryRepo;
 
 @Service
@@ -33,7 +33,7 @@ public class DiaryServiceImpl implements DiaryService {
 	}
 
 	@Override
-	public List<StrDiary> findDiaryByMonth(String userId, int month) {
+	public List<DiaryDto> findDiaryByMonth(String userId, int month) {
 		return diaryRepo.findDiary(userId, month);
 	}
 }
