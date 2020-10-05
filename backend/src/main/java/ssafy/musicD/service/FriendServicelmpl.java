@@ -28,4 +28,5 @@ public class FriendServicelmpl implements FriendService {
 
     public void deleteFriend(String userId,String friendId) {friendRepo.deleteFriend(userId,friendId);}
 
+    public void refuseFriend(String userId,String friendId) {friendRepo.refuseFriend(userId,friendId);}
 }

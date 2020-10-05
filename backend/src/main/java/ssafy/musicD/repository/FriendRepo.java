@@ -20,5 +20,6 @@ public interface FriendRepo {
 
     public void deleteFriend(String userId,String friendId);
 
+    public void refuseFriend(String userId,String friendId);
 }
 

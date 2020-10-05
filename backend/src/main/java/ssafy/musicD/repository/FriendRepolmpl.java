@@ -148,8 +148,18 @@ public class FriendRepolmpl {
         mongoTemplate.updateFirst(query,update,"user");
         Update update1 = new Update();
         update.set("friends",sendlisted);
-        mongoTemplate.updateFirst(query1,update,"user");
+        mongoTemplate.updateFirst(query1,update1,"user");
 
+    }
+
+    public void refuseFriend(String userId,String friendId){
+        Query query = new Query(Criteria.where("_id").is(userId));
+        MemberDto user = mongoTemplate.findOne(query, MemberDto.class,"user");
+        List<String> userWaitFriend = user.getWaitFriends();
+        userWaitFriend.remove(friendId);
+        Update update = new Update();
+        update.set("waitFriends",userWaitFriend);
+        mongoTemplate.updateFirst(query,update,"user");
     }
 
 
