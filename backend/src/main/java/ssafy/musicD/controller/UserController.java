@@ -124,10 +124,10 @@ public class UserController {
 	@PostMapping(path = "/signup")
 	@ApiOperation(value = "회원 가입", response = String.class)
 	public Map<String, Object> addNewUser(@RequestBody Member user) {
-		String email = user.getEmail();
 		Map<String, Object> map = new HashMap<>();
-		if (userRepo.findByEmail(email) == null) {
-			user.setEmail(email);
+		Map<String, String> tmp = new HashMap<>();
+		tmp.put("nickname", user.getNickname());
+		if (userRepo.findByEmail(user.getEmail()) == null && checkNickname(tmp)) {
 			if (user.getNickname().equals("admin")) {
 				user.setRole("ROLE_ADMIN");
 			} else {
