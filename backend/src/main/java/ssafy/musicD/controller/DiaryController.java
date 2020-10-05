@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
 import ssafy.musicD.Domain.Diary;
-import ssafy.musicD.dto.StrDiary;
+import ssafy.musicD.dto.DiaryDto;
 import ssafy.musicD.service.DiaryService;
 
 @RestController
@@ -36,7 +37,7 @@ public class DiaryController {
 		System.out.println(userId);
 		System.out.println(month);
 		try {
-			List<StrDiary> diarys = diaryService.findDiaryByMonth(userId, month);
+			List<DiaryDto> diarys = diaryService.findDiaryByMonth(userId, month);
 			map.put("status", 200);
 			map.put("diarys", diarys);
 		} catch (Exception e) {
@@ -46,10 +47,9 @@ public class DiaryController {
 	}
 	
 	// 일기 삭제
-	@DeleteMapping
+	@DeleteMapping("/{diaryId}")
 	@ApiOperation(value = "일기 삭제", response = String.class)
-	public Map<String, Object> deleteDiary(@RequestBody Map<String, String> m) {
-		String diaryId = m.get("id");
+	public Map<String, Object> deleteDiary(@PathVariable String diaryId) {
 		diaryService.deleteDiary(diaryId);
 		Map<String, Object> map = new HashMap<>();
 		map.put("status", 200);
@@ -59,7 +59,7 @@ public class DiaryController {
 	// 일기 등록
 	@PostMapping
 	@ApiOperation(value = "일기 등록", response = String.class)
-	public Map<String, Object> registerDiary(@RequestBody StrDiary strDiary) {
+	public Map<String, Object> registerDiary(@RequestBody DiaryDto strDiary) {
 		Diary diary = new Diary();
 		diary.convertId(strDiary);
 		diaryService.insertDiary(diary);
@@ -71,7 +71,7 @@ public class DiaryController {
 	// 일기 수정
 	@PutMapping
 	@ApiOperation(value = "일기 수정", response = String.class)
-	public Map<String, Object> updateDiary(@RequestBody StrDiary strDiary) {
+	public Map<String, Object> updateDiary(@RequestBody DiaryDto strDiary) {
 		Diary diary = new Diary();
 		diary.convertId(strDiary);
 		diaryService.updateDiary(diary);

@@ -32,7 +32,6 @@ public class Member {
 	private String profileURL;
 	private List<String> friends;
 	private List<String> waitFriends;
-
 	private String role;
 	
 //	@DBRef

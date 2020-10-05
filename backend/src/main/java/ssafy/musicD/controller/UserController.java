@@ -4,8 +4,10 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.swagger.annotations.ApiOperation;
 import ssafy.musicD.Domain.Member;
 import ssafy.musicD.Domain.Token;
+import ssafy.musicD.dto.MemberDto;
 import ssafy.musicD.jwt.JwtUtils;
 import ssafy.musicD.repository.UserRepo;
+import ssafy.musicD.repository.UserRepo2;
 import ssafy.musicD.service.UserDetailsServiceImpl;
 
 import org.slf4j.Logger;
@@ -35,6 +37,8 @@ public class UserController {
 	private Logger logger = LoggerFactory.getLogger(ApplicationRunner.class);
 	@Autowired
 	private UserRepo userRepo;
+	@Autowired
+	private UserRepo2 userRepo2;
 	@Autowired
 	RedisTemplate<String, Object> redisTemplate;
 	@Autowired
@@ -133,6 +137,7 @@ public class UserController {
 			map.put("status", 200);
 			map.put("email", user.getEmail());
 			map.put("nickname", user.getNickname());
+			user.setProfileURL("");
 			user.setFriends(new ArrayList<String>());
 			user.setWaitFriends(new ArrayList<String>());
 			userRepo.save(user);
@@ -165,15 +170,16 @@ public class UserController {
 	@ApiOperation(value = "회원 정보 조회", response = String.class)
 	public Map<String, Object> getUser(@PathVariable String userId) {
 		Map<String, Object> map = new HashMap<>();
-		Member member = userRepo.findById(userId).orElse(null);
+		Member tmp = userRepo.findById(userId).orElse(null);
+		MemberDto member = new MemberDto();
+		member.convertId(tmp);
 		System.out.println(member);
-		if (member != null) {
-			member.setPassword("");
-			map.put("success", true);
+		if (tmp != null) {
+			map.put("status", 200);
 			map.put("member", member);			
 			return map;
 		} else {
-			map.put("success", false);
+			map.put("status", 500);
 			map.put("message", "can't find member");
 		}
 		return map;
@@ -182,16 +188,16 @@ public class UserController {
 	// 회원정보수정
 	@PutMapping(path = "/")
 	@ApiOperation(value = "회원정보수정", response = String.class)
-	public Map<String, Object> modifyUser(@RequestBody Member user) {
-		String email = user.getEmail();
+	public Map<String, Object> modifyUser(@RequestBody MemberDto user) {
+		String id = user.getId();
 		Map<String, Object> map = new HashMap<>();
-		if (userRepo.findByEmail(email) != null) {
-			userRepo.save(user);
+		if (userRepo.findById(id) != null) {
+			userRepo2.updateUserInfo(user);
 			map.put("status", 200);
 			return map;
 		} else {
 			map.put("status", 500);
-			map.put("message", "duplicated email");
+			map.put("message", "can't find member");
 		}
 		return map;
 	}
@@ -199,10 +205,18 @@ public class UserController {
 	// 회원정보삭제
 	@DeleteMapping(path = "/{userId}")
 	@ApiOperation(value = "회원 탈퇴", response = String.class)
-	public void deleteUser(@PathVariable Long userId) {
+	public Map<String, Object> deleteUser(@PathVariable String userId) {
 		logger.info("delete userId: " + userId);
-		Long result = userRepo.deleteById(userId);
-		logger.info("delete result: " + result);
+		Map<String, Object> map = new HashMap<>();
+		 try {
+			userRepo.deleteById(userId);
+			map.put("status", 200);
+			return map;
+		} catch (Exception e) {
+			map.put("status", 500);
+			map.put("message", "error");
+			return map;
+		}
 	}
 
 	// accesstoken 재발급(refresh token이 만료 안된 경우)

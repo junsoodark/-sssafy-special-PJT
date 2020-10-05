@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ssafy.musicD.dto.User;
+import ssafy.musicD.dto.MemberDto;
 import ssafy.musicD.service.FriendServicelmpl;
 
 import java.util.HashMap;
@@ -21,24 +21,24 @@ public class FriendController {
 
     @ApiOperation(value = "친구 검색", response = String.class)
     @GetMapping("/friend")
-    public List<User> searchFriends(@RequestParam String keyword, @RequestBody Map<String, String> map) {
+    public List<MemberDto> searchFriends(@RequestParam String keyword, @RequestBody Map<String, String> map) {
         String userId = map.get("userId");
-        List<User> searchFriendList = friendService.searchFriends(keyword, userId);
+        List<MemberDto> searchFriendList = friendService.searchFriends(keyword, userId);
         return searchFriendList;
     }
 
     @ApiOperation(value = "친구 아닌 유저 검색", response = String.class)
     @GetMapping("/nonfriend")
-    public List<User> searchNonFriends(@RequestParam String keyword, @RequestBody Map<String, String> map) {
+    public List<MemberDto> searchNonFriends(@RequestParam String keyword, @RequestBody Map<String, String> map) {
         String userId = map.get("userId");
-        List<User> searchNonFriendList = friendService.searchNonFriend(keyword, userId);
+        List<MemberDto> searchNonFriendList = friendService.searchNonFriend(keyword, userId);
         return searchNonFriendList;
     }
 
     @ApiOperation(value = "친구 목록 조회", response = String.class)
     @GetMapping("/friend/{userId}")
-    public List<User> friendList(@PathVariable String userId) {
-        List<User> friendList = friendService.friendList(userId);
+    public List<MemberDto> friendList(@PathVariable String userId) {
+        List<MemberDto> friendList = friendService.friendList(userId);
         return friendList;
     }
 
@@ -84,9 +84,9 @@ public class FriendController {
 
     @ApiOperation(value = "나에게 친구요청한 유저 목록 조회", response = String.class)
     @GetMapping("/friend/request/list")
-    public List<User> waitFriendList(@RequestBody Map<String, String> map) {
+    public List<MemberDto> waitFriendList(@RequestBody Map<String, String> map) {
         String userId = map.get("userId");
-        List<User> waitFriendList = friendService.waitFriendList(userId);
+        List<MemberDto> waitFriendList = friendService.waitFriendList(userId);
         return waitFriendList;
     }
 
