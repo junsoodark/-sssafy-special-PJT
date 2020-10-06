@@ -43,18 +43,18 @@
         </div>
         <div style="text-align:left;">
           <span class="setting">기분</span>
-          <img class="settingimg" src="@/assets/img/emotion/smile.png" @click="feelChoose(1)" v-if="feel_smile" />
-          <img class="settingimg" src="@/assets/img/emotion/smile (1).png" v-else />
-          <img class="settingimg" src="@/assets/img/emotion/happy.png" @click="feelChoose(2)" v-if="feel_happy" />
+          <img class="settingimg" src="@/assets/img/emotion/happy.png" @click="feelChoose(1)" v-if="feel_happy" />
           <img class="settingimg" src="@/assets/img/emotion/happy (1).png" v-else />
-          <img class="settingimg" src="@/assets/img/emotion/meh.png" @click="feelChoose(3)" v-if="feel_meh" />
-          <img class="settingimg" src="@/assets/img/emotion/meh (1).png" v-else />
-          <img class="settingimg" src="@/assets/img/emotion/crying.png" @click="feelChoose(4)" v-if="feel_crying" />
-          <img class="settingimg" src="@/assets/img/emotion/crying (1).png" v-else />
-          <img class="settingimg" src="@/assets/img/emotion/sad.png" @click="feelChoose(5)" v-if="feel_sad" />
+          <img class="settingimg" src="@/assets/img/emotion/excited.png" @click="feelChoose(2)" v-if="feel_excited" />
+          <img class="settingimg" src="@/assets/img/emotion/excited (1).png" v-else />
+          <img class="settingimg" src="@/assets/img/emotion/indifferent.png" @click="feelChoose(3)" v-if="feel_indifferent" />
+          <img class="settingimg" src="@/assets/img/emotion/indifferent (1).png" v-else />
+          <img class="settingimg" src="@/assets/img/emotion/sad.png" @click="feelChoose(4)" v-if="feel_sad" />
           <img class="settingimg" src="@/assets/img/emotion/sad (1).png" v-else />
-          <img class="settingimg" src="@/assets/img/emotion/pain.png" @click="feelChoose(6)" v-if="feel_pain" />
-          <img class="settingimg" src="@/assets/img/emotion/pain (1).png" v-else />
+          <img class="settingimg" src="@/assets/img/emotion/angry.png" @click="feelChoose(5)" v-if="feel_angry" />
+          <img class="settingimg" src="@/assets/img/emotion/angry (1).png" v-else />
+          <img class="settingimg" src="@/assets/img/emotion/fear.png" @click="feelChoose(6)" v-if="feel_fear" />
+          <img class="settingimg" src="@/assets/img/emotion/fear (1).png" v-else />
         </div>
         <div class="ma-3">
           <v-btn block color="secondary" dark>사진 수정하기<v-icon dark right>mdi-camera-plus</v-icon></v-btn>
@@ -248,7 +248,7 @@ export default {
     wthr_sunny: true, wthr_cloudy: true, wthr_cloud: true, wthr_windy: true, wthr_rainy: true, wthr_storm: true, wthr_snowing: true,
     /*기분*/
     feeling: "",
-    feel_smile: true, feel_happy: true, feel_meh: true, feel_crying: true, feel_sad: true, feel_pain: true,
+    feel_happy: true, feel_excited: true, feel_indifferent: true, feel_sad: true, feel_angry: true, feel_fear: true,
   }),
   watch: {
     loader () {
@@ -280,17 +280,17 @@ export default {
     },
     feelChoose(num) {
       if(num == 1) {
-        this.feel_smile = false; this.feel_happy = true; this.feel_meh = true; this.feel_crying = true; this.feel_sad = true; this.feel_pain = true;
+        this.feel_happy = false; this.feel_excited = true; this.feel_indifferent = true; this.feel_sad = true; this.feel_angry = true; this.feel_fear = true;
       } else if(num == 2) {
-        this.feel_smile = true; this.feel_happy = false; this.feel_meh = true; this.feel_crying = true; this.feel_sad = true; this.feel_pain = true;
+        this.feel_happy = true; this.feel_excited = false; this.feel_indifferent = true; this.feel_sad = true; this.feel_angry = true; this.feel_fear = true;
       } else if(num == 3) {
-        this.feel_smile = true; this.feel_happy = true; this.feel_meh = false; this.feel_crying = true; this.feel_sad = true; this.feel_pain = true;
+        this.feel_happy = true; this.feel_excited = true; this.feel_indifferent = false; this.feel_sad = true; this.feel_angry = true; this.feel_fear = true;
       } else if(num == 4) {
-        this.feel_smile = true; this.feel_happy = true; this.feel_meh = true; this.feel_crying = false; this.feel_sad = true; this.feel_pain = true;
+        this.feel_happy = true; this.feel_excited = true; this.feel_indifferent = true; this.feel_sad = false; this.feel_angry = true; this.feel_fear = true;
       } else if(num == 5) {
-        this.feel_smile = true; this.feel_happy = true; this.feel_meh = true; this.feel_crying = true; this.feel_sad = false; this.feel_pain = true;
+        this.feel_happy = true; this.feel_excited = true; this.feel_indifferent = true; this.feel_sad = true; this.feel_angry = false; this.feel_fear = true;
       } else if(num == 6) {
-        this.feel_smile = true; this.feel_happy = true; this.feel_meh = true; this.feel_crying = true; this.feel_sad = true; this.feel_pain = false;
+        this.feel_happy = true; this.feel_excited = true; this.feel_indifferent = true; this.feel_sad = true; this.feel_angry = true; this.feel_fear = false;
       }
     },
     showChoose() {
