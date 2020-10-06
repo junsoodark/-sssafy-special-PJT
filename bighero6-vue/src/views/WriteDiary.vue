@@ -22,25 +22,39 @@
               {{ date }}
             </p>
           </template>
-          <v-date-picker v-model="date" @input="menu = false"></v-date-picker>
+          <v-date-picker v-model="date" @input="menu = false" @change="getDay()"></v-date-picker>
         </v-menu>
         <div style="text-align:left;">
           <span class="setting">날씨</span>
-          <img class="settingimg" src="@/assets/img/weather/sunny.png" />
-          <img class="settingimg" src="@/assets/img/weather/cloudy-day.png" />
-          <img class="settingimg" src="@/assets/img/weather/cloud.png" />
-          <img class="settingimg" src="@/assets/img/weather/windy.png" />
-          <img class="settingimg" src="@/assets/img/weather/umbrella (1).png" />
-          <img class="settingimg" src="@/assets/img/weather/storm.png" />
-          <img class="settingimg" src="@/assets/img/weather/snowing.png" />
+          <img class="settingimg" src="@/assets/img/weather/sunny.png" @click="wthrChoose(1)" v-if="wthr_sunny" />
+          <img class="settingimg" src="@/assets/img/weather/sunny (1).png" v-else />
+          <img class="settingimg" src="@/assets/img/weather/cloudy.png" @click="wthrChoose(2)" v-if="wthr_cloudy" />
+          <img class="settingimg" src="@/assets/img/weather/cloudy (1).png" v-else />
+          <img class="settingimg" src="@/assets/img/weather/cloud.png" @click="wthrChoose(3)" v-if="wthr_cloud" />
+          <img class="settingimg" src="@/assets/img/weather/cloud (1).png" v-else />
+          <img class="settingimg" src="@/assets/img/weather/windy.png" @click="wthrChoose(4)" v-if="wthr_windy" />
+          <img class="settingimg" src="@/assets/img/weather/windy (1).png" v-else />
+          <img class="settingimg" src="@/assets/img/weather/umbrella.png" @click="wthrChoose(5)" v-if="wthr_rainy" />
+          <img class="settingimg" src="@/assets/img/weather/umbrella (1).png" v-else />
+          <img class="settingimg" src="@/assets/img/weather/storm.png" @click="wthrChoose(6)" v-if="wthr_storm" />
+          <img class="settingimg" src="@/assets/img/weather/storm (1).png" v-else />
+          <img class="settingimg" src="@/assets/img/weather/snowing.png" @click="wthrChoose(7)" v-if="wthr_snowing" />
+          <img class="settingimg" src="@/assets/img/weather/snowing (1).png" v-else />
         </div>
         <div style="text-align:left;">
           <span class="setting">기분</span>
-          <img class="settingimg" src="@/assets/img/emotion/smile.png" />
-          <img class="settingimg" src="@/assets/img/emotion/happy.png" />
-          <img class="settingimg" src="@/assets/img/emotion/meh (1).png" />
-          <img class="settingimg" src="@/assets/img/emotion/crying.png" />
-          <img class="settingimg" src="@/assets/img/emotion/sad.png" />
+          <img class="settingimg" src="@/assets/img/emotion/happy.png" @click="feelChoose(1)" v-if="feel_happy" />
+          <img class="settingimg" src="@/assets/img/emotion/happy (1).png" v-else />
+          <img class="settingimg" src="@/assets/img/emotion/excited.png" @click="feelChoose(2)" v-if="feel_excited" />
+          <img class="settingimg" src="@/assets/img/emotion/excited (1).png" v-else />
+          <img class="settingimg" src="@/assets/img/emotion/indifferent.png" @click="feelChoose(3)" v-if="feel_indifferent" />
+          <img class="settingimg" src="@/assets/img/emotion/indifferent (1).png" v-else />
+          <img class="settingimg" src="@/assets/img/emotion/sad.png" @click="feelChoose(4)" v-if="feel_sad" />
+          <img class="settingimg" src="@/assets/img/emotion/sad (1).png" v-else />
+          <img class="settingimg" src="@/assets/img/emotion/angry.png" @click="feelChoose(5)" v-if="feel_angry" />
+          <img class="settingimg" src="@/assets/img/emotion/angry (1).png" v-else />
+          <img class="settingimg" src="@/assets/img/emotion/fear.png" @click="feelChoose(6)" v-if="feel_fear" />
+          <img class="settingimg" src="@/assets/img/emotion/fear (1).png" v-else />
         </div>
         <div class="ma-3">
           <v-btn block color="secondary" dark>사진 수정하기<v-icon dark right>mdi-camera-plus</v-icon></v-btn>
@@ -66,11 +80,12 @@
             <v-col>
               <v-switch style="margin-top: 0px;padding-top: 0px;"
                 v-model="switch1"
-                :label="`공개 설정 : ${switch1.toString()}`"
+                @change="showChoose()"
+                :label="`${show}`"
               ></v-switch>
             </v-col>
             <v-col style="padding-top:7px;">
-              <v-btn color="error" style="float:right;">저장</v-btn>
+              <v-btn color="error" @click="checkHandler()" style="float:right;">저장</v-btn>
             </v-col>
           </v-row>
         </v-container>
@@ -207,20 +222,33 @@
 </template>
 
 <script>
+import axios from 'axios'
+import constants from "@/lib/constants"
+
 export default {
   components: {
     tape: () => import('@/components/writediarypage/Tape'),
   },
   data: () => ({
     date: new Date().toISOString().substr(0, 10),
+    day: new Date().getDate(),
+    month: new Date().getMonth() + 1,
+    year: new Date().getYear() + 1900,
     menu: false,
     diarytext: "",
     switch1: true,
+    show: "공개",
     model: null,
     file: 'http://www.hochmuth.com/mp3/Boccherini_Concerto_478-1.mp3',
     loader: null,
     loading4: false,
     dialog: false,
+    /*날씨*/
+    weather: "",
+    wthr_sunny: true, wthr_cloudy: true, wthr_cloud: true, wthr_windy: true, wthr_rainy: true, wthr_storm: true, wthr_snowing: true,
+    /*기분*/
+    feeling: "",
+    feel_happy: true, feel_excited: true, feel_indifferent: true, feel_sad: true, feel_angry: true, feel_fear: true,
   }),
   watch: {
     loader () {
@@ -232,6 +260,144 @@ export default {
       this.loader = null
     },
   },
+  methods: {
+    wthrChoose(num) {
+      if(num == 1) {
+        this.wthr_sunny = false; this.wthr_cloudy = true; this.wthr_cloud = true; this.wthr_windy = true; this.wthr_rainy = true; this.wthr_storm = true; this.wthr_snowing = true;
+      } else if(num == 2) {
+        this.wthr_sunny = true; this.wthr_cloudy = false; this.wthr_cloud = true; this.wthr_windy = true; this.wthr_rainy = true; this.wthr_storm = true; this.wthr_snowing = true;
+      } else if(num == 3) {
+        this.wthr_sunny = true; this.wthr_cloudy = true; this.wthr_cloud = false; this.wthr_windy = true; this.wthr_rainy = true; this.wthr_storm = true; this.wthr_snowing = true;
+      } else if(num == 4) {
+        this.wthr_sunny = true; this.wthr_cloudy = true; this.wthr_cloud = true; this.wthr_windy = false; this.wthr_rainy = true; this.wthr_storm = true; this.wthr_snowing = true;
+      } else if(num == 5) {
+        this.wthr_sunny = true; this.wthr_cloudy = true; this.wthr_cloud = true; this.wthr_windy = true; this.wthr_rainy = false; this.wthr_storm = true; this.wthr_snowing = true;
+      } else if(num == 6) {
+        this.wthr_sunny = true; this.wthr_cloudy = true; this.wthr_cloud = true; this.wthr_windy = true; this.wthr_rainy = true; this.wthr_storm = false; this.wthr_snowing = true;
+      } else if(num == 7) {
+        this.wthr_sunny = true; this.wthr_cloudy = true; this.wthr_cloud = true; this.wthr_windy = true; this.wthr_rainy = true; this.wthr_storm = true; this.wthr_snowing = false;
+      }
+    },
+    feelChoose(num) {
+      if(num == 1) {
+        this.feel_happy = false; this.feel_excited = true; this.feel_indifferent = true; this.feel_sad = true; this.feel_angry = true; this.feel_fear = true;
+      } else if(num == 2) {
+        this.feel_happy = true; this.feel_excited = false; this.feel_indifferent = true; this.feel_sad = true; this.feel_angry = true; this.feel_fear = true;
+      } else if(num == 3) {
+        this.feel_happy = true; this.feel_excited = true; this.feel_indifferent = false; this.feel_sad = true; this.feel_angry = true; this.feel_fear = true;
+      } else if(num == 4) {
+        this.feel_happy = true; this.feel_excited = true; this.feel_indifferent = true; this.feel_sad = false; this.feel_angry = true; this.feel_fear = true;
+      } else if(num == 5) {
+        this.feel_happy = true; this.feel_excited = true; this.feel_indifferent = true; this.feel_sad = true; this.feel_angry = false; this.feel_fear = true;
+      } else if(num == 6) {
+        this.feel_happy = true; this.feel_excited = true; this.feel_indifferent = true; this.feel_sad = true; this.feel_angry = true; this.feel_fear = false;
+      }
+    },
+    showChoose() {
+      if(this.switch1) this.show = "공개";
+      else this.show = "비공개";
+    },
+    getDay() {
+      this.day = new Date(this.date).getDate();
+      this.month = new Date(this.date).getMonth() + 1;
+      this.year = new Date(this.date).getYear() + 1900;
+    },
+    checkHandler() {
+      let err = true;
+      let msg = '';
+
+      if(!this.wthr_sunny) this.weather = "sunny";
+      else if(!this.wthr_cloudy) this.weather = "cloudy";
+      else if(!this.wthr_cloud) this.weather = "cloud";
+      else if(!this.wthr_windy) this.weather = "windy";
+      else if(!this.wthr_rainy) this.weather = "rainy";
+      else if(!this.wthr_storm) this.weather = "storm";
+      else if(!this.wthr_snowing) this.weather = "snowing";
+      else {
+        err = false;
+        msg = '날씨를 선택해주세요.';
+      };
+      
+      if(!this.feel_smile) this.feeling = "smile";
+      else if(!this.feel_happy) this.feeling = "happy";
+      else if(!this.feel_meh) this.feeling = "meh";
+      else if(!this.feel_crying) this.feeling = "crying";
+      else if(!this.feel_sad) this.feeling = "sad";
+      else if(!this.feel_pain) this.feeling = "pain";
+      else {
+        err = false;
+        msg = '기분을 선택해주세요.';
+      };
+
+      if(this.diarytext == "") {
+        err = false;
+        msg = '일기를 작성해주세요.';
+      }
+
+      if (!err) alert(msg);
+			else {
+				this.saveGibonHandler();
+			}
+    },
+    saveGibonHandler(){
+      axios
+      .post(constants.baseUrl + "/diary", {
+        context: this.diarytext,
+        date: this.date,
+        day: this.day,
+        feel: this.feeling,
+        //id: "string",
+        img: "string",
+        month: this.month,
+        show: this.switch1,
+        song: {
+          albumCover: "string",
+          singer: "string",
+          songId: "string",
+          title: "string",
+          youtube: "string"
+        },
+        userId: this.$store.state.userId,
+        weather: this.weather,
+        year: this.year
+      },{ headers : {"Authorization": "Bearer "+ this.$store.state.authToken} }) // 토큰 인증을 위해 헤더에 내용 추가
+      .then(({ data }) => {
+        alert("일기가 저장되었습니다.");
+      })
+      .catch((error) => {
+        console.dir(error);
+      });
+    },
+    updateGibonHandler(){
+      axios
+      .put(constants.baseUrl + "/diary", {
+        context: this.diarytext,
+        date: this.date,
+        day: this.day,
+        feel: this.feeling,
+        //id: "string",
+        img: "string",
+        month: this.month,
+        show: this.switch1,
+        song: {
+          albumCover: "string",
+          singer: "string",
+          songId: "string",
+          title: "string",
+          youtube: "string"
+        },
+        userId: this.$store.state.userId,
+        weather: this.weather,
+        year: this.year
+      },{ headers : {"Authorization": "Bearer "+ this.$store.state.authToken} }) // 토큰 인증을 위해 헤더에 내용 추가
+      .then(({ data }) => {
+        alert("일기가 수정되었습니다.");
+      })
+      .catch((error) => {
+        console.dir(error);
+      });
+    }
+  }
 }
 </script>
 
