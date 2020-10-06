@@ -7,6 +7,7 @@ import Login from '../views/Login.vue'
 import Playlist from '../views/Playlist.vue'
 import Signup from '../views/SignupPage.vue'
 import WriteDiary from '../views/WriteDiary.vue'
+import Logout from '../views/Logout.vue'
 
 Vue.use(Router)
 export default new Router({
@@ -49,5 +50,11 @@ export default new Router({
       name: 'writediary',
       component: WriteDiary,
     },
+
+    {
+      path: '/logout',
+      name: 'logout',
+      component: Logout,
+    }
   ],
 })

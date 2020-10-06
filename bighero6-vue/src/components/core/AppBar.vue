@@ -25,7 +25,7 @@
           :key="i"
           v-bind="link"
           class="hidden-sm-and-down"
-          v-show="link.text!=='login'"
+          v-show="show(link.text)"
           text
           @click="onClick($event, link)"
         >
@@ -61,7 +61,11 @@
     computed: {
       ...mapGetters(['links']),
     },
+    data(){
+   return {
 
+   }
+    },
     methods: {
       ...mapMutations(['toggleDrawer']),
       onClick (e, item) {
@@ -73,6 +77,11 @@
         }
         else alert("로그인이 필요한 서비스입니다")
       },
+      show(text){
+           if(text!=='logout') return true;
+           else if (this.$store.state.userId!=='') return true;
+           else return false;
+      }
     },
   }
 </script>
