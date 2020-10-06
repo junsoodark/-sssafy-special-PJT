@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.Data;
 
 @Data
-@Document(collection="songs")
+@Document(collection="emotion")
 public class Song {
 	private String id;
 	private String issue_date;

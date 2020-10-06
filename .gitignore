@@ -6,6 +6,7 @@
 jwt.yml
 mongodb.yml
 redis.yml
+youtube.yml
 
 ### Eclipse ###
 .metadata
