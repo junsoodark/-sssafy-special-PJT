@@ -147,7 +147,7 @@ public class FriendRepolmpl {
         update.set("friends",receivelisted);
         mongoTemplate.updateFirst(query,update,"user");
         Update update1 = new Update();
-        update.set("friends",sendlisted);
+        update1.set("friends",sendlisted);
         mongoTemplate.updateFirst(query1,update1,"user");
 
     }
