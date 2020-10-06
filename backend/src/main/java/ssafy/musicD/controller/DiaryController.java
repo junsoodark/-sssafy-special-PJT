@@ -34,10 +34,11 @@ public class DiaryController {
 		Map<String, Object> map = new HashMap<>();
 		String userId = (String)m.get("userId");
 		int month = (int)m.get("month");
+		int year = (int)m.get("year");
 		System.out.println(userId);
 		System.out.println(month);
 		try {
-			List<DiaryDto> diarys = diaryService.findDiaryByMonth(userId, month);
+			List<DiaryDto> diarys = diaryService.findDiaryByMonth(userId, month, year);
 			map.put("status", 200);
 			map.put("diarys", diarys);
 		} catch (Exception e) {
@@ -75,6 +76,19 @@ public class DiaryController {
 		Diary diary = new Diary();
 		diary.convertId(strDiary);
 		diaryService.updateDiary(diary);
+		Map<String, Object> map = new HashMap<>();
+		map.put("status", 200);
+		return map;
+	}
+	
+
+	// 일기 노래 등록
+	@PostMapping("/song")
+	@ApiOperation(value = "일기 노래 등록", response = String.class)
+	public Map<String, Object> registerSong(@RequestBody Map<String, String> m) {
+		String diaryId = m.get("diaryId");
+		String songId = m.get("songId");
+		diaryService.insertSong(diaryId, songId);
 		Map<String, Object> map = new HashMap<>();
 		map.put("status", 200);
 		return map;

@@ -190,16 +190,20 @@ export default new Vuex.Store({
         console.log(params.nickname);
         console.log(params.password);
         //
+        console.log("0");
         const loginData = {
-          'email': email,
-          'password': password,
+          'email': params.email,
+          'password': params.password,
         }
-        
+        console.log("1");
         dispatch("initSignUp", loginData)
-
+        console.log("2");
+        
         //
         alert(res.data.msg);
+        console.log("3");
         router.push({ name: "login" });
+        console.log("4");
       })
       .catch((err) => {
         alert(err.response.data);

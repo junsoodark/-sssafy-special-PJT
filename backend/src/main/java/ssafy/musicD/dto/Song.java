@@ -1,18 +1,24 @@
 package ssafy.musicD.dto;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import lombok.Data;
 
 @Data
+@Document(collection="songs")
 public class Song {
-	private String songId;
-	private String albumCover;
-	private String title;
-	private String singer;
-	private String youtube;
-//	@Builder
-//	public User(String email, String name, String password) {
-//		this.email = email;
-//		this.name = name;
-//		this.password = password;
-//	}
+	private String id;
+	private String issue_date;
+	private String album_name;
+	private String song_name;
+	private String artist;
+	private String lyric;
+	private String genre;
+	private String youtubeId;
+	private double happy;
+	private double sad;
+	private double angry;
+	private double fear;
+	private double excited;
+	private double indifferent;
 }

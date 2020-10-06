@@ -11,10 +11,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-import com.mongodb.BasicDBObject;
-
 import ssafy.musicD.Domain.Diary;
-import ssafy.musicD.Domain.Member;
+import ssafy.musicD.dto.Song;
 import ssafy.musicD.dto.DiaryDto;
 
 @Repository
@@ -23,15 +21,37 @@ public class DiaryRepoImpl implements DiaryRepo {
 	private MongoTemplate mongoTemplate;
 
 	@Override
-	public List<DiaryDto> findDiary(String userId, int month) {
+	public void insertSong(String diaryId, Song song) {
 		Query query = new Query();
-		query.addCriteria(new Criteria().andOperator(
-				Criteria.where("userId").is(userId),
-				Criteria.where("month").is(month)
-				));
+		query.addCriteria(Criteria.where("id").is(new ObjectId(diaryId)));
+		Update update = new Update();
+		update.set("song", song);
+		mongoTemplate.updateFirst(query, update, Diary.class);
+	}
+
+	@Override
+	public List<Song> findSong(String userId, int month, int year) {
+		Query query = new Query();
+		query.addCriteria(new Criteria().andOperator(Criteria.where("userId").is(userId),
+				Criteria.where("month").is(month), Criteria.where("year").is(year)));
+		List<Diary> tmp = mongoTemplate.find(query, Diary.class);
+		List<Song> result = new ArrayList();
+
+		for (Diary diary : tmp) {
+			result.add(diary.getSong());
+		}
+
+		return result;
+	}
+
+	@Override
+	public List<DiaryDto> findDiary(String userId, int month, int year) {
+		Query query = new Query();
+		query.addCriteria(new Criteria().andOperator(Criteria.where("userId").is(userId),
+				Criteria.where("month").is(month), Criteria.where("year").is(year)));
 		List<Diary> tmp = mongoTemplate.find(query, Diary.class);
 		List<DiaryDto> result = new ArrayList();
-		
+
 		for (Diary diary : tmp) {
 			DiaryDto tmpStrDIary = new DiaryDto();
 			tmpStrDIary.convertId(diary);
@@ -63,12 +83,11 @@ public class DiaryRepoImpl implements DiaryRepo {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("id").is(diary.getId()));
 		Update update = new Update();
-        update.set("feel", diary.getFeel());
-        update.set("weather", diary.getWeather());
-        update.set("song", diary.getSong());
-        update.set("show", diary.getShow());
-        update.set("img", diary.getImg());
-        update.set("context", diary.getContext());
+		update.set("feel", diary.getFeel());
+		update.set("weather", diary.getWeather());
+		update.set("show", diary.getShow());
+		update.set("img", diary.getImg());
+		update.set("context", diary.getContext());
 
 		mongoTemplate.updateFirst(query, update, Diary.class);
 		return true;

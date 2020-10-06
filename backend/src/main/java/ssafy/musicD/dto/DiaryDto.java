@@ -17,7 +17,7 @@ public class DiaryDto {
 	private Boolean show;
 	private String img;
 	private String context;
-	
+
 	public void convertId(Diary Diary) {
 		if(Diary.getId() != null)
 			id = Diary.getId().toString();

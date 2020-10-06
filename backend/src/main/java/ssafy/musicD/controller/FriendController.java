@@ -84,7 +84,6 @@ public class FriendController {
     @ApiOperation(value = "나에게 친구요청한 유저 목록 조회", response = String.class)
     @GetMapping("/friend/request/list/{userId}")
     public List<MemberDto> waitFriendList(@PathVariable String userId) {
-
         List<MemberDto> waitFriendList = friendService.waitFriendList(userId);
         return waitFriendList;
     }
