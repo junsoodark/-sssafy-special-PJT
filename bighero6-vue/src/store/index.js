@@ -40,8 +40,8 @@ export default new Vuex.Store({
         href: 'mypage',
       },
       {
-        text: 'login',
-        href: 'login',
+        text: 'logout',
+        href: 'logout',
       },
     ],
   },
@@ -123,7 +123,7 @@ export default new Vuex.Store({
         // console.log(sessionStorage.getItem('jwt-auth-token'));
         // console.log(sessionStorage.getItem('userId'));
 
-        alert("로그인")
+        alert("로그인 성공")
         
          router.push({ name: 'diary' })
          console.log(this.state.userId);
@@ -213,13 +213,15 @@ export default new Vuex.Store({
 
 
     logout({ commit }) {
-      commit("SET_TOKEN", null); // state 에서도 삭제
+      commit("SET_TOKEN", ''); // state 에서도 삭제
+      commit('UPDATE_EMAIL', '')
+      commit('UPDATE_ID', '')
       VueCookies.remove("auth-token"); // cookie 에서는 삭제
       
       localStorage.clear();
       sessionStorage.clear();
 
-      alert("로그아웃");
+      alert("로그아웃 되었습니다.");
       router.push({ name: "home" });
     },
 
