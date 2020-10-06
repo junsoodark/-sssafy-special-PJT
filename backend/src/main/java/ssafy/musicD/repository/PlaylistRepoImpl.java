@@ -1,5 +1,6 @@
 package ssafy.musicD.repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -22,10 +23,9 @@ public class PlaylistRepoImpl implements PlaylistRepo {
 	public List<Playlist> findAllPlaylist(String userId) {
 		Query query = new Query();
 		query.addCriteria(new Criteria().andOperator(
-				Criteria.where("userId").is(new ObjectId(userId))
+				Criteria.where("userId").is(userId)
 				));
 		List<Playlist> result = mongoTemplate.find(query, Playlist.class);
-		
 		return result;
 	}
 	
@@ -43,7 +43,9 @@ public class PlaylistRepoImpl implements PlaylistRepo {
 	@Override
 	public void createPlaylist(String userId, String title) {
 		Playlist tmp = new Playlist();
+		List<Song> songList = new ArrayList<>();
 		tmp.setUserId(userId);
+		tmp.setSongs(songList);
 		tmp.setTitle(title);
 		mongoTemplate.save(tmp);
 	}
@@ -67,11 +69,21 @@ public class PlaylistRepoImpl implements PlaylistRepo {
 	
 	@Override
 	public void insertSong(String playlistId, Song song) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("id").is(new ObjectId(playlistId)));
+		Update update = new Update();
 		
+		update.push("songs").each(song);
+		mongoTemplate.updateFirst(query, update, Playlist.class);
 	}
 	
 	@Override
 	public void deleteSong(String playlistId, String songId) {
-		
+		Query query = new Query();
+		query.addCriteria(Criteria.where("id").is(new ObjectId(playlistId)));
+	    Update update = new Update();
+	    
+	    update.pull("songs", Query.query(Criteria.where("id").is(new ObjectId(songId))));
+	    mongoTemplate.updateFirst(query, update, Playlist.class);
 	}
 }

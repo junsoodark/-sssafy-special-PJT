@@ -6,13 +6,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ssafy.musicD.Domain.Diary;
+import ssafy.musicD.dto.Song;
 import ssafy.musicD.dto.StrDiary;
 import ssafy.musicD.repository.DiaryRepo;
+import ssafy.musicD.repository.SongRepo;
 
 @Service
 public class DiaryServiceImpl implements DiaryService {
 	@Autowired
 	private DiaryRepo diaryRepo;
+	@Autowired
+	private SongRepo songRepo;
+
+	@Override
+	public void insertSong(String diaryId, String songId) {
+		Song song = songRepo.findById(songId).orElse(null);
+		diaryRepo.insertSong(diaryId, song);
+	}
 
 	@Override
 	public boolean insertDiary(Diary diary) {
@@ -33,7 +43,7 @@ public class DiaryServiceImpl implements DiaryService {
 	}
 
 	@Override
-	public List<StrDiary> findDiaryByMonth(String userId, int month) {
-		return diaryRepo.findDiary(userId, month);
+	public List<StrDiary> findDiaryByMonth(String userId, int month, int year) {
+		return diaryRepo.findDiary(userId, month, year);
 	}
 }

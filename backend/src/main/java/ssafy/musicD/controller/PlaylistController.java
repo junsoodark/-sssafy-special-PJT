@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.ApiOperation;
 import ssafy.musicD.Domain.Diary;
 import ssafy.musicD.Domain.Playlist;
+import ssafy.musicD.dto.Song;
 import ssafy.musicD.dto.StrDiary;
 import ssafy.musicD.service.DiaryService;
 import ssafy.musicD.service.PlaylistService;
@@ -30,9 +31,24 @@ public class PlaylistController {
 	@Autowired
 	private PlaylistService playlistService;
 	
+	// 월별 플레이리스트 조회
+	@PostMapping("/month")
+	@ApiOperation(value = "월별 플레이리스트 조회", response = String.class)
+	public Map<String, Object> getMonthPlaylist(@RequestBody Map<String, Object> m) {
+		String userId = (String)m.get("userId");
+		int month = (int)m.get("month");
+		int year = (int)m.get("year");
+		List<Song> playlist = playlistService.getMonthPlaylist(userId, month, year);
+		Map<String, Object> map = new HashMap<>();
+		map.put("status", 200);
+		map.put("playlist", playlist);
+		return map;
+	}
+	
+	
 	// 플레이리스트 목록 조회
 	@GetMapping("/{userId}")
-	@ApiOperation(value = "플레이리스트 목록 조회", response = String.class)
+	@ApiOperation(value = "나만의 플레이리스트 목록 조회", response = String.class)
 	public Map<String, Object> getPlaylist(@PathVariable String userId) {
 		List<Playlist> playlists = playlistService.getPlaylist(userId);
 
@@ -67,30 +83,51 @@ public class PlaylistController {
 		map.put("status", 200);
 		return map;
 	}
-//	
-//	// 플레이리스트 수정
-//	@PutMapping
-//	@ApiOperation(value = "플레이리스트 수정", response = String.class)
-//	public Map<String, Object> updatePlaylist(@RequestBody StrDiary strDiary) {
-//		return map;
-//	}
-//	
-//	// 플레이리스트 삭제
-//	@DeleteMapping("/{playlistId}")
-//	@ApiOperation(value = "플레이리스트 삭제", response = String.class)
-//	public Map<String, Object> deletePlaylist(@RequestBody StrDiary strDiary) {
-//	}
-//	
-//	// 플레이리스트 노래 추가
-//	@PostMapping("/song")
-//	@ApiOperation(value = "플레이리스트 노래 추가", response = String.class)
-//	public Map<String, Object> addPlaylistSong(@RequestBody StrDiary strDiary) {
-//	}
-//	
-//	// 플레이리스트 노래 삭제
-//	@DeleteMapping("/song")
-//	@ApiOperation(value = "플레이리스트 노래 삭제", response = String.class)
-//	public Map<String, Object> deletePlaylistSong(@RequestBody StrDiary strDiary) {
-//	}
+	
+	// 플레이리스트 수정
+	@PutMapping
+	@ApiOperation(value = "플레이리스트 수정", response = String.class)
+	public Map<String, Object> updatePlaylist(@RequestBody Playlist playlist) {
+		String playlistId = playlist.getId();
+		String title = playlist.getTitle();
+		playlistService.updatePlaylist(playlistId, title);
+		Map<String, Object> map = new HashMap<>();
+		map.put("status", 200);
+		return map;
+	}
+	
+	// 플레이리스트 삭제
+	@DeleteMapping("/{playlistId}")
+	@ApiOperation(value = "플레이리스트 삭제", response = String.class)
+	public Map<String, Object> deletePlaylist(@PathVariable String playlistId) {
+		playlistService.deletePlaylist(playlistId);
+		Map<String, Object> map = new HashMap<>();
+		map.put("status", 200);
+		return map;
+	}
+	
+	// 플레이리스트 노래 추가
+	@PostMapping("/song")
+	@ApiOperation(value = "플레이리스트 노래 추가", response = String.class)
+	public Map<String, Object> addPlaylistSong(@RequestBody Map<String, String> m) {
+		String playlistId = m.get("playlistId");
+		String songId = m.get("songId");
+		playlistService.insertSong(playlistId, songId);
+		Map<String, Object> map = new HashMap<>();
+		map.put("status", 200);
+		return map;
+	}
+	
+	// 플레이리스트 노래 삭제
+	@PostMapping("/deletesong")
+	@ApiOperation(value = "플레이리스트 노래 삭제", response = String.class)
+	public Map<String, Object> deletePlaylistSong(@RequestBody Map<String, String> m) {
+		String playlistId = m.get("playlistId");
+		String songId = m.get("songId");
+		playlistService.deleteSong(playlistId, songId);
+		Map<String, Object> map = new HashMap<>();
+		map.put("status", 200);
+		return map;
+	}
 	
 }

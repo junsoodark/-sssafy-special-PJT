@@ -7,12 +7,23 @@ import org.springframework.stereotype.Service;
 
 import ssafy.musicD.Domain.Playlist;
 import ssafy.musicD.dto.Song;
+import ssafy.musicD.repository.DiaryRepo;
 import ssafy.musicD.repository.PlaylistRepo;
+import ssafy.musicD.repository.SongRepo;
 
 @Service
 public class PlaylistServiceImpl implements PlaylistService {
 	@Autowired
 	private PlaylistRepo playlistRepo;
+	@Autowired
+	private SongRepo songRepo;
+	@Autowired
+	private DiaryRepo diaryRepo;
+
+	@Override
+	public List<Song> getMonthPlaylist(String userId, int month, int year) {
+		return diaryRepo.findSong(userId, month, year);
+	}
 
 	@Override
 	public Playlist getDetailPlaylist(String playlistId) {
@@ -33,17 +44,18 @@ public class PlaylistServiceImpl implements PlaylistService {
 	public void updatePlaylist(String playlistId, String title) {
 		playlistRepo.updatePlaylist(playlistId, title);
 	}
-	
+
 	@Override
 	public void deletePlaylist(String playlistId) {
 		playlistRepo.deletePlaylist(playlistId);
 	}
 
 	@Override
-	public void insertSong(String playlistId, Song song) {
+	public void insertSong(String playlistId, String songId) {
+		Song song = songRepo.findById(songId).orElse(null);
 		playlistRepo.insertSong(playlistId, song);
 	}
-	
+
 	@Override
 	public void deleteSong(String playlistId, String songId) {
 		playlistRepo.deleteSong(playlistId, songId);

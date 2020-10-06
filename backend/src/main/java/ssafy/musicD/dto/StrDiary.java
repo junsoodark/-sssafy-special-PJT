@@ -1,7 +1,5 @@
 package ssafy.musicD.dto;
 
-import org.bson.types.ObjectId;
-
 import lombok.Data;
 import ssafy.musicD.Domain.Diary;
 
