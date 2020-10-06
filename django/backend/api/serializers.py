@@ -1,6 +1,6 @@
 from .models import Store
 from rest_framework import serializers
-# from .models import User
+from .models import User
 
 class StoreSerializer(serializers.ModelSerializer):
     class Meta:
@@ -18,8 +18,8 @@ class StoreSerializer(serializers.ModelSerializer):
         ]
 
 
-# class UserSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = User
-#         fields = ('_id','email','password','nickname')
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('_id','email','password','nickname')
     
