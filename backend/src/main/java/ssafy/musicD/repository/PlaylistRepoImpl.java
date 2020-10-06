@@ -86,4 +86,5 @@ public class PlaylistRepoImpl implements PlaylistRepo {
 	    update.pull("songs", Query.query(Criteria.where("id").is(new ObjectId(songId))));
 	    mongoTemplate.updateFirst(query, update, Playlist.class);
 	}
+
 }
