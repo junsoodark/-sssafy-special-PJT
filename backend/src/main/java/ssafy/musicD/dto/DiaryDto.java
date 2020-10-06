@@ -4,7 +4,7 @@ import lombok.Data;
 import ssafy.musicD.Domain.Diary;
 
 @Data
-public class StrDiary {
+public class DiaryDto {
 	private String id;
 	private String userId;
 	private int year;

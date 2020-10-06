@@ -19,7 +19,7 @@ import io.swagger.annotations.ApiOperation;
 import ssafy.musicD.Domain.Diary;
 import ssafy.musicD.Domain.Playlist;
 import ssafy.musicD.dto.Song;
-import ssafy.musicD.dto.StrDiary;
+import ssafy.musicD.dto.DiaryDto;
 import ssafy.musicD.service.DiaryService;
 import ssafy.musicD.service.PlaylistService;
 

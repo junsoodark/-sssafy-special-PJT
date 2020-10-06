@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document(collection="user")
-public class User {
+public class MemberDto {
     @Id
     private String _id;
     private String email;
