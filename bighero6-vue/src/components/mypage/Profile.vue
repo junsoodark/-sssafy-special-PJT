@@ -20,7 +20,10 @@
         :counter="10"
         label="닉네임"
         required
+        ref="nickname"
       ></v-text-field>
+      <v-alert type="success" v-if="(nickname==originNickname)&&(checkNickcname)">중복확인완료</v-alert>
+      <v-alert type="error" @click ="validNickname(nickname)" v-if="(nickname!=originNickname)">닉네임 중복확인</v-alert>
 
       <v-text-field
         v-model="email"
@@ -37,8 +40,9 @@
 
 <script>
 import config from "../../lib/FireBaseConfig";
-import firebase from "firebase"; // 파이어베이스 import 
+import firebase from "firebase/app"; // 파이어베이스 import 
 //import "firebase/storage";
+import "firebase/storage";
 import constants from "../../lib/constants"
 import axios from 'axios'
 
@@ -49,14 +53,44 @@ firebase.initializeApp(config.apiKey);
   export default {
     data () {
       return {
-        nickname : "빅히어로",
+        nickname : "",
+        originNickname : "",
         email:"",
         imgSrc:"",
         originSrc: "",
+        checkNickcname : false,
         file:""
       }
     },
     methods: {
+      validNickname(nickname){
+         axios
+        .post(constants.baseUrl + "/account/checknickname",{ "nickname" :nickname },
+         { headers : {"Authorization": "Bearer "+ this.$store.state.authToken }}
+       ) // 토큰 인증을 위해 헤더에 내용 추가
+        .then(( data ) => {
+          console.log(data)
+          if(data.data){
+            alert("이미 사용된 닉네임 입니다.")
+          }else{
+            this.checkNickcname=true;
+            this.$refs.nickname.readOnly =true;
+            this.originNickname=this.nickname;
+          }
+          /*  if(data.status==200){
+             alert(friend.nickname+"님 에게 친구 요청이 전송되었습니다. ")
+             this.dialog=false;
+           }else{
+             alert("친구 요청 실패했습니다. 다시 시도해주세요! ")
+           } */
+              
+        })
+        .catch(function (error) {
+          console.log(error);
+          alert("친구 요청 실패했습니다. 다시시도해주세요! ")
+        });
+      
+      },
        updateImage() {
       this.$refs.imageInput.click();
     },
@@ -75,16 +109,25 @@ firebase.initializeApp(config.apiKey);
       this.$refs.imageInput.value="";
     },
      updateHandler() {
+       if(this.originNickname!=this.nickname){
+          if(!this.checkNickcname){
+            alert("닉네임 중복 확인해주세요!")
+              return ; 
+          }
+       }
       // 루트 경로기준에서 profileImage이라는 폴더에 user + userid 파일명으로 이미지를 넣어라
      var profileRef = firebase.storage().ref().child("profile/"+this.$store.state.userId);
-
-      if(!this.imgSrc || this.imgSrc==null){ // 이미지가 없는 경우
+    if (!this.imgSrc || this.imgSrc==null){ // 이미지가 없는 경우
         this.imgSrc=null;
         profileRef.delete().then(function(){}).catch(function(err){console.log("해당되는 이미지가 없습니다.")})
-      }else if(this.imgSrc!=this.originSrc){
-        profileRef.put(this.file).then(function(snapshot){}); // 파이어베이스 스토리지에 저장
-        this.imgSrc = "https://firebasestorage.googleapis.com/v0/b/music-diary-710d3.appspot.com/o/profile%2F"+this.$store.state.userId
+      }
+     else if(this.imgSrc!=this.originSrc){
+       //profileRef.delete().then(function(){}).catch(function(err){console.log("해당되는 이미지가 없습니다.")})
+       profileRef.put(this.file).then(function(snapshot){}); // 파이어베이스 스토리지에 저장
+       this.imgSrc = "https://firebasestorage.googleapis.com/v0/b/music-diary-710d3.appspot.com/o/profile%2F"+this.$store.state.userId
         +"?alt=media"; 
+        
+       
       } 
 
       axios
@@ -97,6 +140,7 @@ firebase.initializeApp(config.apiKey);
         .then(({ data }) => {
           this.$store.state.nickname= this.nickname;
           alert("수정 완료되었습니다.")
+          location.reload();
         })
         .catch(function (error) {
           console.log(error);
@@ -128,6 +172,7 @@ firebase.initializeApp(config.apiKey);
         console.log(data)
         var member = data.member
         this.nickname = member.nickname;
+        this.originNickname = member.nickname;
         this.email = member.email;
         this.imgSrc = member.profileURL;
         this.originSrc = member.profileURL;
@@ -152,12 +197,17 @@ firebase.initializeApp(config.apiKey);
        
   }
 </script>
-
+<style scoped>
+  *{
+    font-family: 'Do Hyeon', sans-serif;
+    font-size: 25px;
+  }
+</style>
 <style>
 #profile{
     padding:44px;
     text-align: center;
-    background-color: #f7f5e0;
+    /* background-color: #f7f5e0; */
 
 }
 .inputForm{

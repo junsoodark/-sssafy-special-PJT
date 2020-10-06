@@ -124,7 +124,8 @@ export default new Vuex.Store({
         // console.log(sessionStorage.getItem('userId'));
 
         alert("로그인")
-         router.push({ name: 'home' })
+        
+         router.push({ name: 'diary' })
          console.log(this.state.userId);
       })
       .catch(err => {

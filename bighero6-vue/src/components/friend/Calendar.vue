@@ -36,7 +36,7 @@
                   class="calendar-day-item"
                   
                   :key="col.date.full" @click ="getDiaryDetail(col.date.full)">
-                  <div
+                  <div  
                     :class="[
                       'ui-calendar-item',
                       {
@@ -50,13 +50,18 @@
                     <div
                       class="ui-calendar-item-name"
                       v-for="(item, index) in col.data"
-                      :key="index">
-
-                      <img  class="weatherIcon mr-2" :src= "weather(item.weather)">
-                      <img  class="weatherIcon" :src= "emotion(item.feel)">
+                      :key="index"
+                      >
+                    <div v-if="item.show">
+                      <img class="weatherIcon mr-2" :src= "weather(item.weather)">
+                      <img class="weatherIcon" :src= "emotion(item.feel)">
                       <br>
                       <img class="albumIcon" :src="albumUrl(item.song.songId)"><br>
                       <span>{{item.song.singer}}-{{item.song.title}}</span>
+                    </div>
+                    <div v-else>
+                      <v-icon class= "mt-1" x-large  color="black">mdi-lock</v-icon>
+                    </div>
                     </div>
                   </div>
                 </div>
@@ -80,6 +85,7 @@ export default {
   components: {
     Calendar
   },
+  props:['friendId'],
   data() {
     return {
       todayMonth:'',
@@ -152,9 +158,10 @@ export default {
            //date = date.slice(6,7);
            //console.log(date)
            //axios 요청 현재월 데이터 요청 
+           console.log(this.friendId)
            axios
          .post(constants.baseUrl + "/diary/search", {
-           userId : this.$store.state.userId,
+           userId : this.friendId,
            month: this.todayMonth
          },{ headers : { "Authorization": "Bearer "+ this.$store.state.authToken} }) // 토큰 인증을 위해 헤더에 내용 추가
          .then(({ data }) => {
@@ -172,7 +179,11 @@ export default {
     var diary = {};
     diary = this.dateData.filter(x=> x.date == date);
     //console.log(diary[0])
+    if(!diary[0].show){
+      diary[0]=''
+    }
     this.$emit('showDetail',diary[0]);
+  
    },
    albumUrl(url){
        //10197480
