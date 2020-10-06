@@ -26,10 +26,10 @@
 
                     <div>
                       <p class="ma-0 body-1 font-weight-bold font-italic text-left">
-                        {{ item.text }}
+                       <!--  {{ item.text }} -->
                       </p>
                       <p class="caption font-weight-medium font-italic text-left">
-                        {{ item.subtext }}
+                        <!-- {{ item.subtext }} -->
                       </p>
                     </div>
 
@@ -62,6 +62,7 @@
 
 <script>
   export default {
+    props: ['monthplaylist'],
     data: () => ({
       icons: ['mdi-rewind', 'mdi-play', 'mdi-fast-forward'],
       items: [
@@ -106,6 +107,10 @@
       ],
       transparent: 'rgba(255, 255, 255, 0)',
     }),
+    mounted(){
+      console.log (this.monthlyplaylist)
+      this.items = this.monthplaylist 
+    }
   }
 </script>
 

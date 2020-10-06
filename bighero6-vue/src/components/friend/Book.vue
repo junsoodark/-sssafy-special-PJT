@@ -43,12 +43,12 @@
     </div>
     <div class="cd">
        <div class="album-cover spin">
-        <img :src="albumUrl(diaryDetail.song.songId)" alt="">
+        <img :src="albumUrl(diaryDetail.song.id)" alt="">
 
        </div>
         <div class="song-info">
-        <h2 class="song-title">{{diaryDetail.song.title}}</h2>
-        <h3 class="song-singer">{{diaryDetail.song.singer}}</h3>
+        <h2 class="song-title">{{diaryDetail.song.song_name}}</h2>
+        <h3 class="song-singer">{{diaryDetail.song.artist}}</h3>
         <h4 class="song-hits"></h4>
        </div>
       
@@ -374,7 +374,13 @@ props :['friendId']
   },
 methods : {
  
-   
+   pad(n, width) {
+
+       n = n + '';
+
+     return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
+
+   },
 
   weather(w) {
           return require('../../assets/img/weather/'+w+' (1).png'); 
@@ -391,7 +397,9 @@ methods : {
   },
    albumUrl(url){
        //10197480
-       var imgurl = 'https://cdnimg.melon.co.kr/cm/album/images/'+ url.slice(0,3)+'/'+ url.slice(3,5)+'/'+url.slice(5,8)+'/'+url+'_500.jpg';
+       url = url+'';
+       var number  = this.pad(url,8);
+       var imgurl = 'https://cdnimg.melon.co.kr/cm/album/images/'+ number.slice(0,3)+'/'+ number.slice(3,5)+'/'+number.slice(5,8)+'/'+url+'_500.jpg';
        return imgurl;
    },
   getDiaryDetail(data){

@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <div>
     <v-row
       v-for="n in 1"
       :key="n"
@@ -7,8 +7,15 @@
       no-gutters
     >
       <!-- 플레이어 -->
-      <v-col>
-        <v-card class="pa-2" tile>
+  <v-col>
+    <v-content>
+      <v-container>
+        <systemBar></systemBar>
+       <player-playlist-panel :playlist="playlist" :selectedTrack="selectedTrack"></player-playlist-panel>
+      </v-container>
+    </v-content>
+   
+        <!-- <v-card class="pa-2" tile>
           <div class="container-player">
             <div class="column add-bottom">
               <div id="mainwrap">
@@ -33,17 +40,18 @@
               <p>Download: <a href="https://archive.org/download/mythium/mythium_vbr_mp3.zip">zip</a> / <a href="https://archive.org/download/mythium/mythium_archive.torrent">torrent</a></p>
             </div>
           </div>
-        </v-card>
-      </v-col>
+        </v-card> -->
 
+      </v-col> 
+        
       <!-- 플레이리스트 목록 -->
-      <v-col>
-        <v-row style="margin-left: 0px;">
+      <v-col >
+        <v-row style="margin-left: 0px; max-width:700px;">
           <v-col style="padding-top: 0px;">
-            <v-card class="pa-2" tile>
+            <v-card class="pa-2" tile dark>
               <v-row>
                 <v-col class="playlist">
-                  내 플레이리스트
+                  <h2>마이 플레이리스트</h2>
                 </v-col>
                 <v-col class="playlist" style="text-align:right;">
                   <v-dialog v-model="dialog" persistent max-width="600px">
@@ -85,62 +93,96 @@
               </v-row>
               <v-row>
                 <v-col>
+                   <v-slide-group
+            class="pa-3"
+            center-active
+            show-arrows
+          >
+            <v-slide-item
+              v-for="n in 6"
+              :key="n"
+            >
+               <v-card 
+                class="ma-4"
+                height="200"
+                width="100"
+                @click="getDetail()"
+              >
+                <v-row
+                  class="fill-height"
+                  align="center"
+                  justify="center"
+                >
+                  <img :src="musicImg[n%3]" style="width:90px;" />
                   <div>
-                    <v-carousel 
-                      v-model="myplaylistmodel"
-                      :hide-delimiter-background="true"
-                      :height="200"
-                    >
-                      <v-carousel-item
-                        v-for="myplaylist in myplaylists"
-                        :key="myplaylist"
-                      >
-                        <v-sheet
-                          :color="myplaylist"
-                          height="100%"
-                          tile
-                        >
-                          <v-row
-                            class="fill-height"
-                            align="center"
-                            justify="center"
-                          >
-                            <div>
-                              <playlistcds />
-                            </div>
-                          </v-row>
-                        </v-sheet>
-                      </v-carousel-item>
-                    </v-carousel>
+                    <h2>9월 플레이리스트</h2>
                   </div>
-                </v-col>
+                </v-row>
+              </v-card> 
+            </v-slide-item>
+          </v-slide-group>
+                
+                </v-col> 
               </v-row>
             </v-card>
           </v-col>
         </v-row>
-
-        <v-row style="margin-left: 0px;">
+         <!-- 내 플레이리스트 끝  -->
+     <!-- 월별 프레이리스트 -->
+        <v-row style="margin-left: 0px; max-width:700px;">
           <v-col>
-            <v-card class="pa-2" tile>
+             <v-card class="pa-2" tile dark>
               <v-row>
                 <v-col class="playlist">
-                  월별 플레이리스트
+                  <h2>월별 플레이리스트</h2>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col>
-                  <div>
+                  <v-slide-group
+            class="pa-3"
+            center-active
+            show-arrows
+          >
+            <v-slide-item
+              v-for="(monthplay, index) in monthplaylist"
+              :key="index"
+             
+            >
+               <v-card
+                class="ma-4"
+                height="200"
+                width="100"
+                @click="getMonthDetail(monthplay)"
+              >
+                <v-row
+                  class="fill-height"
+                  align="center"
+                  justify="center"
+                >
+                  <img :src="musicImg[index%3]" style="width:90px;" />
+                  <div style="text-align:center;">
+                      <h3>{{monthplay.title}}</h3>
+                    <h4>플레이리스트</h4>
+                  
+                  </div>
+                </v-row>
+              </v-card> 
+            </v-slide-item>
+          </v-slide-group>
+
+                  <!-- <div>
                     <v-carousel 
                       v-model="monthlyplaylistmodel"
                       :hide-delimiter-background="true"
                       :height="200"
                     >
                       <v-carousel-item
-                        v-for="monthlyplaylist in monthlyplaylists"
-                        :key="monthlyplaylist"
+                        v-for="monthColor in monthlyplaylistColor"
+                        :key="monthColor"
                       >
                         <v-sheet
-                          :color="monthlyplaylist"
+                          :color="monthColor"
                           height="100%"
                           tile
                         >
@@ -150,48 +192,122 @@
                             justify="center"
                           >
                             <div>
-                              <playlistcds />
+                              <playlistcds :monthplaylist="monthplaylist"/> 
                             </div>
                           </v-row>
                         </v-sheet>
                       </v-carousel-item>
                     </v-carousel>
-                  </div>
+                  </div> -->
                 </v-col>
               </v-row>
-            </v-card>
+            </v-card> 
           </v-col>
         </v-row>
+        <!-- 월별플레이리스트 끝  -->
       </v-col>
     </v-row>
-  </v-container>
+  </div>
 </template>
 
 <script>
+import axios from 'axios'
+import constants from "../lib/constants"
 export default {
   components: {
     playlistcds: () => import('@/components/PlaylistCDs'),
+    systemBar : () => import('@/components/playlist/SystemBar'),
+    PlayerPlaylistPanel : ()  => import('@/components/playlist/PlayerPlaylistPanel'),
+
   },
   data () {
     return {
+    musicImg: [
+         'http://lorempixel.com/output/nightlife-q-c-640-480-5.jpg',
+        'https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2100&q=80',
+         'http://lorempixel.com/output/abstract-q-c-640-480-6.jpg'
+      ],
+      year :2020,
+      monthList :[10,9,8,7,6],
+      selectedTrack:'',
       dialog: false,
-      myplaylists: [
+      myplaylistColor: [
         'yellow darken-2',
         'secondary',
         'red',
       ],
-      myplaylistmodel: 0,
-      
-      monthlyplaylists: [
+      myplaylistmodel: 0,    
+      monthlyplaylistColor: [
         'red',
         'yellow darken-2',
         'secondary',
       ],
       monthlyplaylistmodel: 0,
+      playlist: [
+  {song_name: "Watermelon sugar", artist: "Harry Styles", youtubeId: '7-x3uD5z1bQ' ,display:true},
+  {song_name: "Remember the Way", artist: "Ask Again", youtubeId: 'afxLaQiLu-o',display:true},
+  {song_name: "Streets of Sant'Ivo", artist: "Ask Again", youtubeId: 'BzYnNdJhZQw',display:true},
+  {song_name: "Remember the Way", artist: "Ask Again", youtubeId:'JGwWNGJdvx8',display:true},
+  {song_name: "Streets of Sant'Ivo", artist: "Ask Again", youtubeId: '7-x3uD5z1bQ',display:true},
+  {song_name: "Remember the Way", artist: "Ask Again", youtubeId: '7-x3uD5z1bQ',display:true},
+  {song_name: "Streets of Sant'Ivo", artist: "Ask Again", youtubeId: '7-x3uD5z1bQ',display:true},
+  {song_name: "Remember the Way", artist: "Ask Again", youtubeId: '7-x3uD5z1bQ',display:true},
+  {song_name: "Streets of Sant'Ivo", artist: "Ask Again", youtubeId: '7-x3uD5z1bQ',display:true},
+  {song_name: "Remember the Way", artist: "Ask Again", youtubeId: '7-x3uD5z1bQ',display:true},
+  {song_name: "Streets of Sant'Ivo", artist: "Ask Again", youtubeId: '7-x3uD5z1bQ',display:true},
+  {song_name: "Remember the Way", artist: "Ask Again", youtubeId: '7-x3uD5z1bQ',display:true} ]
+  , myplaylist : [],
+    monthplaylist :[],
+
     }
   },
-  mounted() {
 
+  mounted(){    
+     var monthArray = this.monthList
+      for (var i = 0; i < monthArray.length; i++) {
+         var todayMonth=  monthArray[i];
+         this.getmonthly(todayMonth);
+
+      }
+
+      console.log(this.monthplaylist)
+   
+
+
+ 
+    
+
+
+  },
+  methods :{
+    selectTrack (track) {
+  this.selectedTrack = track
+},
+getDetail(){
+      
+    },
+    getMonthDetail(playlist){
+      this.playlist = playlist.songs;
+    },
+getmonthly(todayMonth) {
+       // 월별 플레이리스트 불러오기 (9,8,7,6,5)    
+    axios.post(constants.baseUrl + "/playlist/month", {
+           userId : this.$store.state.userId,
+           month: todayMonth,
+           year :  this.year
+         },{ headers : { "Authorization": "Bearer "+ this.$store.state.authToken} }) // 토큰 인증을 위해 헤더에 내용 추가
+         .then(( data ) => {
+              var songs = data.data.playlist;             
+              var monthplayObject ={};
+              monthplayObject.songs = songs;
+              monthplayObject.title = todayMonth+'월';
+              this.monthplaylist.push(monthplayObject)
+         })
+        .catch(function (error) {
+           console.log(error);
+         });
+
+    }
   }
 }
 </script>
@@ -275,7 +391,7 @@ width:90%;
 /* Audio Player Styles
 ================================================== */
 
-audio {
+/* audio {
 display:none;
 }
 
@@ -385,7 +501,7 @@ border:0;
 padding:0;
 }
 
-
+ */
 /* Plyr Overrides
 ================================================== */
 

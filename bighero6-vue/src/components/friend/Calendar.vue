@@ -56,8 +56,8 @@
                       <img class="weatherIcon mr-2" :src= "weather(item.weather)">
                       <img class="weatherIcon" :src= "emotion(item.feel)">
                       <br>
-                      <img class="albumIcon" :src="albumUrl(item.song.songId)"><br>
-                      <span>{{item.song.singer}}-{{item.song.title}}</span>
+                      <img class="albumIcon" :src="albumUrl(item.song.id)"><br>
+                      <span>{{item.song.artist}}-{{item.song.song_name}}</span>
                     </div>
                     <div v-else>
                       <v-icon class= "mt-1" x-large  color="black">mdi-lock</v-icon>
@@ -104,7 +104,13 @@ export default {
      */
   },
   methods: {
+   pad(n, width) {
 
+       n = n + '';
+
+     return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
+
+   },
     deleteDiary(id){
       this.dateData = this.dateData.filter(item => item.id !== id);
 
@@ -162,7 +168,8 @@ export default {
            axios
          .post(constants.baseUrl + "/diary/search", {
            userId : this.friendId,
-           month: this.todayMonth
+           month: this.todayMonth,
+           year : 2020
          },{ headers : { "Authorization": "Bearer "+ this.$store.state.authToken} }) // 토큰 인증을 위해 헤더에 내용 추가
          .then(({ data }) => {
             this.dateData = data.diarys
@@ -187,7 +194,9 @@ export default {
    },
    albumUrl(url){
        //10197480
-       var imgurl = 'https://cdnimg.melon.co.kr/cm/album/images/'+ url.slice(0,3)+'/'+ url.slice(3,5)+'/'+url.slice(5,8)+'/'+url+'_500.jpg';
+       url = url+'';
+       var number  = this.pad(url,8);
+       var imgurl = 'https://cdnimg.melon.co.kr/cm/album/images/'+ number.slice(0,3)+'/'+ number.slice(3,5)+'/'+number.slice(5,8)+'/'+url+'_500.jpg';
        return imgurl;
    }
   },
