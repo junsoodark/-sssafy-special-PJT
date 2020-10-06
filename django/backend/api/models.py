@@ -19,7 +19,7 @@ class Store(models.Model):
 
 
 class User(models.Model):
-    # _id= models.ObjectIdField(primary_key=True)
+    # _id= models.CharField(primary_key=True)
     email= models.CharField(max_length=20, null=True)
     password= models.CharField(max_length=20, null=True)
     nickname = models.CharField(max_length=20, null=True)
