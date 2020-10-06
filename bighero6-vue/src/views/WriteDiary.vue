@@ -434,10 +434,10 @@ export default {
 			}
     },
     saveGibonHandler(){
-      var diaryImgRef = firebase.storage().ref().child("diary/"+this.$store.state.userId);
+      var diaryImgRef = firebase.storage().ref().child("diary/"+this.date);
       diaryImgRef.put(this.file).then(function(snapshot){}); // 파이어베이스 스토리지에 저장
       this.imgSrc = "https://firebasestorage.googleapis.com/v0/b/music-diary-710d3.appspot.com/o/diary%2F"
-                    + this.$store.state.userId + "?alt=media";
+                    + this.date + "?alt=media";
 
       axios
       .post(constants.baseUrl + "/diary", {
