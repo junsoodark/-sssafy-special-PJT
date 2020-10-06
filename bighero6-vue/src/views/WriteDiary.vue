@@ -260,8 +260,14 @@
 </template>
 
 <script>
+import config from "@/lib/FireBaseConfig";
+import firebase from "firebase/app"; // 파이어베이스 import
+import "firebase/storage";
 import axios from 'axios'
 import constants from "@/lib/constants"
+
+// Initialize Firebase
+firebase.initializeApp(config.apiKey);
 
 export default {
   components: {
@@ -401,12 +407,12 @@ export default {
         msg = '날씨를 선택해주세요.';
       };
       
-      if(!this.feel_smile) this.feeling = "smile";
-      else if(!this.feel_happy) this.feeling = "happy";
-      else if(!this.feel_meh) this.feeling = "meh";
-      else if(!this.feel_crying) this.feeling = "crying";
+      if(!this.feel_happy) this.feeling = "happy";
+      else if(!this.feel_excited) this.feeling = "excited";
+      else if(!this.feel_indifferent) this.feeling = "indifferent";
       else if(!this.feel_sad) this.feeling = "sad";
-      else if(!this.feel_pain) this.feeling = "pain";
+      else if(!this.feel_angry) this.feeling = "angry";
+      else if(!this.feel_fear) this.feeling = "fear";
       else {
         err = false;
         msg = '기분을 선택해주세요.';
@@ -428,6 +434,11 @@ export default {
 			}
     },
     saveGibonHandler(){
+      var diaryImgRef = firebase.storage().ref().child("diary/"+this.$store.state.userId);
+      diaryImgRef.put(this.file).then(function(snapshot){}); // 파이어베이스 스토리지에 저장
+      this.imgSrc = "https://firebasestorage.googleapis.com/v0/b/music-diary-710d3.appspot.com/o/diary%2F"
+                    + this.$store.state.userId + "?alt=media";
+
       axios
       .post(constants.baseUrl + "/diary", {
         context: this.diarytext,
