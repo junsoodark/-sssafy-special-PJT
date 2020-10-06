@@ -57,8 +57,11 @@
           <img class="settingimg" src="@/assets/img/emotion/fear (1).png" v-else />
         </div>
         <div class="ma-3">
-          <v-btn block color="secondary" dark>사진 수정하기<v-icon dark right>mdi-camera-plus</v-icon></v-btn>
-          <v-img src="https://picsum.photos/510/300?random" aspect-ratio="2.0"></v-img>
+          <input ref="imageInput" type="file" hidden @change="changeImage">
+          <v-btn v-if="imgSrc" block color="secondary" dark @click="updateImage">사진 수정하기<v-icon dark right>mdi-camera-plus</v-icon></v-btn>
+          <v-btn v-else block color="secondary" dark @click="updateImage">사진 등록하기<v-icon dark right>mdi-camera-plus</v-icon></v-btn>
+          <v-img v-if="imgSrc" :src="imgSrc" aspect-ratio="2.0"></v-img>
+          <img v-else src="@/assets/blankimage.png" style="width:376px;" />
         </div>
         <!-- 글 작성 start -->
         <v-container style="padding-top: 0px;padding-bottom: 5px;">
@@ -124,7 +127,7 @@
               dark
               v-bind="attrs"
               v-on="on"
-              width="500"
+              width="400"
             >
               노래 검색하기
             </v-btn>
@@ -133,10 +136,44 @@
           <v-card>
             <v-card-title class="headline grey lighten-2">
               노래 검색
+              <v-text-field
+                class="songSearch mx-auto mb-2"
+                flat
+                hide-details
+                label=" 노래 제목으로 검색하세요"
+                prepend-inner-icon="mdi-magnify"
+                solo-inverted
+                v-model="songKeyword"
+                @keyup="searchSong()"
+              ></v-text-field>
             </v-card-title>
 
-            <v-card-text style="padding-top:20px;">
-              (검색 노래 목록)
+            <v-card-text style="padding-top:20px;" v-if="songKeyword != ''">
+              <v-card light
+                max-width="600"
+                class="mx-auto pa-3"
+              >
+                <v-virtual-scroll
+                  :items="songList"
+                  height="400"
+                  item-height="64"
+                >
+                  <template v-slot="{ item }">
+                    <v-list-item >
+                      <v-list-item-avatar>
+                          <img src="@/assets/img/weather/sunny.png">
+                        </v-list-item-avatar>
+
+                      <v-list-item-content>
+                        <v-list-item-title>
+                          <strong>{{ item.songtitle }}</strong>
+                        </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-divider></v-divider>
+                  </template>
+                </v-virtual-scroll>
+              </v-card>
             </v-card-text>
 
             <v-divider></v-divider>
@@ -156,7 +193,7 @@
       </div>
       <!------------------------------ 노래 플레이어 ------------------------------>
       <div id="audio">
-        <tape />
+        <tape :playsong="selectedSong" />
       </div>
       <!------------------------------ 추천 노래 리스트 ------------------------------>
       <div style="margin-right:60px;margin-top:20px;">
@@ -189,8 +226,8 @@
             show-arrows
           >
             <v-slide-item
-              v-for="n in 15"
-              :key="n"
+              v-for="recosong in this.recosongs"
+              :key="recosong"
               v-slot:default="{ active, toggle }"
             >
               <v-card
@@ -204,12 +241,13 @@
                   class="fill-height"
                   align="center"
                   justify="center"
+                  @click="selectMusic(recosong)"
                 >
                   <img src="@/assets/instagram/sunset.jpg" style="width:90px;" />
                   <div>
-                    <h4><v-icon small left>mdi-music</v-icon>헤이즈</h4>
-                    <h4>비도 오고 그래서</h4>
-                    <span>1st mini album</span>
+                    <h4><v-icon small left>mdi-music</v-icon>{{recosong.songsinger}}</h4>
+                    <h4>{{recosong.songtitle}}</h4>
+                    <span>{{recosong.songalbum}}</span>
                   </div>
                 </v-row>
               </v-card>
@@ -249,6 +287,51 @@ export default {
     /*기분*/
     feeling: "",
     feel_happy: true, feel_excited: true, feel_indifferent: true, feel_sad: true, feel_angry: true, feel_fear: true,
+    /*추천음악*/
+    recosongs: [
+      {
+        songsinger: "헤이즈",
+        songtitle: "비도 오고 그래서",
+        songalbum: "1st mini album",
+      },
+      {
+        songsinger: "방탄소년단",
+        songtitle: "Dynamite",
+        songalbum: "2nd album",
+      },
+      {
+        songsinger: "소녀시대",
+        songtitle: "Gee",
+        songalbum: "2nd single album",
+      },
+      {
+        songsinger: "원더걸스",
+        songtitle: "Tell me",
+        songalbum: "1st digital album",
+      },
+      {
+        songsinger: "티아라",
+        songtitle: "Roly Poly",
+        songalbum: "3rd album",
+      },
+      {
+        songsinger: "구구",
+        songtitle: "Roly Poly",
+        songalbum: "3rd album",
+      },
+      {
+        songsinger: "하하",
+        songtitle: "Roly Poly",
+        songalbum: "3rd album",
+      }
+    ],
+    selectedSong: [],
+    /*검색음악*/
+    songKeyword: '',
+    songList: [],
+    /*이미지*/
+    imgSrc:"",
+    file:""
   }),
   watch: {
     loader () {
@@ -329,6 +412,11 @@ export default {
         msg = '기분을 선택해주세요.';
       };
 
+      if(this.imgSrc == "") {
+        err = false;
+        msg = '사진을 등록해주세요.';
+      }
+
       if(this.diarytext == "") {
         err = false;
         msg = '일기를 작성해주세요.';
@@ -347,7 +435,7 @@ export default {
         day: this.day,
         feel: this.feeling,
         //id: "string",
-        img: "string",
+        img: this.imgSrc,
         month: this.month,
         show: this.switch1,
         song: {
@@ -396,7 +484,32 @@ export default {
       .catch((error) => {
         console.dir(error);
       });
-    }
+    },
+    searchSong() {
+      axios
+      .get(constants.baseUrl + "/music", { 
+        headers : {"Authorization": "Bearer "+ this.$store.state.authToken} ,
+        params : { keyword : this.songKeyword }
+      }) // 토큰 인증을 위해 헤더에 내용 추가
+      .then(({ data }) => {
+        console.log(data);
+        this.songList = data;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
+    selectMusic(selected) {
+      this.selectedSong = selected;
+    },
+    updateImage() {
+      this.$refs.imageInput.click();
+    },
+    changeImage(e){
+      if(e.target.files.length==0) return; // 사진 등록 안하면 그냥 종료
+      this.file = e.target.files[0]; // 파일을 가져옴
+      this.imgSrc = URL.createObjectURL(this.file); // 미리보기용으로 url 생성
+    },
   }
 }
 </script>
@@ -489,7 +602,7 @@ export default {
 }
 
 #audio {
-  margin-left:100px;
+  margin-left:50px;
   margin-top:15px;
   width:300px;
 }
@@ -533,6 +646,10 @@ export default {
   to {
     transform: rotate(360deg);
   }
+}
+
+.songSearch {
+  padding-left:20px;
 }
 </style>
 
