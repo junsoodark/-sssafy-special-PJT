@@ -34,8 +34,8 @@
           <img class="settingimg" src="@/assets/img/weather/cloud (1).png" v-else />
           <img class="settingimg" src="@/assets/img/weather/windy.png" @click="wthrChoose(4)" v-if="wthr_windy" />
           <img class="settingimg" src="@/assets/img/weather/windy (1).png" v-else />
-          <img class="settingimg" src="@/assets/img/weather/umbrella.png" @click="wthrChoose(5)" v-if="wthr_rainy" />
-          <img class="settingimg" src="@/assets/img/weather/umbrella (1).png" v-else />
+          <img class="settingimg" src="@/assets/img/weather/rainy.png" @click="wthrChoose(5)" v-if="wthr_rainy" />
+          <img class="settingimg" src="@/assets/img/weather/rainy (1).png" v-else />
           <img class="settingimg" src="@/assets/img/weather/storm.png" @click="wthrChoose(6)" v-if="wthr_storm" />
           <img class="settingimg" src="@/assets/img/weather/storm (1).png" v-else />
           <img class="settingimg" src="@/assets/img/weather/snowing.png" @click="wthrChoose(7)" v-if="wthr_snowing" />
