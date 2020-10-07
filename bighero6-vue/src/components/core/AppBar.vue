@@ -14,10 +14,11 @@
           :src="require('@/assets/logo.png')"
           class="mr-5"
           contain
-          height="48"
-          width="48"
+          height="40"
+          width="40"
           max-width="48"
-          @click="$vuetify.goTo(0)"
+          @click="$router.push('/diary')"
+          style="cursor:pointer;"
         /> 
 
         <v-btn 
