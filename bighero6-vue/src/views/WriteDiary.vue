@@ -104,7 +104,7 @@
           </div>
           <div class="cd">
             <div class="album-cover spin">
-              <img src="https://d3rt1990lpmkn.cloudfront.net/unbranded/d83a086148afe6539dae524607cbe4b6ccdd0360" alt="">
+              <img :src="albumUrl(selectedSong.album_id)" alt="">
 
             </div>
             <div class="song-info">
@@ -190,7 +190,7 @@
                     <v-list>
                       <v-list-item>
                         <v-list-item-avatar>
-                          <img src="@/assets/img/weather/sunny.png">
+                          <img :src="albumUrl(item.album_id)">
                         </v-list-item-avatar>
 
                         <v-list-item-content>
@@ -285,11 +285,11 @@
                   justify="center"
                   @click="selectMusic(recosong)"
                 >
-                  <img :src="recosong.albumcover" style="width:90px;" />
+                  <img :src="albumUrl(recosong.album_id)" style="width:90px;" />
                   <div>
-                    <h4><v-icon small left>mdi-music</v-icon>{{recosong.songsinger}}</h4>
-                    <h4>{{recosong.songtitle}}</h4>
-                    <span>{{recosong.songalbum}}</span>
+                    <h4><v-icon small left>mdi-music</v-icon>{{recosong.artist}}</h4>
+                    <h4>{{recosong.song_name}}</h4>
+                    <span>{{recosong.album_id}}</span>
                   </div>
                 </v-row>
               </v-card>
@@ -340,46 +340,39 @@ export default {
     /*추천음악*/
     recosongs: [
       {
-        songsinger: "헤이즈",
-        songtitle: "비도 오고 그래서",
-        songalbum: "1st mini album",
-        albumcover: "../assets/instagram/sunset.jpg",
+        artist: "헤이즈",
+        song_name: "비도 오고 그래서",
+        album_id: 2315854,
       },
       {
-        songsinger: "방탄소년단",
-        songtitle: "Dynamite",
-        songalbum: "2nd album",
-        albumcover: "../assets/img/weather/sunny.png",
+        artist: "방탄소년단",
+        song_name: "Dynamite",
+        album_id: 10197480,
       },
       {
-        songsinger: "소녀시대",
-        songtitle: "Gee",
-        songalbum: "2nd single album",
-        albumcover: "../assets/instagram/sunset.jpg",
+        artist: "소녀시대",
+        song_name: "Gee",
+        album_id: 323987,
       },
       {
-        songsinger: "원더걸스",
-        songtitle: "Tell me",
-        songalbum: "1st digital album",
-        albumcover: "../assets/img/weather/sunny.png",
+        artist: "원더걸스",
+        song_name: "Tell me",
+        album_id: 2261839,
       },
       {
-        songsinger: "티아라",
-        songtitle: "Roly Poly",
-        songalbum: "3rd album",
-        albumcover: "../assets/instagram/sunset.jpg",
+        artist: "티아라",
+        song_name: "Roly Poly",
+        album_id: 2279275,
       },
       {
-        songsinger: "구구",
-        songtitle: "Roly Poly",
-        songalbum: "3rd album",
-        albumcover: "@/assets/img/weather/sunny.png",
+        artist: "구구",
+        song_name: "Roly Poly",
+        album_id: 2169336,
       },
       {
-        songsinger: "하하",
-        songtitle: "Roly Poly",
-        songalbum: "3rd album",
-        albumcover: "@/assets/instagram/sunset.jpg",
+        artist: "하하",
+        song_name: "Roly Poly",
+        album_id: 311689,
       }
     ],
     selectedSong: [],
@@ -600,16 +593,16 @@ export default {
         console.log(error);
       });
     },
-    selectMusic(selected) {
-      if(selected.song_name) {
-        var song = {songtitle:selected.song_name, songsinger:selected.artist};
-        this.selectedSong = song;
-        console.log(this.selectedSong);
-      }
-      else {
+     selectMusic(selected) {
+    //   if(selected.song_name) {
+    //     var song = {song_name:selected.song_name, artist:selected.artist};
+    //     this.selectedSong = song;
+    //     console.log(this.selectedSong);
+    //   }
+    //   else {
         this.selectedSong = selected;
         console.log(this.selectedSong);
-      }
+      //}
     },
     updateImage() {
       this.$refs.imageInput.click();
@@ -619,6 +612,17 @@ export default {
       this.file = e.target.files[0]; // 파일을 가져옴
       this.imgSrc = URL.createObjectURL(this.file); // 미리보기용으로 url 생성
     },
+    pad(n, width) {
+      n = n + '';
+      return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
+    },
+    albumUrl(url){
+      //10197480
+      url = url+'';
+      var number  = this.pad(url,8);
+      var imgurl = 'https://cdnimg.melon.co.kr/cm/album/images/'+ number.slice(0,3)+'/'+ number.slice(3,5)+'/'+number.slice(5,8)+'/'+url+'_500.jpg';
+      return imgurl;
+   },
   }
 }
 </script>
