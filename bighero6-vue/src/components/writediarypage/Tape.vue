@@ -5,7 +5,7 @@
     <v-btn @click="pauseVideo">pause</v-btn>
     <v-btn @click="stopVideo">stop</v-btn> -->
     <youtube hidden :video-id="videoId" ref="youtube" v-on:ended="ended" @playing.native="_handlePlayingUI" ></youtube>
-    <v-card elevation="0" style="text-align: center;" :flat="flat == undefined || flat == false  ? false : true">
+    <v-card elevation="0" style="text-align: center;background-color:rgb(255, 246, 211);" :flat="flat == undefined || flat == false  ? false : true">
         <v-img
           height="200px"
           contain
