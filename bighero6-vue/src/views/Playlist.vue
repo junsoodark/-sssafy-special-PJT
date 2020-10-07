@@ -11,7 +11,7 @@
     <v-content>
       <v-container>
         <systemBar></systemBar>
-       <player-playlist-panel :playlist="playlist" :selectedTrack="selectedTrack"></player-playlist-panel>
+       <player-playlist-panel :isMy="isMy" :playlistId="playlistId" :playlist="playlist" :selectedTrack="selectedTrack"></player-playlist-panel>
       </v-container>
     </v-content>
    
@@ -172,34 +172,7 @@
             </v-slide-item>
           </v-slide-group>
 
-                  <!-- <div>
-                    <v-carousel 
-                      v-model="monthlyplaylistmodel"
-                      :hide-delimiter-background="true"
-                      :height="200"
-                    >
-                      <v-carousel-item
-                        v-for="monthColor in monthlyplaylistColor"
-                        :key="monthColor"
-                      >
-                        <v-sheet
-                          :color="monthColor"
-                          height="100%"
-                          tile
-                        >
-                          <v-row
-                            class="fill-height"
-                            align="center"
-                            justify="center"
-                          >
-                            <div>
-                              <playlistcds :monthplaylist="monthplaylist"/> 
-                            </div>
-                          </v-row>
-                        </v-sheet>
-                      </v-carousel-item>
-                    </v-carousel>
-                  </div> -->
+                 
                 </v-col>
               </v-row>
             </v-card> 
@@ -305,10 +278,13 @@ addPlayList(){
 },
      getDetail(playlist){
           this.playlist = playlist.songs;
+          this.playlistId = playlist.id;
+          this.isMy = true;
       
     },
     getMonthDetail(playlist){
       this.playlist = playlist.songs;
+      this.isMy = false;
     },
     getMy(){
      axios.get(constants.baseUrl + "/playlist/"+ this.$store.state.userId,{ headers : { "Authorization": "Bearer "+ this.$store.state.authToken} }) // 토큰 인증을 위해 헤더에 내용 추가
