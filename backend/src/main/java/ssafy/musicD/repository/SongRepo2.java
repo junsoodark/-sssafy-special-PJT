@@ -6,6 +6,6 @@ import ssafy.musicD.dto.Song;
 
 public interface SongRepo2 {
     public List<Song> searchSong(String keyword);
-
+    public List<Song> recommendSong(String emotion, String genre);
 }
 

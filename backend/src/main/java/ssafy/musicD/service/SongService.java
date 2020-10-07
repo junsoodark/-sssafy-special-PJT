@@ -7,4 +7,5 @@ import java.util.List;
 public interface SongService {
 
     public List<Song> searchSong(String keyword);
+    public List<Song> recommendSong(String emotion, String genre);
 }

@@ -14,4 +14,8 @@ public class SongServiceImpl implements SongService{
     private SongRepo2 songRepo;
 
     public List<Song> searchSong(String keyword){return songRepo.searchSong(keyword); }
+    
+    public List<Song> recommendSong(String emotion, String genre) {
+    	return songRepo.recommendSong(emotion, genre);
+    }
 }

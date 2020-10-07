@@ -16,12 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
-import ssafy.musicD.Domain.Diary;
 import ssafy.musicD.Domain.Playlist;
 import ssafy.musicD.dto.Song;
-import ssafy.musicD.dto.DiaryDto;
-import ssafy.musicD.service.DiaryService;
 import ssafy.musicD.service.PlaylistService;
+import ssafy.musicD.service.SongService;
 
 @RestController
 @RequestMapping("/api/playlist")
@@ -30,6 +28,8 @@ import ssafy.musicD.service.PlaylistService;
 public class PlaylistController {
 	@Autowired
 	private PlaylistService playlistService;
+	@Autowired
+	private SongService songService;
 	
 	// 월별 플레이리스트 조회
 	@PostMapping("/month")
@@ -39,10 +39,25 @@ public class PlaylistController {
 		int month = (int)m.get("month");
 		int year = (int)m.get("year");
 		List<Song> playlist = playlistService.getMonthPlaylist(userId, month, year);
+		
+		// List<Song> recomendedList = songService.recommendSong(emotion, genre);
+		
+		
+		
 		Map<String, Object> map = new HashMap<>();
 		map.put("status", 200);
 		map.put("playlist", playlist);
+		
 		return map;
+	}
+	
+	public String getMostEmotion(List<Song> list) {
+		int[] arr = {0, 0, 0, 0, 0, 0};
+		for (int i = 0; i < list.size(); i++) {
+			
+		}
+		
+		return "String";
 	}
 	
 	
