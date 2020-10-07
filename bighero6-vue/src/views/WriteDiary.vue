@@ -498,6 +498,7 @@ export default {
       },{ headers : {"Authorization": "Bearer "+ this.$store.state.authToken} }) // 토큰 인증을 위해 헤더에 내용 추가
       .then(({ data }) => {
         alert("일기가 저장되었습니다.");
+        this.$router.push("/diary");
       })
       .catch((error) => {
         console.dir(error);
