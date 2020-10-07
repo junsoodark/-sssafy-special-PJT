@@ -73,7 +73,7 @@ export default {
             type: Object,
             default: null
         },
-        flat: {
+        /*flat: {
             type: Boolean,
             default: false
         },
@@ -100,7 +100,7 @@ export default {
         downloadable: {
             type: Boolean,
             default: false
-        }
+        }*/
     },
     computed: {
         player() {
