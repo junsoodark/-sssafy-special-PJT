@@ -121,7 +121,7 @@
           <v-list-item-title><v-avatar class="mr-3"><v-img :src="albumUrl(track.album_id)"></v-img></v-avatar>{{ track.artist }}  -  {{ track.song_name }} </v-list-item-title>
             </v-list-item-content>
         <v-spacer></v-spacer>
-        <!-- {{ track.howl.duration() }} -->
+         <v-icon style="z-index:100;"  v-if="isMy" @click="deleteSong(track)">mdi-trash-can-outline</v-icon>
       </v-list-item>
     </v-list>
    
@@ -252,6 +252,24 @@ Vue.use(VueYoutube)
          });
 
       },
+      deleteSong(song){
+         axios
+      .delete(constants.baseUrl + "/playlist/"+song.id, { 
+        headers : {"Authorization": "Bearer "+ this.$store.state.authToken} 
+      }) // 토큰 인증을 위해 헤더에 내용 추가
+      .then(({ data }) => {
+        if(data.status==200){
+           this.playlist.filter(x=> x!==song);
+           this.playlists.filter(x=> x!==song.youtubeId);
+           
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+
+      },
        searchSong() {
       axios
       .get(constants.baseUrl + "/music", { 
@@ -282,7 +300,7 @@ Vue.use(VueYoutube)
   selectTrack (index, track) {
      this.selectedTrack = track;
      this.selectedNumber= index;
-     //this.player.playVideoAt(index);
+     this.player.playVideoAt(index);
   },
   updateVolume(volume){
         this.player.setVolume(volume)
