@@ -30,20 +30,21 @@
 
           <v-card>
             <v-card-title class="headline grey lighten-2">
-              노래 검색
+              <span>아티스트 검색</span>
               <v-text-field
                 class="songSearch mx-auto mb-2"
                 flat
                 hide-details
-                label=" 노래 제목으로 검색하세요"
+                label="아티스트 이름으로 검색하세요"
                 prepend-inner-icon="mdi-magnify"
                 solo-inverted
                 v-model="songKeyword"
-                @keyup="searchSong()"
+               
               ></v-text-field>
+              <v-btn color="warning" @click="searchSong()" style="float:right;height:45px;margin-bottom:10px;">검색</v-btn>
             </v-card-title>
 
-            <v-card-text style="padding-top:20px;" v-if="songKeyword != ''">
+            <v-card-text style="padding-top:20px;">
               <v-card light
                 max-width="600"
                 class="mx-auto pa-3"

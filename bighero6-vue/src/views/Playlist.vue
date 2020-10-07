@@ -26,6 +26,8 @@
               <v-row>
                 <v-col class="playlist">
                   <h2>마이 플레이리스트</h2>
+                  <h4 class="ml-2" >나만의 플레이리스트를 제공합니다.</h4>
+                  <h5  class="ml-2" style="color:red">**플레이리스트 삭제는 더블클릭으로 가능합니다.</h5>
                 </v-col>
                 <v-col class="playlist" style="text-align:right;">
                   <v-dialog v-model="dialog" persistent max-width="600px">
@@ -50,7 +52,7 @@
                         <v-container>
                           <v-row>
                             <v-col cols="12" sm="6" md="4">
-                              <v-text-field v-model="newPlaylistName" label="플레이리스트 명*"  required></v-text-field>
+                              <v-text-field v-model="newPlaylistName" label="플레이리스트명*"  required></v-text-field>
                             </v-col>
                           </v-row>
                         </v-container>
@@ -66,34 +68,42 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>
+                <v-col style="height:310.4px">
                    <v-slide-group
             class="pa-3"
             center-active
             show-arrows
-          >
-            <v-slide-item
+          > <div class="mx-auto" v-if="myplaylist.length==0" style="text-align:center;color:grey">
+            <h1>아직 마이플레이리스트가 없습니다.</h1>
+            <h1>나만의플레이리스트를 만들어보세요!</h1>
+  
+            </div>
+            <v-slide-item    
               v-for="(playlist,index) in myplaylist"
               :key="index"
             >
                <v-card 
-                class="ma-4"
+                class="ma-3"
                 height="200"
-                width="100"
+                width="110"
+                @dblclick="deletePlaylist(playlist.id)"
                 @click="getDetail(playlist)"
                 dark
               >
+              
                 <v-row
                   class="fill-height"
                   align="center"
                   justify="center"
                 >
-                  <img :src="musicImg[7-(index+1)%7-1]" style="width:90px;" />
+                  <img :src="musicImg[7-(index+1)%7-1]" style="width:95px;" />
                   <div>
                     <h4>{{playlist.title}}</h4>
                   </div>
                 </v-row>
-              </v-card> 
+              </v-card>
+             
+             
             </v-slide-item>
           </v-slide-group>
                 
@@ -110,6 +120,7 @@
               <v-row>
                 <v-col class="playlist">
                   <h2>월별 플레이리스트</h2>
+                  <h4 class="ml-2" >다이어리 기준 월별 플레이리스트를 제공합니다</h4>
                 </v-col>
               </v-row>
               <v-row>
@@ -204,6 +215,7 @@ export default {
     monthplaylist :[],
     playlistId:'',
     playlistTitle:'',
+    monthplaylistTest :[]
     }
   },
 
@@ -211,11 +223,10 @@ export default {
      var monthArray = this.monthList
       for (var i = 0; i < monthArray.length; i++) {
          var todayMonth=  monthArray[i];
-         this.getmonthly(todayMonth);
+         this.monthplaylist.push(this.getmonthly(todayMonth));
 
       }
-
-      console.log(this.monthplaylist)
+      
        this.getMy();
       
 
@@ -227,6 +238,28 @@ export default {
   methods :{
     selectTrack (track) {
   this.selectedTrack = track
+},
+deletePlaylist(id){
+  if(confirm("삭제하시겠습니까?")){
+         axios.delete(constants.baseUrl + "/playlist/"+id,
+         { headers : { "Authorization": "Bearer "+ this.$store.state.authToken} }) // 토큰 인증을 위해 헤더에 내용 추가
+         .then(( {data} ) => {
+             if(data.status ==200){
+               alert("삭제되었습니다.")
+               location.reload();
+             }
+         })
+        .catch(function (error) {
+           console.log(error);
+         });
+  }
+
+},
+sortMonth(){
+
+  this.monthplaylist.sort(function(a,b){
+        return a.title> b.title?-1 :a.title <b.title?1:0
+      });
 },
 addPlayList(){
      axios.post(constants.baseUrl + "/playlist", {
@@ -267,7 +300,8 @@ addPlayList(){
          });
     },
 getmonthly(todayMonth) {
-       // 월별 플레이리스트 불러오기 (9,8,7,6,5)    
+       // 월별 플레이리스트 불러오기 (10,9,8,7,6)   
+       var monthplayObject ={}; 
     axios.post(constants.baseUrl + "/playlist/month", {
            userId : this.$store.state.userId,
            month: todayMonth,
@@ -275,15 +309,15 @@ getmonthly(todayMonth) {
          },{ headers : { "Authorization": "Bearer "+ this.$store.state.authToken} }) // 토큰 인증을 위해 헤더에 내용 추가
          .then(( data ) => {
               var songs = data.data.playlist;             
-              var monthplayObject ={};
+              
               monthplayObject.songs = songs;
               monthplayObject.title = todayMonth+'월';
-              this.monthplaylist.push(monthplayObject)
+              
          })
         .catch(function (error) {
            console.log(error);
          });
-
+   return (monthplayObject)
     }
   }
 }
