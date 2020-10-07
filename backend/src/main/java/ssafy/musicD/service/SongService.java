@@ -8,4 +8,5 @@ public interface SongService {
 
     public List<Song> searchSong(String keyword);
     public List<Song> recommendSong(String emotion, String genre);
+    public List<Song> similarity(String genre);
 }

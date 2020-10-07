@@ -1,7 +1,6 @@
 package ssafy.musicD.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -42,17 +41,17 @@ public class SongController {
     		month = "0" + month;
     	}
     	
-    	
     	List<Song> list = songService.recommendSong(emotion, month);
+    	System.out.println(list.size());
     	int[] arr = randomIndex(list.size());
     	
-    	List<Song> recomendSongs = new ArrayList<Song>();
+    	List<Song> recomendedSongs = new ArrayList<Song>();
     	
     	for (int i = 0; i < arr.length; i++) {
-    		recomendSongs.add(list.get(arr[i]));
+    		recomendedSongs.add(list.get(arr[i]));
     	}
     			
-    	return recomendSongs;
+    	return recomendedSongs;
     }
     
     public int[] randomIndex(int size) {

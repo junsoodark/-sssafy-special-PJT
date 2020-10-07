@@ -3,6 +3,7 @@ package ssafy.musicD.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -40,9 +41,41 @@ public class PlaylistController {
 		int year = (int)m.get("year");
 		List<Song> playlist = playlistService.getMonthPlaylist(userId, month, year);
 		
-		// List<Song> recomendedList = songService.recommendSong(emotion, genre);
-		
-		
+		if (playlist.size() < 3) {
+			double max = 0;
+			int index = -1;
+			
+			for (int i = 0; i < playlist.size(); i++) {
+				List<Song> list = songService.similarity(playlist.get(i).getGenre());
+				
+				for (int j = 0; j < list.size(); j++) {
+					double tempSim = calSimilarity(playlist.get(i), list.get(j));
+					if (tempSim > max) {
+						max = tempSim;
+						index = j;
+						list.remove(index);
+					}
+				}
+				playlist.add(list.get(index));
+			}
+		} else {
+			double max = 0;
+			int index = -1;
+			
+			int[] arr = randomIndex(playlist.size());
+			for (int i = 0; i < 3; i++) {
+				List<Song> list = songService.similarity(playlist.get(arr[i]).getGenre());
+				for (int j = 0; j < list.size(); j++) {
+					double tempSim = calSimilarity(playlist.get(i), list.get(j));
+					if (tempSim > max) {
+						max = tempSim;
+						index = j;
+						list.remove(index);
+					}
+				}
+				playlist.add(list.get(index));
+			}
+		}
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("status", 200);
@@ -51,15 +84,44 @@ public class PlaylistController {
 		return map;
 	}
 	
-	public String getMostEmotion(List<Song> list) {
-		int[] arr = {0, 0, 0, 0, 0, 0};
-		for (int i = 0; i < list.size(); i++) {
-			
-		}
+	public double calSimilarity(Song song1, Song song2) {
+		double similarity;
+		double happy1 = song1.getHappy();
+		double sad1 = song1.getSad();
+		double angry1 = song1.getAngry();
+		double fear1 = song1.getAngry();
+		double excited1 = song1.getExcited();
+		double indifferent1 = song1.getIndifferent();
+		double happy2 = song2.getHappy();
+		double sad2 = song2.getSad();
+		double angry2 = song2.getAngry();
+		double fear2 = song2.getAngry();
+		double excited2 = song2.getExcited();
+		double indifferent2 = song2.getIndifferent();
 		
-		return "String";
+		double top = happy1*happy2 + sad1*sad2 + angry1*angry2 + fear1*fear2 + excited1*excited2 + indifferent1*indifferent2;
+		double bottom = Math.sqrt(happy1*happy1 + sad1*sad1 + angry1*angry1 + fear1*fear1 + excited1*excited1 + indifferent1*indifferent1)
+				* Math.sqrt(happy2*happy2 + sad2*sad2 + angry2*angry2 + fear2*fear2 + excited2*excited2 + indifferent2*indifferent2);
+		
+		similarity = top / bottom;
+		
+		return similarity;
 	}
 	
+	public int[] randomIndex(int size) {
+    	int[] arr = new int[3];
+    	Random r = new Random();
+    	
+    	for (int i = 0; i < 3; i++) {
+    		arr[i] = r.nextInt(size);
+    		for (int j = 0; j < i; j++) {
+    			if (arr[i]==arr[j])
+    				i--;
+    		}
+    	}
+    	
+    	return arr;
+    }
 	
 	// 플레이리스트 목록 조회
 	@GetMapping("/{userId}")
