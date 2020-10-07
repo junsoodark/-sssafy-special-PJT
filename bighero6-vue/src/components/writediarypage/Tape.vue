@@ -109,9 +109,6 @@ export default {
         Duration() {
             return this.totalDuration;
         },
-        showText() {
-            alert("dd");
-        }
     },
     methods: {
         play() {

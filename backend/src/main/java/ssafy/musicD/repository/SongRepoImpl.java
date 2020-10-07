@@ -21,7 +21,7 @@ public class SongRepoImpl implements SongRepo2 {
 
 	@Override
 	public List<Song> searchSong(String keyword) {
-		Query query = new Query(Criteria.where("album_name").regex(keyword));
+		Query query = new Query(Criteria.where("song_name").regex(keyword));
 		System.out.println(keyword);
 		List<Song> keywordSong = mongoTemplate.find(query, Song.class, "emotion");
 		return keywordSong;

@@ -55,7 +55,7 @@
                       <img  class="weatherIcon mr-2" :src= "weather(item.weather)">
                       <img  class="weatherIcon" :src= "emotion(item.feel)">
                       <br>
-                      <img class="albumIcon" :src="albumUrl(item.song.id)"><br>
+                      <img class="albumIcon" :src="albumUrl(item.song.album_id)"><br>
                       <span>{{item.song.artist}}-{{item.song.song_name}}</span>
                     </div>
                   </div>
@@ -166,6 +166,7 @@ export default {
          },{ headers : { "Authorization": "Bearer "+ this.$store.state.authToken} }) // 토큰 인증을 위해 헤더에 내용 추가
          .then(({ data }) => {
             this.dateData = data.diarys
+            //console.log(data.diarys)
            //console.log(data)
            //alert("수정 완료되었습니다.")
          })

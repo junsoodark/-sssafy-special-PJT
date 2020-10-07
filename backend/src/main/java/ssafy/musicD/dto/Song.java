@@ -9,6 +9,7 @@ import lombok.Data;
 public class Song {
 	private String id;
 	private String issue_date;
+	private int album_id;
 	private String album_name;
 	private String song_name;
 	private String artist;

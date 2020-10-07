@@ -11,7 +11,7 @@
     <v-content>
       <v-container>
         <systemBar></systemBar>
-       <player-playlist-panel :playlist="playlist" :selectedTrack="selectedTrack"></player-playlist-panel>
+       <player-playlist-panel :isMy="isMy" :playlistId="playlistId" :playlist="playlist" :selectedTrack="selectedTrack"></player-playlist-panel>
       </v-container>
     </v-content>
    
@@ -48,7 +48,7 @@
       <v-col >
         <v-row style="margin-left: 0px; max-width:700px;">
           <v-col style="padding-top: 0px;">
-            <v-card class="pa-2" tile dark>
+            <v-card class="pa-2" tile>
               <v-row>
                 <v-col class="playlist">
                   <h2>마이 플레이리스트</h2>
@@ -76,7 +76,7 @@
                         <v-container>
                           <v-row>
                             <v-col cols="12" sm="6" md="4">
-                              <v-text-field label="플레이리스트 명*" required></v-text-field>
+                              <v-text-field v-model="newPlaylistName" label="플레이리스트 명*"  required></v-text-field>
                             </v-col>
                           </v-row>
                         </v-container>
@@ -85,7 +85,7 @@
                       <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-                        <v-btn color="blue darken-1" text @click="dialog = false">Save</v-btn>
+                        <v-btn color="blue darken-1" text @click="addPlayList()">Save</v-btn>
                       </v-card-actions>
                     </v-card>
                   </v-dialog>
@@ -99,23 +99,24 @@
             show-arrows
           >
             <v-slide-item
-              v-for="n in 6"
-              :key="n"
+              v-for="(playlist,index) in myplaylist"
+              :key="playlist"
             >
                <v-card 
                 class="ma-4"
                 height="200"
                 width="100"
-                @click="getDetail()"
+                @click="getDetail(playlist)"
+                dark
               >
                 <v-row
                   class="fill-height"
                   align="center"
                   justify="center"
                 >
-                  <img :src="musicImg[n%3]" style="width:90px;" />
+                  <img :src="musicImg[(index*3)%4]" style="width:90px;" />
                   <div>
-                    <h2>9월 플레이리스트</h2>
+                    <h4>{{playlist.title}}</h4>
                   </div>
                 </v-row>
               </v-card> 
@@ -131,7 +132,7 @@
      <!-- 월별 프레이리스트 -->
         <v-row style="margin-left: 0px; max-width:700px;">
           <v-col>
-             <v-card class="pa-2" tile dark>
+             <v-card class="pa-2" tile>
               <v-row>
                 <v-col class="playlist">
                   <h2>월별 플레이리스트</h2>
@@ -153,14 +154,14 @@
                 class="ma-4"
                 height="200"
                 width="100"
-                @click="getMonthDetail(monthplay)"
+                @click="getMonthDetail(monthplay)" dark
               >
                 <v-row
                   class="fill-height"
                   align="center"
                   justify="center"
                 >
-                  <img :src="musicImg[index%3]" style="width:90px;" />
+                  <img :src="musicImg[index%4]" style="width:90px;" />
                   <div style="text-align:center;">
                       <h3>{{monthplay.title}}</h3>
                     <h4>플레이리스트</h4>
@@ -171,34 +172,7 @@
             </v-slide-item>
           </v-slide-group>
 
-                  <!-- <div>
-                    <v-carousel 
-                      v-model="monthlyplaylistmodel"
-                      :hide-delimiter-background="true"
-                      :height="200"
-                    >
-                      <v-carousel-item
-                        v-for="monthColor in monthlyplaylistColor"
-                        :key="monthColor"
-                      >
-                        <v-sheet
-                          :color="monthColor"
-                          height="100%"
-                          tile
-                        >
-                          <v-row
-                            class="fill-height"
-                            align="center"
-                            justify="center"
-                          >
-                            <div>
-                              <playlistcds :monthplaylist="monthplaylist"/> 
-                            </div>
-                          </v-row>
-                        </v-sheet>
-                      </v-carousel-item>
-                    </v-carousel>
-                  </div> -->
+                 
                 </v-col>
               </v-row>
             </v-card> 
@@ -224,9 +198,13 @@ export default {
     return {
     musicImg: [
          'http://lorempixel.com/output/nightlife-q-c-640-480-5.jpg',
-        'https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2100&q=80',
-         'http://lorempixel.com/output/abstract-q-c-640-480-6.jpg'
+        'https://firebasestorage.googleapis.com/v0/b/music-diary-710d3.appspot.com/o/banner%2FdiaryBanner.jpg?alt=media',
+         'http://lorempixel.com/output/abstract-q-c-640-480-6.jpg',
+         'https://firebasestorage.googleapis.com/v0/b/music-diary-710d3.appspot.com/o/banner%2Fdiary.jpg?alt=media'
+
       ],
+      isMy : false,
+      newPlaylistName :'',
       year :2020,
       monthList :[10,9,8,7,6],
       selectedTrack:'',
@@ -271,8 +249,8 @@ export default {
       }
 
       console.log(this.monthplaylist)
-   
-
+       this.getMy();
+      
 
  
     
@@ -283,11 +261,41 @@ export default {
     selectTrack (track) {
   this.selectedTrack = track
 },
-getDetail(){
+addPlayList(){
+     axios.post(constants.baseUrl + "/playlist", {
+           userId : this.$store.state.userId,
+           title : this.newPlaylistName
+         },{ headers : { "Authorization": "Bearer "+ this.$store.state.authToken} }) // 토큰 인증을 위해 헤더에 내용 추가
+         .then(( {data} ) => {
+             if(data.status ==200){
+               alert("새로운 플레이리스트가 생성되었습니다.")
+               this.getMy();
+             }
+         })
+        .catch(function (error) {
+           console.log(error);
+         });
+},
+     getDetail(playlist){
+          this.playlist = playlist.songs;
+          this.playlistId = playlist.id;
+          this.isMy = true;
       
     },
     getMonthDetail(playlist){
       this.playlist = playlist.songs;
+      this.isMy = false;
+    },
+    getMy(){
+     axios.get(constants.baseUrl + "/playlist/"+ this.$store.state.userId,{ headers : { "Authorization": "Bearer "+ this.$store.state.authToken} }) // 토큰 인증을 위해 헤더에 내용 추가
+         .then(( {data} ) => {
+               if(data.status==200){
+                 this.myplaylist = data.playlists;
+               }
+         })
+        .catch(function (error) {
+           console.log(error);
+         });
     },
 getmonthly(todayMonth) {
        // 월별 플레이리스트 불러오기 (9,8,7,6,5)    

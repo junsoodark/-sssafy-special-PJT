@@ -1,10 +1,10 @@
 <template>
 
 <div > 
-    <youtube hidden :video-id="videoId" @ended="end" ref="youtube" ></youtube>
+    <youtube hidden :video-id="diaryDetail.song.youtubeId" @ended="end" ref="youtube" ></youtube>
 <v-card style="text-align: center;">
-      <h3 id="playing" style ="font-family: 'Do Hyeon', sans-serif;" class="pt-2"><v-icon small left>mdi-music</v-icon>{{diaryDetail.song.singer}}<v-icon small left>mdi-music</v-icon></h3>
-      <h3 id="playing" style ="font-family: 'Do Hyeon', sans-serif; ">{{diaryDetail.song.title}}</h3>
+      <h3 id="playing" style ="font-family: 'Do Hyeon', sans-serif;" class="pt-2"><v-icon small left>mdi-music</v-icon>{{diaryDetail.song.artist}}<v-icon small left>mdi-music</v-icon></h3>
+      <h3 id="playing" style ="font-family: 'Do Hyeon', sans-serif; ">{{diaryDetail.song.song_name}}</h3>
       
             <v-btn outlined icon class="mx-1"  @click.native="playing ? pause() : play()" >
                 <v-icon   v-if="!playing || paused" >mdi-play</v-icon>
@@ -48,7 +48,7 @@ components: {
   },
   data () {
             return {
-                videoId: '7-x3uD5z1bQ',
+                videoId: '',
                 firstPlay: true,
                 isMuted: false,
                 loaded: false,
