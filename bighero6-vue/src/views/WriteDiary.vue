@@ -496,7 +496,7 @@ export default {
         msg = '일기를 작성해주세요.';
       }
 
-      if(!this.selectedSong) {
+      if(this.selectedSong.length == 0) {
         err = false;
         msg = '노래를 선택해주세요.';
       }
@@ -525,23 +525,6 @@ export default {
         img: this.imgSrc,
         month: this.month,
         show: this.switch1,
-        /*song: {
-          album_id: 0,
-          album_name: "",
-          angry: 0,
-          artist: "",
-          excited: 0,
-          fear: 0,
-          genre: "",
-          happy: 0,
-          id: "",
-          indifferent: 0,
-          issue_date: "",
-          lyric: "",
-          sad: 0,
-          song_name: "",
-          youtubeId: ""
-        },*/
         song: this.selectedSong,
         userId: this.$store.state.userId,
         weather: this.weather,
@@ -573,23 +556,6 @@ export default {
         img: this.imgSrc,
         month: this.month,
         show: this.switch1,
-        /*song: {
-          album_id: 0,
-          album_name: "",
-          angry: 0,
-          artist: "",
-          excited: 0,
-          fear: 0,
-          genre: "",
-          happy: 0,
-          id: "",
-          indifferent: 0,
-          issue_date: "",
-          lyric: "",
-          sad: 0,
-          song_name: "",
-          youtubeId: ""
-        },*/
         song: this.selectedSong,
         userId: this.$store.state.userId,
         weather: this.weather,
@@ -641,23 +607,6 @@ export default {
           img: this.imgSrc,
           month: this.month,
           show: this.switch1,
-          /*song: {
-            album_id: 0,
-            album_name: "",
-            angry: 0,
-            artist: "",
-            excited: 0,
-            fear: 0,
-            genre: "",
-            happy: 0,
-            id: "",
-            indifferent: 0,
-            issue_date: "",
-            lyric: "",
-            sad: 0,
-            song_name: "",
-            youtubeId: ""
-          },*/
           userId: this.$store.state.userId,
           weather: this.weather,
           year: this.year
