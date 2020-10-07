@@ -55,7 +55,7 @@
                       <img  class="weatherIcon mr-2" :src= "weather(item.weather)">
                       <img  class="weatherIcon" :src= "emotion(item.feel)">
                       <br>
-                      <img class="albumIcon" :src="albumUrl(item.song.id)"><br>
+                      <img class="albumIcon" :src="albumUrl(item.song.album_id)"><br>
                       <span>{{item.song.artist}}-{{item.song.song_name}}</span>
                     </div>
                   </div>
