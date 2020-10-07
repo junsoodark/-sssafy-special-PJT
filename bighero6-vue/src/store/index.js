@@ -200,7 +200,7 @@ export default new Vuex.Store({
         console.log("2");
         
         //
-        alert(res.data.msg);
+        alert("회원가입에 성공하셨습니다.");
         console.log("3");
         router.push({ name: "login" });
         console.log("4");
