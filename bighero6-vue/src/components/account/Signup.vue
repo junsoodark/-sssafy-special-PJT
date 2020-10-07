@@ -1,26 +1,15 @@
 <template>
   <div id="signup">
-    <v-container class="mx-auto" style="max-width:600px; margin-top:50px">
+    <v-container class="mx-auto" style="max-width:600px; margin-top:100px">
       <div class="inputForm mx-auto">
       <v-form @submit.prevent="signup(signupData)">
         <v-row align="center" no-gutters>
-            <v-col cols="12" sm="9">
                 <v-text-field v-model="signupData.email"
                       :rules="emailRules"
                       label="email"
                       required
                  ></v-text-field>
-            </v-col>
-            <v-col cols="12" sm="1">
-            </v-col>
-            <v-col cols="12" sm="2">
-              <v-btn depressed small color = "primary" @click="sendCode">인증코드 발송</v-btn>
-            </v-col>
         </v-row>
-        <v-text-field v-model="certicode"
-              label="인증코드"
-              required
-        ></v-text-field>
         <v-text-field v-model="signupData.nickname"
                       :rules="[rules.nicknamerequired, rules.max]"
                       label="nickname"
