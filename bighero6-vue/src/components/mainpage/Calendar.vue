@@ -166,6 +166,7 @@ export default {
          },{ headers : { "Authorization": "Bearer "+ this.$store.state.authToken} }) // 토큰 인증을 위해 헤더에 내용 추가
          .then(({ data }) => {
             this.dateData = data.diarys
+            //console.log(data.diarys)
            //console.log(data)
            //alert("수정 완료되었습니다.")
          })

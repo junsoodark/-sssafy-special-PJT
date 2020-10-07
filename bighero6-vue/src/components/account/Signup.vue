@@ -55,7 +55,7 @@ export default {
       signupData: {
         nickname: '',
         email: '',
-        password: 'Password',
+        password: '',
       },
       reenter: '',
       certicode: '',
