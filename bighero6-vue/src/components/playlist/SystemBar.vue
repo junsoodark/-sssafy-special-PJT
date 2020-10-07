@@ -1,25 +1,16 @@
 <template>
+<div>
+  <span v-if="isMy">마이플레이리스트 -</span>
+  <span v-else>월별플레이리스트 -</span>
+  {{playlistTitle}}
 <v-system-bar window  dark>
-    <v-menu offset-y transition="slide-y-transition">
-      <v-btn  small right slot="activator">
-        <v-icon dark>headset</v-icon>
-      </v-btn>
-      <v-list>
-        <v-list-tile >
-          <v-list-tile-title>About</v-list-tile-title>
-        </v-list-tile>
-        <v-dialog  max-width="300">
-          <v-card>
-            <v-card-title><h2>Music Player</h2></v-card-title>
-            <v-card-text>Version 1.0.0</v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn  >OK</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-list>
-    </v-menu>
+    
+
+        <v-icon class="ml-4" light>headset</v-icon>
+
+
+
+
     <v-spacer></v-spacer>
  MUSIC PLAYER
     <v-spacer></v-spacer>
@@ -27,4 +18,18 @@
     <v-icon>check_box_outline_blank</v-icon>
     <v-icon>close</v-icon>
   </v-system-bar>
-  </template>
+</div>
+</template>
+
+ <script>
+export default {
+    props: {
+      playlistTitle: String,
+      isMy : Boolean
+    },
+
+mounted:{
+}
+}
+</script>
+
