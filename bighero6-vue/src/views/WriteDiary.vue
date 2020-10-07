@@ -144,11 +144,11 @@
                 prepend-inner-icon="mdi-magnify"
                 solo-inverted
                 v-model="songKeyword"
-                @keyup="searchSong()"
               ></v-text-field>
+              <v-btn color="warning" @click="searchSong()" style="float:right;height:45px;margin-bottom:10px;">검색</v-btn>
             </v-card-title>
 
-            <v-card-text style="padding-top:20px;" v-if="songKeyword != ''">
+            <v-card-text style="padding-top:20px;">
               <v-card light
                 max-width="800"
                 class="mx-auto pa-3"
@@ -412,7 +412,7 @@ export default {
       const l = this.loader
       this[l] = !this[l]
 
-      setTimeout(() => (this[l] = false), 1000)
+      setTimeout(() => (this[l] = false), 3000)
 
       this.loader = null
     },
@@ -800,6 +800,7 @@ export default {
 
 .songSearch {
   padding-left:20px;
+  padding-right:20px;
 }
 </style>
 
