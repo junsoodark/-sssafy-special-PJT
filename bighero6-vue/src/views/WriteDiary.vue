@@ -166,7 +166,7 @@
 
                       <v-list-item-content>
                         <v-list-item-title>
-                          <strong>{{ item.songtitle }}</strong>
+                          <strong>{{ item.song_name }}</strong>
                         </v-list-item-title>
                       </v-list-item-content>
                     </v-list-item>
@@ -274,6 +274,8 @@ export default {
     tape: () => import('@/components/writediarypage/Tape'),
   },
   data: () => ({
+    diaryId: "",
+    isUpdate: false,
     date: new Date().toISOString().substr(0, 10),
     day: new Date().getDate(),
     month: new Date().getMonth() + 1,
@@ -339,6 +341,37 @@ export default {
     imgSrc:"",
     file:""
   }),
+  created() {
+    if(this.$route.params.date) {
+      this.isUpdate = true;
+
+      this.diaryId = this.$route.params.id;
+      this.date = this.$route.params.date;
+      this.weather = this.$route.params.weather;
+      this.feeling = this.$route.params.feel;
+      this.imgSrc = this.$route.params.img;
+      this.diarytext = this.$route.params.context;
+      this.switch1 = this.$route.params.show;
+
+      if(this.weather == "sunny") this.wthr_sunny = false;
+      else if(this.weather == "cloudy") this.wthr_cloudy = false;
+      else if(this.weather == "cloud") this.wthr_cloud = false;
+      else if(this.weather == "windy") this.wthr_windy = false;
+      else if(this.weather == "rainy") this.wthr_rainy = false;
+      else if(this.weather == "storm") this.wthr_storm = false;
+      else if(this.weather == "snowing") this.wthr_snowing = false;
+
+      if(this.feeling == "happy") this.feel_happy = false;
+      else if(this.feeling == "excited") this.feel_excited = false;
+      else if(this.feeling == "indifferent") this.feel_indifferent = false;
+      else if(this.feeling == "sad") this.feel_sad = false;
+      else if(this.feeling == "angry") this.feel_angry = false;
+      else if(this.feeling == "fear") this.feel_fear = false;
+
+      if(this.switch1 == true) this.show = "공개";
+      else if(this.switch1 == false) this.show = "비공개";
+    }
+  },
   watch: {
     loader () {
       const l = this.loader
@@ -429,6 +462,9 @@ export default {
       }
 
       if (!err) alert(msg);
+      else if(this.isUpdate == true) {
+        this.updateGibonHandler();
+      }
 			else {
 				this.saveGibonHandler();
 			}
@@ -462,20 +498,26 @@ export default {
       },{ headers : {"Authorization": "Bearer "+ this.$store.state.authToken} }) // 토큰 인증을 위해 헤더에 내용 추가
       .then(({ data }) => {
         alert("일기가 저장되었습니다.");
+        this.$router.push("/diary");
       })
       .catch((error) => {
         console.dir(error);
       });
     },
     updateGibonHandler(){
+      var diaryImgRef = firebase.storage().ref().child("diary/"+this.date);
+      diaryImgRef.put(this.file).then(function(snapshot){}); // 파이어베이스 스토리지에 저장
+      this.imgSrc = "https://firebasestorage.googleapis.com/v0/b/music-diary-710d3.appspot.com/o/diary%2F"
+                    + this.date + "?alt=media";
+
       axios
       .put(constants.baseUrl + "/diary", {
         context: this.diarytext,
         date: this.date,
         day: this.day,
         feel: this.feeling,
-        //id: "string",
-        img: "string",
+        id: this.diaryId,
+        img: this.imgSrc,
         month: this.month,
         show: this.switch1,
         song: {
@@ -499,11 +541,10 @@ export default {
     searchSong() {
       axios
       .get(constants.baseUrl + "/music", { 
-        headers : {"Authorization": "Bearer "+ this.$store.state.authToken} ,
+        headers : { "Authorization" : "Bearer " + this.$store.state.authToken } ,
         params : { keyword : this.songKeyword }
       }) // 토큰 인증을 위해 헤더에 내용 추가
       .then(({ data }) => {
-        console.log(data);
         this.songList = data;
       })
       .catch(function (error) {
