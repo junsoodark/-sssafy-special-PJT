@@ -4,7 +4,7 @@
     <!-- <v-btn @click="playVideo">play</v-btn>
     <v-btn @click="pauseVideo">pause</v-btn>
     <v-btn @click="stopVideo">stop</v-btn> -->
-    <youtube hidden :video-id="videoId" ref="youtube" v-on:ended="ended" @playing.native="_handlePlayingUI" ></youtube>
+    <youtube hidden :video-id="playsong.youtubeId" ref="youtube" v-on:ended="ended" @playing.native="_handlePlayingUI" ></youtube>
     <v-card elevation="0" style="text-align: center;background-color:rgb(255, 246, 211);" :flat="flat == undefined || flat == false  ? false : true">
         <v-img
           height="200px"
@@ -56,7 +56,7 @@ Vue.use(VueYoutube)
 export default {
   data () {
         return {
-            videoId: '7-x3uD5z1bQ',
+            videoId: "",
             firstPlay: true,
             isMuted: false,
             loaded: false,

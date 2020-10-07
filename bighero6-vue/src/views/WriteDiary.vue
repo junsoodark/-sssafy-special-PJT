@@ -140,7 +140,7 @@
                 class="songSearch mx-auto mb-2"
                 flat
                 hide-details
-                label=" 노래 제목으로 검색하세요"
+                label=" 가수명으로 검색하세요"
                 prepend-inner-icon="mdi-magnify"
                 solo-inverted
                 v-model="songKeyword"
@@ -251,7 +251,7 @@
               :loading="loading4"
               :disabled="loading4"
               color="warning"
-              @click="loader = 'loading4'"
+              @click="loader = 'loading4';recommendSong();"
             >
               노래 추천받기
               <template v-slot:loader>
@@ -285,11 +285,11 @@
                   justify="center"
                   @click="selectMusic(recosong)"
                 >
-                  <img :src="albumUrl(recosong.album_id)" style="width:90px;" />
-                  <div>
+                  <img :src="albumUrl(recosong.album_id)" style="width:90px;" v-if="isRecommended" />
+                  <div style="max-width:80px;font-size:8px;max-height:110px;" v-if="isRecommended">
                     <h4><v-icon small left>mdi-music</v-icon>{{recosong.artist}}</h4>
-                    <h4>{{recosong.song_name}}</h4>
-                    <span>{{recosong.album_id}}</span>
+                    <h4 style="color:indigo;">{{recosong.song_name}}</h4>
+                    <span>{{recosong.album_name}}</span>
                   </div>
                 </v-row>
               </v-card>
@@ -318,6 +318,7 @@ export default {
   data: () => ({
     diaryId: "",
     isUpdate: false,
+    isRecommended: false,
     date: new Date().toISOString().substr(0, 10),
     day: new Date().getDate(),
     month: new Date().getMonth() + 1,
@@ -340,40 +341,30 @@ export default {
     /*추천음악*/
     recosongs: [
       {
-        artist: "헤이즈",
-        song_name: "비도 오고 그래서",
-        album_id: 2315854,
+        artist: "",
+        song_name: "",
+        album_id: "",
       },
       {
-        artist: "방탄소년단",
-        song_name: "Dynamite",
-        album_id: 10197480,
+        artist: "",
+        song_name: "",
+        album_id: "",
       },
       {
-        artist: "소녀시대",
-        song_name: "Gee",
-        album_id: 323987,
+        artist: "",
+        song_name: "",
+        album_id: "",
       },
       {
-        artist: "원더걸스",
-        song_name: "Tell me",
-        album_id: 2261839,
+        artist: "",
+        song_name: "",
+        album_id: "",
       },
       {
-        artist: "티아라",
-        song_name: "Roly Poly",
-        album_id: 2279275,
+        artist: "",
+        song_name: "",
+        album_id: "",
       },
-      {
-        artist: "구구",
-        song_name: "Roly Poly",
-        album_id: 2169336,
-      },
-      {
-        artist: "하하",
-        song_name: "Roly Poly",
-        album_id: 311689,
-      }
     ],
     selectedSong: [],
     /*검색음악*/
@@ -392,8 +383,10 @@ export default {
       this.weather = this.$route.params.weather;
       this.feeling = this.$route.params.feel;
       this.imgSrc = this.$route.params.img;
+      this.originSrc = this.$route.params.img;
       this.diarytext = this.$route.params.context;
       this.switch1 = this.$route.params.show;
+      this.selectedSong = this.$route.params.song;
 
       if(this.weather == "sunny") this.wthr_sunny = false;
       else if(this.weather == "cloudy") this.wthr_cloudy = false;
@@ -419,7 +412,7 @@ export default {
       const l = this.loader
       this[l] = !this[l]
 
-      setTimeout(() => (this[l] = false), 3000)
+      setTimeout(() => (this[l] = false), 1000)
 
       this.loader = null
     },
@@ -503,6 +496,11 @@ export default {
         msg = '일기를 작성해주세요.';
       }
 
+      if(!this.selectedSong) {
+        err = false;
+        msg = '노래를 선택해주세요.';
+      }
+
       if (!err) alert(msg);
       else if(this.isUpdate == true) {
         this.updateGibonHandler();
@@ -512,10 +510,10 @@ export default {
 			}
     },
     saveGibonHandler(){
-      var diaryImgRef = firebase.storage().ref().child("diary/"+this.date);
+      var diaryImgRef = firebase.storage().ref().child("diary/"+this.$store.state.userId+this.date);
       diaryImgRef.put(this.file).then(function(snapshot){}); // 파이어베이스 스토리지에 저장
       this.imgSrc = "https://firebasestorage.googleapis.com/v0/b/music-diary-710d3.appspot.com/o/diary%2F"
-                    + this.date + "?alt=media";
+                    + this.$store.state.userId+ this.date + "?alt=media";
 
       axios
       .post(constants.baseUrl + "/diary", {
@@ -527,13 +525,24 @@ export default {
         img: this.imgSrc,
         month: this.month,
         show: this.switch1,
-        song: {
-          albumCover: "string",
-          singer: "string",
-          songId: "string",
-          title: "string",
-          youtube: "string"
-        },
+        /*song: {
+          album_id: 0,
+          album_name: "",
+          angry: 0,
+          artist: "",
+          excited: 0,
+          fear: 0,
+          genre: "",
+          happy: 0,
+          id: "",
+          indifferent: 0,
+          issue_date: "",
+          lyric: "",
+          sad: 0,
+          song_name: "",
+          youtubeId: ""
+        },*/
+        song: this.selectedSong,
         userId: this.$store.state.userId,
         weather: this.weather,
         year: this.year
@@ -547,10 +556,12 @@ export default {
       });
     },
     updateGibonHandler(){
-      var diaryImgRef = firebase.storage().ref().child("diary/"+this.date);
-      diaryImgRef.put(this.file).then(function(snapshot){}); // 파이어베이스 스토리지에 저장
-      this.imgSrc = "https://firebasestorage.googleapis.com/v0/b/music-diary-710d3.appspot.com/o/diary%2F"
-                    + this.date + "?alt=media";
+      if(this.imgSrc!=this.originSrc) {
+        var diaryImgRef = firebase.storage().ref().child("diary/"+this.$store.state.userId+this.date);
+        diaryImgRef.put(this.file).then(function(snapshot){}); // 파이어베이스 스토리지에 저장
+        this.imgSrc = "https://firebasestorage.googleapis.com/v0/b/music-diary-710d3.appspot.com/o/diary%2F"
+                      + this.$store.state.userId + this.date + "?alt=media";
+      }
 
       axios
       .put(constants.baseUrl + "/diary", {
@@ -562,13 +573,24 @@ export default {
         img: this.imgSrc,
         month: this.month,
         show: this.switch1,
-        song: {
-          albumCover: "string",
-          singer: "string",
-          songId: "string",
-          title: "string",
-          youtube: "string"
-        },
+        /*song: {
+          album_id: 0,
+          album_name: "",
+          angry: 0,
+          artist: "",
+          excited: 0,
+          fear: 0,
+          genre: "",
+          happy: 0,
+          id: "",
+          indifferent: 0,
+          issue_date: "",
+          lyric: "",
+          sad: 0,
+          song_name: "",
+          youtubeId: ""
+        },*/
+        song: this.selectedSong,
         userId: this.$store.state.userId,
         weather: this.weather,
         year: this.year
@@ -580,6 +602,78 @@ export default {
         console.dir(error);
       });
     },
+    recommendSong() {
+      let err = true;
+      let msg = '';
+
+      if(!this.wthr_sunny) this.weather = "sunny";
+      else if(!this.wthr_cloudy) this.weather = "cloudy";
+      else if(!this.wthr_cloud) this.weather = "cloud";
+      else if(!this.wthr_windy) this.weather = "windy";
+      else if(!this.wthr_rainy) this.weather = "rainy";
+      else if(!this.wthr_storm) this.weather = "storm";
+      else if(!this.wthr_snowing) this.weather = "snowing";
+      else {
+        err = false;
+        msg = '날씨를 선택해주세요.';
+      };
+      
+      if(!this.feel_happy) this.feeling = "happy";
+      else if(!this.feel_excited) this.feeling = "excited";
+      else if(!this.feel_indifferent) this.feeling = "indifferent";
+      else if(!this.feel_sad) this.feeling = "sad";
+      else if(!this.feel_angry) this.feeling = "angry";
+      else if(!this.feel_fear) this.feeling = "fear";
+      else {
+        err = false;
+        msg = '기분을 선택해주세요.';
+      };
+
+      if (!err) alert(msg);
+			else {
+        axios
+        .post(constants.baseUrl + "/music/recommend", {
+          context: this.diarytext,
+          date: this.date,
+          day: this.day,
+          feel: this.feeling,
+          //id: "string",
+          img: this.imgSrc,
+          month: this.month,
+          show: this.switch1,
+          /*song: {
+            album_id: 0,
+            album_name: "",
+            angry: 0,
+            artist: "",
+            excited: 0,
+            fear: 0,
+            genre: "",
+            happy: 0,
+            id: "",
+            indifferent: 0,
+            issue_date: "",
+            lyric: "",
+            sad: 0,
+            song_name: "",
+            youtubeId: ""
+          },*/
+          userId: this.$store.state.userId,
+          weather: this.weather,
+          year: this.year
+        },{ headers : {"Authorization": "Bearer "+ this.$store.state.authToken} }) // 토큰 인증을 위해 헤더에 내용 추가
+        .then(({ data }) => {
+          if(data != this.recosongs) {
+            //console.log(data)
+            this.isRecommended = true;
+            this.recosongs = data;
+          }
+        })
+        .catch((error) => {
+          console.dir(error);
+        });
+      }
+    },
     searchSong() {
       axios
       .get(constants.baseUrl + "/music", { 
@@ -588,21 +682,15 @@ export default {
       }) // 토큰 인증을 위해 헤더에 내용 추가
       .then(({ data }) => {
         this.songList = data;
+        console.log(data)
       })
       .catch(function (error) {
         console.log(error);
       });
     },
-     selectMusic(selected) {
-    //   if(selected.song_name) {
-    //     var song = {song_name:selected.song_name, artist:selected.artist};
-    //     this.selectedSong = song;
-    //     console.log(this.selectedSong);
-    //   }
-    //   else {
-        this.selectedSong = selected;
-        console.log(this.selectedSong);
-      //}
+    selectMusic(selected) {
+      this.selectedSong = selected;
+      console.log(this.selectedSong);
     },
     updateImage() {
       this.$refs.imageInput.click();
