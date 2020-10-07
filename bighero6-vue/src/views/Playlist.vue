@@ -10,38 +10,12 @@
   <v-col>
     <v-content>
       <v-container>
-        <systemBar></systemBar>
+        <systemBar :isMy="isMy" :playlistTitle ="playlistTitle"></systemBar>
        <player-playlist-panel :isMy="isMy" :playlistId="playlistId" :playlist="playlist" :selectedTrack="selectedTrack"></player-playlist-panel>
       </v-container>
     </v-content>
-   
-        <!-- <v-card class="pa-2" tile>
-          <div class="container-player">
-            <div class="column add-bottom">
-              <div id="mainwrap">
-                <div id="nowPlay">
-                  <span id="npAction">Paused...</span><span id="npTitle"></span>
-                </div>
-                <div id="audiowrap">
-                  <div id="audio0">
-                    <audio id="audio1" preload controls>Your browser does not support HTML5 Audio! 😢</audio>
-                  </div>
-                  <div id="tracks">
-                    <a id="btnPrev">&vltri;</a><a id="btnNext">&vrtri;</a>
-                  </div>
-                </div>
-                <div id="plwrap">
-                  <ul id="plList"></ul>
-                </div>
-              </div>
-            </div>
-            <div class="column add-bottom center">
-              <p>Music by <a href="http://www.mythium.net/">Mythium</a></p>
-              <p>Download: <a href="https://archive.org/download/mythium/mythium_vbr_mp3.zip">zip</a> / <a href="https://archive.org/download/mythium/mythium_archive.torrent">torrent</a></p>
-            </div>
-          </div>
-        </v-card> -->
-
+  
+        <h3 class="ml-3" v-if="!isMy">** <v-icon color="error">mdi-shield-star</v-icon>는 월별 플레이리스트 기반 추천곡입니다.</h3>
       </v-col> 
         
       <!-- 플레이리스트 목록 -->
@@ -100,7 +74,7 @@
           >
             <v-slide-item
               v-for="(playlist,index) in myplaylist"
-              :key="playlist"
+              :key="index"
             >
                <v-card 
                 class="ma-4"
@@ -114,7 +88,7 @@
                   align="center"
                   justify="center"
                 >
-                  <img :src="musicImg[(index*3)%4]" style="width:90px;" />
+                  <img :src="musicImg[7-(index+1)%7-1]" style="width:90px;" />
                   <div>
                     <h4>{{playlist.title}}</h4>
                   </div>
@@ -161,7 +135,7 @@
                   align="center"
                   justify="center"
                 >
-                  <img :src="musicImg[index%4]" style="width:90px;" />
+                  <img :src="musicImg[index%7]" style="width:90px;" />
                   <div style="text-align:center;">
                       <h3>{{monthplay.title}}</h3>
                     <h4>플레이리스트</h4>
@@ -198,9 +172,13 @@ export default {
     return {
     musicImg: [
          'http://lorempixel.com/output/nightlife-q-c-640-480-5.jpg',
-        'https://firebasestorage.googleapis.com/v0/b/music-diary-710d3.appspot.com/o/banner%2FdiaryBanner.jpg?alt=media',
+        'https://i.picsum.photos/id/1022/6000/3376.jpg?hmac=FBA9Qbec8NfDlxj8xLhV9k3DQEKEc-3zxkQM-hmfcy0',
          'http://lorempixel.com/output/abstract-q-c-640-480-6.jpg',
-         'https://firebasestorage.googleapis.com/v0/b/music-diary-710d3.appspot.com/o/banner%2Fdiary.jpg?alt=media'
+         'https://i.picsum.photos/id/103/2592/1936.jpg?hmac=aC1FT3vX9bCVMIT-KXjHLhP6vImAcsyGCH49vVkAjPQ',
+         'https://i.picsum.photos/id/351/3994/2443.jpg?hmac=XefBGGaGQ_g2n6aGblkqlhZ2ZXWMWZ9FGDz81BWkfXk',
+         'https://i.picsum.photos/id/360/1925/1280.jpg?hmac=vX9T-qgnqfOUqLnxlsxCZfkKn_wi-9vtPKdbq7H6EgU',
+         'https://i.picsum.photos/id/365/5616/3744.jpg?hmac=m9Chefr19BelgN9G4ErJVFBbdvNmA_xlbd0CjATLwhM'
+
 
       ],
       isMy : false,
@@ -221,22 +199,11 @@ export default {
         'secondary',
       ],
       monthlyplaylistmodel: 0,
-      playlist: [
-  {song_name: "Watermelon sugar", artist: "Harry Styles", youtubeId: '7-x3uD5z1bQ' ,display:true},
-  {song_name: "Remember the Way", artist: "Ask Again", youtubeId: 'afxLaQiLu-o',display:true},
-  {song_name: "Streets of Sant'Ivo", artist: "Ask Again", youtubeId: 'BzYnNdJhZQw',display:true},
-  {song_name: "Remember the Way", artist: "Ask Again", youtubeId:'JGwWNGJdvx8',display:true},
-  {song_name: "Streets of Sant'Ivo", artist: "Ask Again", youtubeId: '7-x3uD5z1bQ',display:true},
-  {song_name: "Remember the Way", artist: "Ask Again", youtubeId: '7-x3uD5z1bQ',display:true},
-  {song_name: "Streets of Sant'Ivo", artist: "Ask Again", youtubeId: '7-x3uD5z1bQ',display:true},
-  {song_name: "Remember the Way", artist: "Ask Again", youtubeId: '7-x3uD5z1bQ',display:true},
-  {song_name: "Streets of Sant'Ivo", artist: "Ask Again", youtubeId: '7-x3uD5z1bQ',display:true},
-  {song_name: "Remember the Way", artist: "Ask Again", youtubeId: '7-x3uD5z1bQ',display:true},
-  {song_name: "Streets of Sant'Ivo", artist: "Ask Again", youtubeId: '7-x3uD5z1bQ',display:true},
-  {song_name: "Remember the Way", artist: "Ask Again", youtubeId: '7-x3uD5z1bQ',display:true} ]
+      playlist: []
   , myplaylist : [],
     monthplaylist :[],
-
+    playlistId:'',
+    playlistTitle:'',
     }
   },
 
@@ -277,12 +244,14 @@ addPlayList(){
          });
 },
      getDetail(playlist){
+          this.playlistTitle = playlist.title;
           this.playlist = playlist.songs;
           this.playlistId = playlist.id;
           this.isMy = true;
       
     },
     getMonthDetail(playlist){
+      this.playlistTitle = playlist.title;
       this.playlist = playlist.songs;
       this.isMy = false;
     },
@@ -321,15 +290,29 @@ getmonthly(todayMonth) {
 </script>
 
 <style scoped>
+.v-slide-item {
+  transition: opacity .4s ease-in-out;
+}
+
+.v-slide-item:not(.on-hover) {
+  opacity: 0.6;
+ }
 .mb-6 {
   margin: 24px 24px;
 }
 .pa-2 {
-  background-color: blanchedalmond;
+  background-color:#f8ce72
 }
 .playlist {
   padding-top:0px;
   padding-bottom:0px;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap');
+*{
+  font-family: 'Do Hyeon', sans-serif;
+
+  
 }
 /* Font Family
 ================================================== */

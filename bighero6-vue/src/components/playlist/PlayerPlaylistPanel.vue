@@ -12,8 +12,8 @@
             tile
       v-bind="attrs"
       v-on="on"
-      color="blue"
-      class="ma-2"
+      color="success"
+      class="ma-2 ml-11"
       style = "float:right;"
 
     >노래 추가
@@ -55,7 +55,7 @@
                 >
                   <template v-slot="{ item }">
                     <v-list-item >
-                      <v-list-item-avatar>
+                      <v-list-item-avatar tile>
                           <img :src="albumUrl(item.album_id)">
                         </v-list-item-avatar>
 
@@ -109,47 +109,57 @@
         <h3>해당 플레이리스트에 </h3>
     <h3>재생목록이 없습니다 <v-icon>mdi-playlist-music-outline</v-icon></h3>
       </div>
-    <v-list v-show="!isEmpty">
-      <v-list-item @click="selectTrack(index,track)"
+    <v-list v-show="!isEmpty" >
+      <v-list-item 
         v-for="(track, index) in playlist"
-        :key="track"
+        :key="index"
         :class="[{selected: index === selectedNumber}, {even: index % 2 == 0}]"
         >
         <v-list-item-content >
-          <!-- <v-img :src="albumUrl(track.id)"></v-img> -->
           
-          <v-list-item-title><v-avatar class="mr-3"><v-img :src="albumUrl(track.album_id)"></v-img></v-avatar>{{ track.artist }}  -  {{ track.song_name }} </v-list-item-title>
+          <v-list-item-title @click="selectTrack(index,track)">
+            <v-badge v-if="!isMy&&(index>=(playlist.length-3))"
+        bordered
+        large
+        color="error"
+        icon="mdi-shield-star"
+        overlap
+      ><v-avatar tile class="mr-3"><v-img :src="albumUrl(track.album_id)"></v-img></v-avatar></v-badge>
+            <v-avatar v-else tile class="mr-3"><v-img :src="albumUrl(track.album_id)"></v-img></v-avatar>
+            
+            {{ track.artist }}  -  {{ track.song_name }} </v-list-item-title>
             </v-list-item-content>
-        <v-spacer></v-spacer>
-        <!-- {{ track.howl.duration() }} -->
+         
+         <v-icon style="z-index:100;"  v-if="isMy" @click="deleteSong(track,index)">mdi-trash-can-outline</v-icon>
       </v-list-item>
     </v-list>
    
   </v-card>
-  <v-card tile height="60" dark v-show="selectedTrack&&!isEmpty">
-    <v-card-title>
-      <h2>{{ selectedTrack.artist }} - {{ selectedTrack.song_name }}</h2>
+  <v-card tile height="100" dark  style="background-color : rgb(77, 22, 26);opacity:0.9">
+     NowPlaying <v-icon>mdi-music</v-icon>
+    <v-card-title v-show="selectedTrack&&!isEmpty" class="ml-2">
+      <v-avatar tile class="mr-3"><v-img :src="albumUrl(selectedTrack.album_id)"></v-img></v-avatar><h4>{{ selectedTrack.artist }} - {{ selectedTrack.song_name }}</h4>
       <v-spacer></v-spacer>
       <!-- <h3>{{trackInfo.seek | minutes}}/{{trackInfo.duration | minutes}}</h3> -->
     </v-card-title>    
   </v-card>
       <v-toolbar flat height=90 dark v-show="!isEmpty">
       <v-spacer></v-spacer>
-      <v-btn outlined fab small color="light-blue" @click="prev()">
+      <v-btn class="mr-2" outlined fab small color="light-blue" @click="prev()">
   <v-icon >skip_previous</v-icon>
-</v-btn>
-      <v-btn outlined fab small color="light-blue" @click="stop()">
+</v-btn> 
+      <v-btn class="mr-2" outlined fab small color="light-blue" @click="stop()">
         <v-icon>stop</v-icon>
-      </v-btn>
-      <v-btn outlined fab color="light-blue" @click="play()">
-        <v-icon large>play_arrow</v-icon>
-      </v-btn>
-      <v-btn outlined fab small color="light-blue" @click="pause()">
+      </v-btn> 
+      <v-btn class="mr-2" outlined fab color="light-blue" @click="play()">
+        <v-icon large>play_arrow</v-icon> 
+      </v-btn> 
+      <v-btn class="mr-2" outlined fab small color="light-blue" @click="pause()">
         <v-icon>pause</v-icon>
-      </v-btn>
-      <v-btn outlined fab small color="light-blue" @click="next()">
+      </v-btn> 
+      <v-btn class="mr-2" outlined fab small color="light-blue" @click="next()">
   <v-icon>skip_next</v-icon>
-</v-btn>
+</v-btn> 
       <v-spacer></v-spacer>
     </v-toolbar>
     </div>
@@ -194,12 +204,12 @@ Vue.use(VueYoutube)
     }
     },
     mounted(){
-      this.selectedNumber = 0;
+     /*  this.selectedNumber = 0;
       this.selectedTrack = this.playlist[0];
       this.playlists = this.playlist.map(a=>a.youtubeId)
        //console.log(this.playlists)
        //let result = objArray.map(a => a.foo);
-       this.player.cuePlaylist(this.playlists,'playlist',0,0,'default')
+       this.player.cuePlaylist(this.playlists,'playlist',0,0,'default') */
        //this.player.stopVideo();
     },
      data () {
@@ -233,8 +243,25 @@ Vue.use(VueYoutube)
             },  
         },
     methods: {
+      getPlaylistDetail(){
+         axios.get(constants.baseUrl + "/playlist/"+this.$store.state.userId, 
+         { headers : { "Authorization": "Bearer "+ this.$store.state.authToken} }) // 토큰 인증을 위해 헤더에 내용 추가
+         .then(( {data} ) => {
+             if(data.status ==200){
+             var  myplaylists = data.playlists;
+             //console.log(myplaylists)
+            myplaylists =  myplaylists.filter(x=>x.id===this.playlistId);
+            this.playlists = myplaylists[0].songs.map(a=>a.youtubeId)
+            this.player.cuePlaylist(this.playlists,'playlist',0,0,'default')
+             }
+         })
+        .catch(function (error) {
+           console.log(error);
+         });
+
+          
+      },
       addSong(song){
-        console.log(this.playlistId)
          axios.post(constants.baseUrl + "/playlist/song", {
            playlistId : this.playlistId,
            songId : song.id
@@ -243,14 +270,35 @@ Vue.use(VueYoutube)
              if(data.status ==200){
                alert("노래 추가 완료!")
                this.playlist.push(song);
-               this.playlists.push(song.youtubeId);
                this.dialog2 =false;
+               this.getPlaylistDetail();
              }
          })
         .catch(function (error) {
            console.log(error);
          });
 
+      },
+      deleteSong(song,index){
+        if(confirm(song.artist+"-"+song.song_name+"\n삭제하시겠습니까?")){
+        console.log(song)
+         axios.post(constants.baseUrl + "/playlist/deletesong",{
+           songId : song.id,
+           playlistId : this.playlistId
+         }, {
+        headers : {"Authorization": "Bearer "+ this.$store.state.authToken} 
+      }) // 토큰 인증을 위해 헤더에 내용 추가
+      .then(({ data }) => {
+        if(data.status==200){
+           this.playlist.splice(index,1)
+           this.playlists.splice(index,1)
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+        }
       },
        searchSong() {
       axios
@@ -259,7 +307,6 @@ Vue.use(VueYoutube)
         params : { keyword : this.songKeyword }
       }) // 토큰 인증을 위해 헤더에 내용 추가
       .then(({ data }) => {
-        console.log(data);
         this.songList = data;
       })
       .catch(function (error) {
@@ -282,7 +329,7 @@ Vue.use(VueYoutube)
   selectTrack (index, track) {
      this.selectedTrack = track;
      this.selectedNumber= index;
-     //this.player.playVideoAt(index);
+     this.player.playVideoAt(index);
   },
   updateVolume(volume){
         this.player.setVolume(volume)
@@ -335,6 +382,7 @@ Vue.use(VueYoutube)
   }
   .even {
     background-color: #505050
+    
   }
   .playlist {
     overflow: auto
@@ -346,5 +394,12 @@ Vue.use(VueYoutube)
     left: -20px;
     top : -50px;
     z-index:10;
+
   }
+  @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap');
+h1,h2,span{
+  font-family: 'Do Hyeon', sans-serif;
+
+  
+}
 </style>
