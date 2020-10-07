@@ -10,12 +10,9 @@ import ssafy.musicD.dto.Song;
 import ssafy.musicD.repository.SongRepo2;
 import ssafy.musicD.youtube.Youtube;
 
-<<<<<<< HEAD
-=======
 import java.util.ArrayList;
 import java.util.List;
 
->>>>>>> 8881927011cb21c98f5e71d119296051d3d2126f
 @Service
 public class SongServiceImpl implements SongService{
     @Autowired
