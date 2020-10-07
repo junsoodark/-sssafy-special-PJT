@@ -128,7 +128,7 @@ public class UserController {
 		Map<String, Object> map = new HashMap<>();
 		Map<String, String> tmp = new HashMap<>();
 		tmp.put("nickname", user.getNickname());
-		if (userRepo.findByEmail(user.getEmail()) == null && checkNickname(tmp)) {
+		if (userRepo.findByEmail(user.getEmail()) == null && !checkNickname(tmp)) {
 			if (user.getNickname().equals("admin")) {
 				user.setRole("ROLE_ADMIN");
 			} else {
