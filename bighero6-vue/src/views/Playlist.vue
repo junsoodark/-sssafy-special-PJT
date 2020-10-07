@@ -96,7 +96,7 @@
                   align="center"
                   justify="center"
                 >
-                  <img :src="musicImg[7-(index+1)%7-1]" style="width:95px;" />
+                  <img :src="musicImg[(index+1)%7]" style="width:95px;" />
                   <div>
                     <h4>{{playlist.title}}</h4>
                   </div>
@@ -223,7 +223,7 @@ export default {
      var monthArray = this.monthList
       for (var i = 0; i < monthArray.length; i++) {
          var todayMonth=  monthArray[i];
-         this.monthplaylist.push(this.getmonthly(todayMonth));
+         this.getmonthly(todayMonth);
 
       }
       
@@ -301,23 +301,24 @@ addPlayList(){
     },
 getmonthly(todayMonth) {
        // 월별 플레이리스트 불러오기 (10,9,8,7,6)   
-       var monthplayObject ={}; 
+      
     axios.post(constants.baseUrl + "/playlist/month", {
            userId : this.$store.state.userId,
            month: todayMonth,
            year :  this.year
          },{ headers : { "Authorization": "Bearer "+ this.$store.state.authToken} }) // 토큰 인증을 위해 헤더에 내용 추가
          .then(( data ) => {
-              var songs = data.data.playlist;             
-              
+           
+              var songs = data.data.playlist;  
+              var monthplayObject ={};            
               monthplayObject.songs = songs;
               monthplayObject.title = todayMonth+'월';
+              this.monthplaylist.push(monthplayObject);
               
          })
         .catch(function (error) {
            console.log(error);
          });
-   return (monthplayObject)
     }
   }
 }
