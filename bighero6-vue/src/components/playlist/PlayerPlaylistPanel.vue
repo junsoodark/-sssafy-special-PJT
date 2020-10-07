@@ -2,16 +2,20 @@
 <div>
   <youtube hidden  @ended="end" ref="youtube" ></youtube>  
     <v-card height="330" tile dark :class="{playlist}">
-    <v-list>
+      <div v-show="isEmpty" style="text-align:center;" class="container">
+        <h3>해당 플레이리스트에 </h3>
+    <h3>재생목록이 없습니다 <v-icon>mdi-playlist-music-outline</v-icon></h3>
+      </div>
+    <v-list v-show="!isEmpty">
       <v-list-item @click="selectTrack(index,track)"
         v-for="(track, index) in playlist"
-        :key="index"
+        :key="track"
         :class="[{selected: index === selectedNumber}, {even: index % 2 == 0}]"
         >
         <v-list-item-content >
           <!-- <v-img :src="albumUrl(track.id)"></v-img> -->
           
-          <v-list-item-title><v-avatar class="mr-3"><v-img src="https://cdnimg.melon.co.kr/cm/album/images/102/38/683/10238683_500.jpg"></v-img></v-avatar>{{ track.artist }} - {{ track.song_name }} </v-list-item-title>
+          <v-list-item-title><v-avatar class="mr-3"><v-img :src="albumUrl(track.album_id)"></v-img></v-avatar>{{ track.artist }} - {{ track.song_name }} </v-list-item-title>
             </v-list-item-content>
         <v-spacer></v-spacer>
         <!-- {{ track.howl.duration() }} -->
@@ -19,14 +23,14 @@
     </v-list>
    
   </v-card>
-  <v-card tile height="60" dark v-show="selectedTrack">
+  <v-card tile height="60" dark v-show="selectedTrack&&!isEmpty">
     <v-card-title>
       <h2>{{ selectedTrack.artist }} - {{ selectedTrack.song_name }}</h2>
       <v-spacer></v-spacer>
       <!-- <h3>{{trackInfo.seek | minutes}}/{{trackInfo.duration | minutes}}</h3> -->
     </v-card-title>    
   </v-card>
-      <v-toolbar flat height=90 dark>
+      <v-toolbar flat height=90 dark v-show="!isEmpty">
       <v-spacer></v-spacer>
       <v-btn outlined fab small color="light-blue" @click="prev()">
   <v-icon >skip_previous</v-icon>
@@ -60,16 +64,21 @@ Vue.use(VueYoutube)
       playlist: Array
     },
     watch: {
-    // 질문이 변경될 때 마다 이 기능이 실행됩니다.
     playlist: function () {
-      console.log(this.playlist)
-      this.selectedNumber = 0;
+      if(this.playlist.length==0){
+             this.isEmpty = true;
+      }else{
+        this.isEmpty = false;
+        this.selectedNumber = 0;
       this.selectedTrack = this.playlist[0];
       this.playlists = this.playlist.map(a=>a.youtubeId)
        console.log(this.playlists)
        //let result = objArray.map(a => a.foo);
-       this.player.loadPlaylist(this.playlists,'playlist',0,10,'default')
+       this.player.loadPlaylist(this.playlists,'playlist',0,0,'default')
        this.player.stopVideo();
+
+      }
+      
     }
     },
     mounted(){
@@ -78,7 +87,7 @@ Vue.use(VueYoutube)
       this.playlists = this.playlist.map(a=>a.youtubeId)
        //console.log(this.playlists)
        //let result = objArray.map(a => a.foo);
-       this.player.loadPlaylist(this.playlists,'playlist',0,10,'default')
+       this.player.loadPlaylist(this.playlists,'playlist',0,0,'default')
        this.player.stopVideo();
     },
      data () {
@@ -97,6 +106,7 @@ Vue.use(VueYoutube)
                 volume:100,
                 selectedTrack :'',
                 selectedNumber :'',
+                isEmpty : false
             }
         },
         computed: {

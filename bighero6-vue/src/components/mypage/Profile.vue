@@ -41,13 +41,12 @@
 <script>
 import config from "../../lib/FireBaseConfig";
 import firebase from "firebase/app"; // 파이어베이스 import 
-//import "firebase/storage";
 import "firebase/storage";
 import constants from "../../lib/constants"
 import axios from 'axios'
 
 // Initialize Firebase
-firebase.initializeApp(config.apiKey);
+//firebase.initializeApp(config.apiKey);
 
 
   export default {

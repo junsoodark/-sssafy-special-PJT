@@ -46,7 +46,7 @@
     </div>
     <div class="cd">
        <div class="album-cover spin">
-        <img :src="albumUrl(diaryDetail.song.id)" alt="">
+        <img :src="albumUrl(diaryDetail.song.album_id)" alt="">
 
        </div>
         <div class="song-info">
