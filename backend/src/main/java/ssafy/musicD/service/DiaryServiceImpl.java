@@ -10,7 +10,6 @@ import ssafy.musicD.dto.Song;
 import ssafy.musicD.dto.DiaryDto;
 import ssafy.musicD.repository.DiaryRepo;
 import ssafy.musicD.repository.SongRepo;
-import ssafy.musicD.youtube.Youtube;
 
 @Service
 public class DiaryServiceImpl implements DiaryService {
@@ -18,18 +17,10 @@ public class DiaryServiceImpl implements DiaryService {
 	private DiaryRepo diaryRepo;
 	@Autowired
 	private SongRepo songRepo;
-	@Autowired
-	private Youtube youtube;
 
 	@Override
 	public void insertSong(String diaryId, String songId) {
 		Song song = songRepo.findById(songId).orElse(null);
-		String search = song.getArtist()+" "+song.getSong_name();
-		System.out.println(search);
-		String videoId = youtube.getVideoId(search);
-		System.out.println(videoId);
-		song.setYoutubeId(videoId);
-		System.out.println(song);
 		diaryRepo.insertSong(diaryId, song);
 	}
 

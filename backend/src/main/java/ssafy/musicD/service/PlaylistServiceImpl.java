@@ -10,7 +10,6 @@ import ssafy.musicD.dto.Song;
 import ssafy.musicD.repository.DiaryRepo;
 import ssafy.musicD.repository.PlaylistRepo;
 import ssafy.musicD.repository.SongRepo;
-import ssafy.musicD.youtube.Youtube;
 
 @Service
 public class PlaylistServiceImpl implements PlaylistService {
@@ -20,8 +19,6 @@ public class PlaylistServiceImpl implements PlaylistService {
 	private SongRepo songRepo;
 	@Autowired
 	private DiaryRepo diaryRepo;
-	@Autowired
-	private Youtube youtube;
 
 	@Override
 	public List<Song> getMonthPlaylist(String userId, int month, int year) {
@@ -56,12 +53,6 @@ public class PlaylistServiceImpl implements PlaylistService {
 	@Override
 	public void insertSong(String playlistId, String songId) {
 		Song song = songRepo.findById(songId).orElse(null);
-		String search = song.getArtist()+" "+song.getSong_name();
-		System.out.println(search);
-		String videoId = youtube.getVideoId(search);
-		System.out.println(videoId);
-		song.setYoutubeId(videoId);
-		System.out.println(song);
 		playlistRepo.insertSong(playlistId, song);
 	}
 
