@@ -11,14 +11,14 @@
           contain
           :src="require('@/assets/img/tape.png')"
         >
-            <v-card-text v-if="playsong.songsinger">
+            <v-card-text v-if="playsong.artist">
                 <h3 id="playing" style ="font-family: 'Do Hyeon', sans-serif;margin-top:20px;">
                     <v-icon small left>mdi-music</v-icon>
-                    {{playsong.songsinger}}
+                    {{playsong.artist}}
                     <v-icon small left>mdi-music</v-icon>
                 </h3>
                 <h3 id="playing" style ="font-family: 'Do Hyeon', sans-serif;">
-                    {{playsong.songtitle}}
+                    {{playsong.song_name}}
                 </h3>
                 <v-btn outlined icon :color="color" @click.native="playing ? pause() : play()" style="margin-right: 72px;background-color:white;">
                     <v-icon v-if="!playing || paused" >mdi-play</v-icon>
@@ -73,7 +73,7 @@ export default {
             type: Object,
             default: null
         },
-        flat: {
+        /*flat: {
             type: Boolean,
             default: false
         },
@@ -100,7 +100,7 @@ export default {
         downloadable: {
             type: Boolean,
             default: false
-        }
+        }*/
     },
     computed: {
         player() {
