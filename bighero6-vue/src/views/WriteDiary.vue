@@ -119,7 +119,7 @@
       <div class="text-left">
         <v-dialog
           v-model="dialog"
-          width="500"
+          width="800"
         >
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -150,27 +150,69 @@
 
             <v-card-text style="padding-top:20px;" v-if="songKeyword != ''">
               <v-card light
-                max-width="600"
+                max-width="800"
                 class="mx-auto pa-3"
               >
+                <template>
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-title>
+                        <strong>앨범 커버</strong>
+                      </v-list-item-title>
+                    </v-list-item-content>
+
+                    <v-list-item-content>
+                      <v-list-item-title>
+                        <strong>노래 제목</strong>
+                      </v-list-item-title>
+                    </v-list-item-content>
+
+                    <v-list-item-content>
+                      <v-list-item-title style="text-align:right;">
+                        <strong>가수</strong>
+                      </v-list-item-title>
+                    </v-list-item-content>
+
+                    <v-list-item-content>
+                      <v-list-item-title>
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-divider></v-divider>
+                </template>
+
                 <v-virtual-scroll
                   :items="songList"
                   height="400"
                   item-height="64"
                 >
                   <template v-slot="{ item }">
-                    <v-list-item >
-                      <v-list-item-avatar>
+                    <v-list>
+                      <v-list-item>
+                        <v-list-item-avatar>
                           <img src="@/assets/img/weather/sunny.png">
                         </v-list-item-avatar>
 
-                      <v-list-item-content>
-                        <v-list-item-title>
-                          <strong>{{ item.song_name }}</strong>
-                        </v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
+                        <v-list-item-content>
+                          <v-list-item-title>
+                            <strong>{{ item.song_name }}</strong>
+                          </v-list-item-title>
+                        </v-list-item-content>
+
+                        <v-list-item-content>
+                          <v-list-item-title style="text-align:right;">
+                            <strong>{{ item.artist }}</strong>
+                          </v-list-item-title>
+                        </v-list-item-content>
+
+                        <v-list-item-content>
+                          <v-list-item-title style="text-align:right;">
+                            <v-btn tile color="orange" @click="selectMusic(item)"><strong>선택</strong></v-btn>
+                          </v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
                     <v-divider></v-divider>
+                    </v-list>
                   </template>
                 </v-virtual-scroll>
               </v-card>
@@ -243,7 +285,7 @@
                   justify="center"
                   @click="selectMusic(recosong)"
                 >
-                  <img src="@/assets/instagram/sunset.jpg" style="width:90px;" />
+                  <img :src="recosong.albumcover" style="width:90px;" />
                   <div>
                     <h4><v-icon small left>mdi-music</v-icon>{{recosong.songsinger}}</h4>
                     <h4>{{recosong.songtitle}}</h4>
@@ -301,36 +343,43 @@ export default {
         songsinger: "헤이즈",
         songtitle: "비도 오고 그래서",
         songalbum: "1st mini album",
+        albumcover: "../assets/instagram/sunset.jpg",
       },
       {
         songsinger: "방탄소년단",
         songtitle: "Dynamite",
         songalbum: "2nd album",
+        albumcover: "../assets/img/weather/sunny.png",
       },
       {
         songsinger: "소녀시대",
         songtitle: "Gee",
         songalbum: "2nd single album",
+        albumcover: "../assets/instagram/sunset.jpg",
       },
       {
         songsinger: "원더걸스",
         songtitle: "Tell me",
         songalbum: "1st digital album",
+        albumcover: "../assets/img/weather/sunny.png",
       },
       {
         songsinger: "티아라",
         songtitle: "Roly Poly",
         songalbum: "3rd album",
+        albumcover: "../assets/instagram/sunset.jpg",
       },
       {
         songsinger: "구구",
         songtitle: "Roly Poly",
         songalbum: "3rd album",
+        albumcover: "@/assets/img/weather/sunny.png",
       },
       {
         songsinger: "하하",
         songtitle: "Roly Poly",
         songalbum: "3rd album",
+        albumcover: "@/assets/instagram/sunset.jpg",
       }
     ],
     selectedSong: [],
@@ -552,7 +601,15 @@ export default {
       });
     },
     selectMusic(selected) {
-      this.selectedSong = selected;
+      if(selected.song_name) {
+        var song = {songtitle:selected.song_name, songsinger:selected.artist};
+        this.selectedSong = song;
+        console.log(this.selectedSong);
+      }
+      else {
+        this.selectedSong = selected;
+        console.log(this.selectedSong);
+      }
     },
     updateImage() {
       this.$refs.imageInput.click();
