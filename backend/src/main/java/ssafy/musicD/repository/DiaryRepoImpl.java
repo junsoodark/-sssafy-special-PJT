@@ -88,6 +88,7 @@ public class DiaryRepoImpl implements DiaryRepo {
 		update.set("show", diary.getShow());
 		update.set("img", diary.getImg());
 		update.set("context", diary.getContext());
+		update.set("song", diary.getSong());
 
 		mongoTemplate.updateFirst(query, update, Diary.class);
 		return true;

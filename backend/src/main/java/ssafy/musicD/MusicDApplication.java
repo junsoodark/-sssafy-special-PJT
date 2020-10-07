@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MusicDApplication {
 
 	public static final String APPLICATION_LOCATIONS =
-			"classpath:mongodb.yml" + ",classpath:redis.yml" + ",classpath:jwt.yml" + ",classpath:youtube.yml" + ",classpath:/application.properties";
+			"classpath:mongodb.yml" + ",classpath:redis.yml" + ",classpath:jwt.yml" + ",classpath:/application.properties";
 	public static void main(String[] args) {
 		System.setProperty("spring.config.location", APPLICATION_LOCATIONS);
 		SpringApplication.run(MusicDApplication.class, args);

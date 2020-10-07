@@ -319,6 +319,7 @@ export default {
     diaryId: "",
     isUpdate: false,
     isRecommended: false,
+    isSearching: false,
     date: new Date().toISOString().substr(0, 10),
     day: new Date().getDate(),
     month: new Date().getMonth() + 1,
@@ -412,7 +413,7 @@ export default {
       const l = this.loader
       this[l] = !this[l]
 
-      setTimeout(() => (this[l] = false), 3000)
+      setTimeout(() => (this[l] = false), 8000)
 
       this.loader = null
     },
