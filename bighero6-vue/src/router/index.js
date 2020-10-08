@@ -1,14 +1,15 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '../views/Home.vue'
+import Diary from '../views/Diary.vue'
 import MyPage from '../views/MyPage.vue'
 import Login from '../views/Login.vue'
 import Playlist from '../views/Playlist.vue'
 import Signup from '../views/SignupPage.vue'
-
+import WriteDiary from '../views/WriteDiary.vue'
+import Logout from '../views/Logout.vue'
 
 Vue.use(Router)
-
 export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,
@@ -17,6 +18,11 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home,
+    },
+    {
+      path: '/diary',
+      name: 'diary',
+      component: Diary,
     },
     {
       path: '/mypage',
@@ -38,7 +44,17 @@ export default new Router({
       path: '/playlist',
       name: 'playlist',
       component: Playlist,
-
     },
+    {
+      path: '/writediary',
+      name: 'writediary',
+      component: WriteDiary,
+    },
+
+    {
+      path: '/logout',
+      name: 'logout',
+      component: Logout,
+    }
   ],
 })

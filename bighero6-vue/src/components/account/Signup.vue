@@ -1,33 +1,22 @@
 <template>
-  <div id="login">
-    <v-container class="mx-auto" style="max-width:600px; margin-top:50px">
+  <div id="signup">
+    <v-container class="mx-auto" style="max-width:600px; margin-top:100px">
       <div class="inputForm mx-auto">
-      <v-form>
+      <v-form @submit.prevent="signup(signupData)">
         <v-row align="center" no-gutters>
-            <v-col cols="12" sm="9">
-                <v-text-field v-model="email"
+                <v-text-field v-model="signupData.email"
                       :rules="emailRules"
                       label="email"
                       required
                  ></v-text-field>
-            </v-col>
-            <v-col cols="12" sm="1">
-            </v-col>
-            <v-col cols="12" sm="2">
-              <v-btn depressed small color = "primary">인증코드 발송</v-btn>
-            </v-col>
         </v-row>
-        <v-text-field v-model="certicode"
-              label="인증코드"
-              required
-        ></v-text-field>
-        <v-text-field v-model="nickname"
+        <v-text-field v-model="signupData.nickname"
                       :rules="[rules.nicknamerequired, rules.max]"
                       label="nickname"
                       required
         ></v-text-field>
         <v-text-field
-          v-model="password"
+          v-model="signupData.password"
           :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
           :rules="[rules.passwordrequired, rules.min]"
           :type="show1 ? 'text' : 'password'"
@@ -48,10 +37,10 @@
           counter
           @click:append="show2 = !show2"
         ></v-text-field>
+        <div align="right" class="my-4">
+          <v-btn type="submit" depressed small color = "primary">회원가입</v-btn>
+        </div>
       </v-form>
-      <div align="right" class="my-4">
-        <v-btn depressed small color = "primary">회원가입</v-btn>
-      </div>
     </div>
     </v-container>
     
@@ -59,22 +48,25 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
-      password: 'Password',
+      signupData: {
+        nickname: '',
+        email: '',
+        password: '',
+      },
       reenter: '',
       certicode: '',
-      email: '',
       show1: false,
       show2: false,
-      nickname: '',
       emailRules: [
         v => !!v || 'E-mail is required',
         v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
       ],
       reenterRules: [
-        v => v== this.password || 'Password is not equals',
+        v => v== this.signupData.password || 'Password is not equals',
         v => !!v || 'Re-enter is required',
       ],
       rules: {
@@ -86,6 +78,10 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["signup"]),
+    sendCode:function(){
+      // this.$router.push({ name: 'home' })
+    },
   },
 };
 </script>

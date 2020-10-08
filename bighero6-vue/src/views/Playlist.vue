@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <div>
     <v-row
       v-for="n in 1"
       :key="n"
@@ -7,43 +7,27 @@
       no-gutters
     >
       <!-- 플레이어 -->
-      <v-col>
-        <v-card class="pa-2" tile>
-          <div class="container-player">
-            <div class="column add-bottom">
-              <div id="mainwrap">
-                <div id="nowPlay">
-                  <span id="npAction">Paused...</span><span id="npTitle"></span>
-                </div>
-                <div id="audiowrap">
-                  <div id="audio0">
-                    <audio id="audio1" preload controls>Your browser does not support HTML5 Audio! 😢</audio>
-                  </div>
-                  <div id="tracks">
-                    <a id="btnPrev">&vltri;</a><a id="btnNext">&vrtri;</a>
-                  </div>
-                </div>
-                <div id="plwrap">
-                  <ul id="plList"></ul>
-                </div>
-              </div>
-            </div>
-            <div class="column add-bottom center">
-              <p>Music by <a href="http://www.mythium.net/">Mythium</a></p>
-              <p>Download: <a href="https://archive.org/download/mythium/mythium_vbr_mp3.zip">zip</a> / <a href="https://archive.org/download/mythium/mythium_archive.torrent">torrent</a></p>
-            </div>
-          </div>
-        </v-card>
-      </v-col>
-
+  <v-col>
+    <v-content>
+      <v-container>
+        <systemBar :isMy="isMy" :playlistTitle ="playlistTitle"></systemBar>
+       <player-playlist-panel :isMy="isMy" :playlistId="playlistId" :playlist="playlist" :selectedTrack="selectedTrack"></player-playlist-panel>
+      </v-container>
+    </v-content>
+  
+        <h3 class="ml-3" v-if="!isMy">** <v-icon color="error">mdi-shield-star</v-icon>는 월별 플레이리스트 기반 추천곡입니다.</h3>
+      </v-col> 
+        
       <!-- 플레이리스트 목록 -->
-      <v-col>
-        <v-row style="margin-left: 0px;">
+      <v-col >
+        <v-row style="margin-left: 0px; max-width:700px;">
           <v-col style="padding-top: 0px;">
             <v-card class="pa-2" tile>
               <v-row>
                 <v-col class="playlist">
-                  내 플레이리스트
+                  <h2>마이 플레이리스트</h2>
+                  <h4 class="ml-2" >나만의 플레이리스트를 제공합니다.</h4>
+                  <h5  class="ml-2" style="color:red">**플레이리스트 삭제는 더블클릭으로 가능합니다.</h5>
                 </v-col>
                 <v-col class="playlist" style="text-align:right;">
                   <v-dialog v-model="dialog" persistent max-width="600px">
@@ -68,7 +52,7 @@
                         <v-container>
                           <v-row>
                             <v-col cols="12" sm="6" md="4">
-                              <v-text-field label="플레이리스트 명*" required></v-text-field>
+                              <v-text-field v-model="newPlaylistName" label="플레이리스트명*"  required></v-text-field>
                             </v-col>
                           </v-row>
                         </v-container>
@@ -77,135 +61,313 @@
                       <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-                        <v-btn color="blue darken-1" text @click="dialog = false">Save</v-btn>
+                        <v-btn color="blue darken-1" text @click="addPlayList()">Save</v-btn>
                       </v-card-actions>
                     </v-card>
                   </v-dialog>
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>
+                <v-col style="height:310.4px">
+                   <v-slide-group
+            class="pa-3"
+            center-active
+            show-arrows
+          > <div class="mx-auto" v-if="myplaylist.length==0" style="text-align:center;color:grey">
+            <h1>아직 마이플레이리스트가 없습니다.</h1>
+            <h1>나만의플레이리스트를 만들어보세요!</h1>
+  
+            </div>
+            <v-slide-item    
+              v-for="(playlist,index) in myplaylist"
+              :key="index"
+            >
+               <v-card 
+                class="ma-3"
+                height="200"
+                width="110"
+                @dblclick="deletePlaylist(playlist.id)"
+                @click="getDetail(playlist)"
+                dark
+              >
+              
+                <v-row
+                  class="fill-height"
+                  align="center"
+                  justify="center"
+                >
+                  <img :src="musicImg[(index+1)%7]" style="width:95px;" />
                   <div>
-                    <v-carousel 
-                      v-model="myplaylistmodel"
-                      :hide-delimiter-background="true"
-                      :height="200"
-                    >
-                      <v-carousel-item
-                        v-for="myplaylist in myplaylists"
-                        :key="myplaylist"
-                      >
-                        <v-sheet
-                          :color="myplaylist"
-                          height="100%"
-                          tile
-                        >
-                          <v-row
-                            class="fill-height"
-                            align="center"
-                            justify="center"
-                          >
-                            <div>
-                              <playlistcds />
-                            </div>
-                          </v-row>
-                        </v-sheet>
-                      </v-carousel-item>
-                    </v-carousel>
+                    <h4>{{playlist.title}}</h4>
                   </div>
-                </v-col>
+                </v-row>
+              </v-card>
+             
+             
+            </v-slide-item>
+          </v-slide-group>
+                
+                </v-col> 
               </v-row>
             </v-card>
           </v-col>
         </v-row>
-
-        <v-row style="margin-left: 0px;">
+         <!-- 내 플레이리스트 끝  -->
+     <!-- 월별 프레이리스트 -->
+        <v-row style="margin-left: 0px; max-width:700px;">
           <v-col>
-            <v-card class="pa-2" tile>
+             <v-card class="pa-2" tile>
               <v-row>
                 <v-col class="playlist">
-                  월별 플레이리스트
+                  <h2>월별 플레이리스트</h2>
+                  <h4 class="ml-2" >다이어리 기준 월별 플레이리스트를 제공합니다</h4>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col>
-                  <div>
-                    <v-carousel 
-                      v-model="monthlyplaylistmodel"
-                      :hide-delimiter-background="true"
-                      :height="200"
-                    >
-                      <v-carousel-item
-                        v-for="monthlyplaylist in monthlyplaylists"
-                        :key="monthlyplaylist"
-                      >
-                        <v-sheet
-                          :color="monthlyplaylist"
-                          height="100%"
-                          tile
-                        >
-                          <v-row
-                            class="fill-height"
-                            align="center"
-                            justify="center"
-                          >
-                            <div>
-                              <playlistcds />
-                            </div>
-                          </v-row>
-                        </v-sheet>
-                      </v-carousel-item>
-                    </v-carousel>
+                  <v-slide-group
+            class="pa-3"
+            center-active
+            show-arrows
+          >
+            <v-slide-item
+              v-for="(monthplay, index) in monthplaylist"
+              :key="index"
+             
+            >
+               <v-card
+                class="ma-4"
+                height="200"
+                width="100"
+                @click="getMonthDetail(monthplay)" dark
+              >
+                <v-row
+                  class="fill-height"
+                  align="center"
+                  justify="center"
+                >
+                  <img :src="musicImg[index%7]" style="width:90px;" />
+                  <div style="text-align:center;">
+                      <h3>{{monthplay.title}}</h3>
+                    <h4>플레이리스트</h4>
+                  
                   </div>
+                </v-row>
+              </v-card> 
+            </v-slide-item>
+          </v-slide-group>
+
+                 
                 </v-col>
               </v-row>
-            </v-card>
+            </v-card> 
           </v-col>
         </v-row>
+        <!-- 월별플레이리스트 끝  -->
       </v-col>
     </v-row>
-  </v-container>
+  </div>
 </template>
 
 <script>
+import axios from 'axios'
+import constants from "../lib/constants"
 export default {
   components: {
     playlistcds: () => import('@/components/PlaylistCDs'),
+    systemBar : () => import('@/components/playlist/SystemBar'),
+    PlayerPlaylistPanel : ()  => import('@/components/playlist/PlayerPlaylistPanel'),
+
   },
   data () {
     return {
+    musicImg: [
+         'http://lorempixel.com/output/nightlife-q-c-640-480-5.jpg',
+        'https://i.picsum.photos/id/1022/6000/3376.jpg?hmac=FBA9Qbec8NfDlxj8xLhV9k3DQEKEc-3zxkQM-hmfcy0',
+         'http://lorempixel.com/output/abstract-q-c-640-480-6.jpg',
+         'https://i.picsum.photos/id/103/2592/1936.jpg?hmac=aC1FT3vX9bCVMIT-KXjHLhP6vImAcsyGCH49vVkAjPQ',
+         'https://i.picsum.photos/id/351/3994/2443.jpg?hmac=XefBGGaGQ_g2n6aGblkqlhZ2ZXWMWZ9FGDz81BWkfXk',
+         'https://i.picsum.photos/id/360/1925/1280.jpg?hmac=vX9T-qgnqfOUqLnxlsxCZfkKn_wi-9vtPKdbq7H6EgU',
+         'https://i.picsum.photos/id/365/5616/3744.jpg?hmac=m9Chefr19BelgN9G4ErJVFBbdvNmA_xlbd0CjATLwhM'
+
+
+      ],
+      isMy : false,
+      newPlaylistName :'',
+      year :2020,
+      monthList :[10,9,8,7,6],
+      selectedTrack:'',
       dialog: false,
-      myplaylists: [
+      myplaylistColor: [
         'yellow darken-2',
         'secondary',
         'red',
       ],
-      myplaylistmodel: 0,
-      
-      monthlyplaylists: [
+      myplaylistmodel: 0,    
+      monthlyplaylistColor: [
         'red',
         'yellow darken-2',
         'secondary',
       ],
       monthlyplaylistmodel: 0,
+      playlist: []
+  , myplaylist : [],
+    monthplaylist :[],
+    playlistId:'',
+    playlistTitle:'',
+    monthplaylistTest :[]
     }
   },
-  mounted() {
 
+  mounted(){    
+     var monthArray = this.monthList
+      //  for (var i = 0; i < monthArray.length; i++) {
+      //    var todayMonth=  monthArray[i];
+      //    this.getmonthly(todayMonth);
+
+      // } 
+
+
+       
+       this.getmonthly(10);
+       this.getmonthly(9);
+         this.getmonthly(8);
+         this.getmonthly(7);
+         this.getmonthly(6);
+       this.getMy();
+      
+
+ 
+    
+
+
+  },
+  methods :{
+    selectTrack (track) {
+  this.selectedTrack = track
+},
+deletePlaylist(id){
+  if(confirm("삭제하시겠습니까?")){
+         axios.delete(constants.baseUrl + "/playlist/"+id,
+         { headers : { "Authorization": "Bearer "+ this.$store.state.authToken} }) // 토큰 인증을 위해 헤더에 내용 추가
+         .then(( {data} ) => {
+             if(data.status ==200){
+               alert("삭제되었습니다.")
+               location.reload();
+             }
+         })
+        .catch(function (error) {
+           console.log(error);
+         });
+  }
+
+},
+sortMonth(){
+
+  this.monthplaylist.sort(function(a,b){
+        return a.title> b.title?-1 :a.title <b.title?1:0
+      });
+},
+addPlayList(){
+     axios.post(constants.baseUrl + "/playlist", {
+           userId : this.$store.state.userId,
+           title : this.newPlaylistName
+         },{ headers : { "Authorization": "Bearer "+ this.$store.state.authToken} }) // 토큰 인증을 위해 헤더에 내용 추가
+         .then(( {data} ) => {
+             if(data.status ==200){
+               alert("새로운 플레이리스트가 생성되었습니다.")
+               this.getMy();
+             }
+         })
+        .catch(function (error) {
+           console.log(error);
+         });
+},
+     getDetail(playlist){
+          this.playlistTitle = playlist.title;
+          this.playlist = playlist.songs;
+          this.playlistId = playlist.id;
+          this.isMy = true;
+      
+    },
+    getMonthDetail(playlist){
+      this.playlistTitle = playlist.title;
+      this.playlist = playlist.songs;
+      this.isMy = false;
+    },
+    getMy(){
+     axios.get(constants.baseUrl + "/playlist/"+ this.$store.state.userId,{ headers : { "Authorization": "Bearer "+ this.$store.state.authToken} }) // 토큰 인증을 위해 헤더에 내용 추가
+         .then(( {data} ) => {
+               if(data.status==200){
+                 this.myplaylist = data.playlists;
+               }
+         })
+        .catch(function (error) {
+           console.log(error);
+         });
+    },
+    postHandler(todayMonth){
+      axios.post(constants.baseUrl + "/playlist/month", {
+           userId : this.$store.state.userId,
+           month: todayMonth,
+           year :  this.year
+         },{ headers : { "Authorization": "Bearer "+ this.$store.state.authToken} }) // 토큰 인증을 위해 헤더에 내용 추가
+         .then(( data ) => {
+           
+              var songs = data.data.playlist;  
+              var monthplayObject ={};            
+              monthplayObject.songs = songs;
+              monthplayObject.title = todayMonth+'월';
+              this.monthplaylist.unshift(monthplayObject);
+              
+         })
+        .catch(function (error) {
+           console.log(error);
+         });
+
+    },
+    
+async getmonthly(todayMonth) {
+       // 월별 플레이리스트 불러오기 (10,9,8,7,6)   
+      
+       // 월별 유저의 다이어리 데이터 가져오는 함수 
+           //date = date.slice(6,7);
+           //console.log(date)
+           //axios 요청 현재월 데이터 요청 
+         
+          await this.postHandler(todayMonth);
+  
+      
+        
+    }
   }
 }
 </script>
 
 <style scoped>
+.v-slide-item {
+  transition: opacity .4s ease-in-out;
+}
+
+.v-slide-item:not(.on-hover) {
+  opacity: 0.6;
+ }
 .mb-6 {
   margin: 24px 24px;
 }
 .pa-2 {
-  background-color: blanchedalmond;
+  background-color:#f8ce72
 }
 .playlist {
   padding-top:0px;
   padding-bottom:0px;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap');
+*{
+  font-family: 'Do Hyeon', sans-serif;
+
+  
 }
 /* Font Family
 ================================================== */
@@ -275,7 +437,7 @@ width:90%;
 /* Audio Player Styles
 ================================================== */
 
-audio {
+/* audio {
 display:none;
 }
 
@@ -385,7 +547,7 @@ border:0;
 padding:0;
 }
 
-
+ */
 /* Plyr Overrides
 ================================================== */
 
