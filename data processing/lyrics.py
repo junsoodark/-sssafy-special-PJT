@@ -3,7 +3,7 @@ import pandas as pd
 import requests
 
 def readJSON():
-    api_key = 'adCBhp8IgO0CCJo3PenwuFMq2g7PVIq2Zf9dqTNQIwwl9MMWCvVubgxUbZu1LtD1'
+    api_key = ''
     file_path = "song4.json"
     with open(file_path, encoding='utf-8', mode='r') as json_file:
         json_data = json.load(json_file)

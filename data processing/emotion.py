@@ -3,7 +3,7 @@ import json
 import pandas as pd
 
 def analysis():
-    api_key = "xh4Su0sghFDW8wlgyle0RwBDVKHcU83Y7zTdN8HOp9M"
+    api_key = ""
 
     file_path = "songswithlyrics.json"
     with open(file_path, encoding='utf-8', mode='r') as json_file:
@@ -12,7 +12,7 @@ def analysis():
     data = json_data
     df = pd.DataFrame.from_dict(data, orient='columns')
 
-    df = df.iloc[1800:2000]
+    df = df.iloc[2400:2600]
 
     for i, row in df.iterrows():
         lyric = row['lyric']
@@ -28,7 +28,7 @@ def analysis():
 
     del df['_id']
 
-    df.to_json('eeee2.json', orient='table')
+    df.to_json('eeee5.json', orient='table')
 
 
 if __name__ == '__main__':
