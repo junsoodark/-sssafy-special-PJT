@@ -234,7 +234,8 @@ import constants from "../../lib/constants"
         .then(( data ) => {
            if(data.status==200){
               alert("친구 삭제가 완료되었습니다.")
-              this.friendList = this.friendList.filter(x => x!==friendId)
+              location.reload();
+  
               
            }
             
@@ -261,8 +262,12 @@ import constants from "../../lib/constants"
             return false ; 
           }else {
               waitFriends = waitFriends.filter(x=> x==this.$store.state.userId)
-              if(waitFriends) return true;
-              else return false;
+              for (let index = 0; index < waitFriends.length; index++) {
+                 if(waitFriends[index] == this.$store.state.userId)
+                 return true;
+                
+              }
+             return false;
           }
       },
       requestFriend(friend){
