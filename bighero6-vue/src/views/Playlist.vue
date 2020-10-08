@@ -221,12 +221,19 @@ export default {
 
   mounted(){    
      var monthArray = this.monthList
-      for (var i = 0; i < monthArray.length; i++) {
-         var todayMonth=  monthArray[i];
-         this.getmonthly(todayMonth);
+      //  for (var i = 0; i < monthArray.length; i++) {
+      //    var todayMonth=  monthArray[i];
+      //    this.getmonthly(todayMonth);
 
-      }
-      
+      // } 
+
+
+       
+       this.getmonthly(10);
+       this.getmonthly(9);
+         this.getmonthly(8);
+         this.getmonthly(7);
+         this.getmonthly(6);
        this.getMy();
       
 
@@ -299,10 +306,8 @@ addPlayList(){
            console.log(error);
          });
     },
-getmonthly(todayMonth) {
-       // 월별 플레이리스트 불러오기 (10,9,8,7,6)   
-      
-    axios.post(constants.baseUrl + "/playlist/month", {
+    postHandler(todayMonth){
+      axios.post(constants.baseUrl + "/playlist/month", {
            userId : this.$store.state.userId,
            month: todayMonth,
            year :  this.year
@@ -313,12 +318,27 @@ getmonthly(todayMonth) {
               var monthplayObject ={};            
               monthplayObject.songs = songs;
               monthplayObject.title = todayMonth+'월';
-              this.monthplaylist.push(monthplayObject);
+              this.monthplaylist.unshift(monthplayObject);
               
          })
         .catch(function (error) {
            console.log(error);
          });
+
+    },
+    
+async getmonthly(todayMonth) {
+       // 월별 플레이리스트 불러오기 (10,9,8,7,6)   
+      
+       // 월별 유저의 다이어리 데이터 가져오는 함수 
+           //date = date.slice(6,7);
+           //console.log(date)
+           //axios 요청 현재월 데이터 요청 
+         
+          await this.postHandler(todayMonth);
+  
+      
+        
     }
   }
 }

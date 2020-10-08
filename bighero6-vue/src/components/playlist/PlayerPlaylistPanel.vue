@@ -119,7 +119,7 @@
         <v-list-item-content >
           
           <v-list-item-title @click="selectTrack(index,track)">
-            <v-badge v-if="!isMy&&(index>=(playlist.length-3))"
+            <v-badge v-if="!isMy&&(index>=(playlist.length-1))"
         bordered
         large
         color="error"
