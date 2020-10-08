@@ -41,40 +41,36 @@ public class PlaylistController {
 		int year = (int)m.get("year");
 		List<Song> playlist = playlistService.getMonthPlaylist(userId, month, year);
 		
-		if (playlist.size() < 3) {
-			double max = 0;
-			int index = -1;
-			
-			for (int i = 0; i < playlist.size(); i++) {
-				List<Song> list = songService.similarity(playlist.get(i).getGenre());
+		if (playlist.size() < 3 && playlist.size() > 0) {
+			Song temp = playlist.get(0);
+			List<Song> list = songService.similarity(temp.getGenre());
+			int index = 0;
+			double max = -1;
 				
-				for (int j = 0; j < list.size(); j++) {
-					double tempSim = calSimilarity(playlist.get(i), list.get(j));
-					if (tempSim > max) {
-						max = tempSim;
-						index = j;
-						list.remove(index);
-					}
+			for (int j = 0; j < list.size(); j++) {
+				double tempSim = calSimilarity(temp, list.get(j));
+				if (tempSim > max) {
+					max = tempSim;
+					index = j;
 				}
-				playlist.add(list.get(index));
 			}
-		} else {
-			double max = 0;
-			int index = -1;
+			playlist.add(list.get(index));
 			
-			int[] arr = randomIndex(playlist.size());
-			for (int i = 0; i < 3; i++) {
-				List<Song> list = songService.similarity(playlist.get(arr[i]).getGenre());
-				for (int j = 0; j < list.size(); j++) {
-					double tempSim = calSimilarity(playlist.get(i), list.get(j));
-					if (tempSim > max) {
-						max = tempSim;
-						index = j;
-						list.remove(index);
-					}
+		} else {
+			double max = -1;
+			int index = 0;
+			int num = randomIndex(playlist.size());
+			Song temp = playlist.get(num);
+			
+			List<Song> list = songService.similarity(temp.getGenre());
+			for (int j = 0; j < list.size(); j++) {
+				double tempSim = calSimilarity(temp, list.get(j));
+				if (tempSim > max && tempSim != 1) {
+					max = tempSim;
+					index = j;
 				}
-				playlist.add(list.get(index));
 			}
+			playlist.add(list.get(index));
 		}
 		
 		Map<String, Object> map = new HashMap<>();
@@ -85,6 +81,8 @@ public class PlaylistController {
 	}
 	
 	public double calSimilarity(Song song1, Song song2) {
+		if (song1.getId().equals(song2.getId()))
+				return 0;
 		double similarity;
 		double happy1 = song1.getHappy();
 		double sad1 = song1.getSad();
@@ -108,19 +106,15 @@ public class PlaylistController {
 		return similarity;
 	}
 	
-	public int[] randomIndex(int size) {
-    	int[] arr = new int[3];
+	public int randomIndex(int size) {
     	Random r = new Random();
-    	
-    	for (int i = 0; i < 3; i++) {
-    		arr[i] = r.nextInt(size);
-    		for (int j = 0; j < i; j++) {
-    			if (arr[i]==arr[j])
-    				i--;
-    		}
+    	int num = 13;
+
+    	while(num == 13) {
+    		num = r.nextInt(size);
     	}
     	
-    	return arr;
+    	return num;
     }
 	
 	// 플레이리스트 목록 조회
